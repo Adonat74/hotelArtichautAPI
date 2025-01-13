@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\contentController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/user', function (Request $request) {
@@ -8,29 +8,16 @@ use Illuminate\Support\Facades\Route;
 //})->middleware('auth:sanctum');
 
 
-
 // CONTENT ROUTES
-//get ALL contents
-Route::get('/content', function () {
-    return 'News';
-});
-
-//get ONE content
-Route::get('/content/{id}', function (string $id) {
-    return 'News number ' . $id;
-});
-
-//add ONE content
-Route::post('/content', function (Request $request) {
-    return 'added ' . $request;
-});
-
-//modify ONE content
-Route::patch('/content/{id}', function (Request $request, string $id) {
-    return 'modified ' . $request;
-});
-
-//delete ONE content
-Route::delete('/content/{id}', function (Request $request, string $id) {
-    return 'deleted ' . $request;
+Route::prefix('content')->controller(ContentController::class)->group(function () {
+    //get ALL contents
+    Route::get('/', 'getAllContent');
+    //add ONE content
+    Route::get('/{id}', 'getSingleContent');
+    //add ONE content
+    Route::post('/', 'addContent');
+    //modify ONE content
+    Route::put('/{id}', 'updateContent');
+    //delete ONE content
+    Route::delete('/{id}', 'deleteContent');
 });
