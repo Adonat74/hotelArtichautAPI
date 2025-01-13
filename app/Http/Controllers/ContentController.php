@@ -15,7 +15,7 @@ class contentController extends Controller
 
     public function getSingleContent(String $id) {
         return response()->json([
-            'content'=>'single content',
+            'content'=>'content ' . $id,
         ]);
     }
 

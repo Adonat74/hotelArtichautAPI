@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\contentController;
+use App\Http\Controllers\ContentController;
 use Illuminate\Support\Facades\Route;
 
 //Route::get('/user', function (Request $request) {
