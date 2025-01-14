@@ -26,7 +26,8 @@ class ContentController extends Controller
     }
 
 
-    public function addContent(Request $request) {
+    public function addContent(Request $request): JsonResponse
+    {
         try {
             $validatedData = $request->validate([
                 'name' => 'bail|required|string|max:100',
@@ -44,7 +45,8 @@ class ContentController extends Controller
         }
     }
 
-    public function updateContent(Request $request, String $id) {
+    public function updateContent(Request $request, String $id): JsonResponse
+    {
         try {
             $validatedData = $request->validate([
                 'name' => 'bail|required|string|max:100',
@@ -63,7 +65,8 @@ class ContentController extends Controller
         }
     }
 
-    public function deleteContent(String $id) {
+    public function deleteContent(String $id): JsonResponse
+    {
         $content = Content::findOrFail($id);
         $content->delete();
 
