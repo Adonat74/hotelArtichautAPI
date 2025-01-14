@@ -51,10 +51,12 @@ class ServiceController extends Controller
                 foreach ($request->file('images') as $image) {
 
                     $imagePath = $image->store('images', 'public');
-                    new Image([
+                    $image = new Image([
                         'url' => $imagePath,
-                        'service_id' => $service->primaryKey,
+                        'fk_service_id' => $service->service_id,
                     ]);
+                    $image->save();
+
                 }
             }
 
@@ -97,10 +99,11 @@ class ServiceController extends Controller
                 }
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
-                    new Image([
+                    $image = new Image([
                         'url' => $imagePath,
-                        'service_id' => $service->primaryKey,
+                        'fk_service_id' => $service->service_id,
                     ]);
+                    $image->save();
                 }
             }
 
