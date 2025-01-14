@@ -1,0 +1,26 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#5268
+    [34mall[39m: [
+      [34;4mApp\Models\RoomsCategory[39;24m {#5284
+        [34mrooms_categories_id[39m: [35m1[39m,
+        [34mdescription[39m: "[32mChambre moyenne[39m",
+        [34mprice_in_cents[39m: [35m900000[39m,
+        [34mbed_size[39m: [35m20[39m,
+        [34mcreated_at[39m: "[32m2025-01-14 12:48:30[39m",
+        [34mupdated_at[39m: "[32m2025-01-14 12:48:30[39m",
+        [34mrooms[39m: [34;4mIlluminate\Database\Eloquent\Collection[39;24m {#5287
+          [34mall[39m: [
+            [34;4mApp\Models\Rooms[39;24m {#5293
+              [34mrooms_id[39m: [35m1[39m,
+              [34mnumber[39m: "[32m109[39m",
+              [34mdescription[39m: "[32mChambre moyenne[39m",
+              [34mprice_in_cents[39m: [35m900000[39m,
+              [34mcreated_at[39m: "[32m2025-01-14 12:51:16[39m",
+              [34mupdated_at[39m: "[32m2025-01-14 12:51:16[39m",
+              [34mfk_has_rooms_categories[39m: [35m1[39m,
+            },
+          ],
+        },
+      },
+    ],
+  }
+
