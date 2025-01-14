@@ -34,7 +34,7 @@ class ServiceController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|required|boolean',
+                'is_per_person' => 'bail|nullable|string|max:5',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -51,7 +51,6 @@ class ServiceController extends Controller
                 foreach ($request->file('images') as $image) {
 
                     $imagePath = $image->store('images', 'public');
-
                     new Image([
                         'url' => $imagePath,
                         'service_id' => $service->primaryKey,

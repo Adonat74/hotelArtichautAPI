@@ -20,7 +20,7 @@ class Service extends Model
         'is_per_person',
     ];
 
-    public function photos(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }

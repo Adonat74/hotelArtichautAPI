@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title', length: 50);
             $table->integer('price_in_cent');
             $table->integer('duration_in_day');
-            $table->boolean('is_per_person');
+            $table->string('is_per_person', length: 5);
             $table->timestamps();
         });
     }
