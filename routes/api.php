@@ -51,3 +51,4 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
     //delete ONE service
     Route::delete('/{id}', 'deleteService');
 });
+

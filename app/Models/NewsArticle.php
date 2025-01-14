@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NewsArticle extends Model
 {
@@ -17,4 +18,8 @@ class NewsArticle extends Model
         'description',
     ];
 
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
 }
