@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('contents', function (Blueprint $table) {
             $table->id('content_id');
-            $table->string('name', length: 15);
-            $table->string('title');
+            $table->string('name', length: 100);
+            $table->string('title', length: 50);
             $table->string('short_description')->nullable();
             $table->text('description');
             $table->boolean('landing_page_display');
