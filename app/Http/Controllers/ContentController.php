@@ -41,7 +41,7 @@ class ContentController extends Controller
             $content->save();
             return response()->json($content);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 
@@ -61,7 +61,7 @@ class ContentController extends Controller
             $content->update($validatedData);
             return response()->json(['updatedContent' => $validatedData]);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 

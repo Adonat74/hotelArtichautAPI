@@ -37,7 +37,7 @@ class NewsArticleController extends Controller
             $newsArticle->save();
             return response()->json($newsArticle);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 
@@ -54,7 +54,7 @@ class NewsArticleController extends Controller
             $newsArticle->update($validatedData);
             return response()->json(['updatedNewsArticle' => $validatedData]);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 

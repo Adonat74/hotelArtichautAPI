@@ -46,8 +46,8 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
     Route::get('/{id}', 'getSingleService');
     //add ONE service
     Route::post('/', 'addService');
-    //modify ONE service
-    Route::put('/{id}', 'updateService');
+    //modify ONE service POST pour les update car laravel ne prend pas en compte l'upload de fichier via PUT
+    Route::post('/{id}', 'updateService');
     //delete ONE service
     Route::delete('/{id}', 'deleteService');
 });

@@ -12,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 class ServiceController extends Controller
 {
     public function getSingleService(int $id): object {
+        // le with permet d'afficher les images liées au service sous forme de tableau
         $service = Service::with('images')->findOrFail($id);
         return response()->json([
             'service'=>$service,
@@ -35,10 +36,11 @@ class ServiceController extends Controller
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|nullable|string|max:5',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images' => 'nullable|array',// vérifie que c'est un tableau
+                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
 
+            // n'enregistre que les fields de service
             $service = new Service([
                 'title' => $validatedData['title'],
                 'price_in_cent' => $validatedData['price_in_cent'],
@@ -50,22 +52,20 @@ class ServiceController extends Controller
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $image) {
 
+                    //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
                         'url' => $imagePath,
                         'service_id' => $service->id,
                     ]);
                     $image->save();
-
                 }
             }
-
-
             return response()->json([
                 'addedService' => $service->load('images'),
             ]);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 
@@ -76,7 +76,7 @@ class ServiceController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|required|boolean',
+                'is_per_person' => 'bail|required|string|max:5',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -89,14 +89,16 @@ class ServiceController extends Controller
             ]);
 
             if ($request->hasFile('images')) {
-                $existingImages = $service->photos()->all();
+                $existingImages = $service->images()->get();
+
+                //supprime les images du strage et l'url de la table images
                 if ($existingImages) {
                     foreach ($existingImages as $existingImage) {
-
                         Storage::disk('public')->delete($existingImage->url);
-                        $existingImage->delete(); // Remove the old image from the database
+                        $existingImage->delete();
                     }
                 }
+
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
@@ -107,25 +109,25 @@ class ServiceController extends Controller
                 }
             }
 
-            return response()->json(['updatedService' => $validatedData]);
+            return response()->json([
+                'updatedService' => $service->load('images'),
+            ]);
         } catch (ValidationException $exception) {
-            return response()->json($exception->getMessage());
+            return response()->json($exception->errors());
         }
     }
 
     public function deleteService(String $id): JsonResponse
     {
         $service = Service::findOrFail($id);
-        $existingImages = $service->photos()->all();
+        $existingImages = $service->images()->get();
         if ($existingImages) {
             foreach ($existingImages as $existingImage) {
                 Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete(); // Remove the old image from the database
+                $existingImage->delete();
             }
         }
         $service->delete();
-
-
         return response()->json(['deletedService' => $service]);
     }
 }
