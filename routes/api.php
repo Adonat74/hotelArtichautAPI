@@ -1,8 +1,10 @@
 <?php
+
+    use App\Http\Controllers\Api\ReviewsController;
     use App\Http\Controllers\Api\RoomsCategoryController;
     use App\Http\Controllers\Api\RoomsController;
-	use App\Http\Controllers\Api\RoomsFeatureController;
-	use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Api\RoomsFeatureController;
+    use Illuminate\Support\Facades\Route;
 
     Route::prefix('rooms-categories')->group(function () {
         Route::get('/', [RoomsCategoryController::class, 'index']); // Liste toutes les catégories
@@ -20,10 +22,20 @@
         Route::delete('/{id}', [RoomsController::class, 'destroy']);
     });
 
-		Route::apiResource('rooms-features', RoomsFeatureController::class);
+    Route::apiResource('rooms-features', RoomsFeatureController::class);
+    Route::prefix('rooms-categories')->group(function () {
+        Route::post('{id}/features', [RoomsCategoryController::class, 'attachFeature']);
+        Route::delete('{id}/features/{featureId}', [RoomsCategoryController::class, 'detachFeature']);
+        Route::get('{id}/features', [RoomsCategoryController::class, 'listFeatures']);
+    });
 
-				Route::prefix('rooms-categories')->group(function () {
-				Route::post('{id}/features', [RoomsCategoryController::class, 'attachFeature']);
-				Route::delete('{id}/features/{featureId}', [RoomsCategoryController::class, 'detachFeature']);
-				Route::get('{id}/features', [RoomsCategoryController::class, 'listFeatures']);
-			});
+
+    Route::prefix('reviews')->group(function () {
+        Route::get('/', [ReviewsController::class, 'index']);
+        Route::post('/', [ReviewsController::class, 'store']);
+        Route::get('/{id}', [ReviewsController::class, 'show']);
+        Route::put('/{id}', [ReviewsController::class, 'update']);
+        Route::delete('/{id}', [ReviewsController::class, 'destroy']);
+    });
+
+    Route::get('/room-category/{id}/features', [RoomsCategoryController::class, 'getFeatures']);

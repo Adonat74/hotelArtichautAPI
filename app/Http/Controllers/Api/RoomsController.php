@@ -30,7 +30,7 @@ class RoomsController extends Controller
                 'number' => 'bail|required|integer',
                 'description' => 'bail|required|string|max:255',
                 'price_in_cents' => 'bail|required|integer',
-                'fk_has_rooms_categories' => 'bail|required|integer',
+                'rooms_category_id' => 'bail|required|integer',
             ]);
 
             // Création et sauvegarde de la nouvelle catégorie
@@ -76,7 +76,7 @@ class RoomsController extends Controller
                 'number' => 'bail|required|integer',
                 'description' => 'bail|required|string|max:255',
                 'price_in_cents' => 'bail|required|integer',
-                'fk_has_rooms_categories' => 'bail|required|integer',
+                'rooms_category_id' => 'bail|required|integer',
             ]);
 
             $room = Rooms::findOrFail($id);

@@ -13,21 +13,11 @@
         {
             Schema::create('room_category_feature', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('rooms_categories_id');
-                $table->unsignedBigInteger('feature_id');
 
-                // Définition des clés étrangères
-                $table->foreign('rooms_categories_id')
-                    ->references('id')
-                    ->on('rooms_categories')
-                    ->onDelete('cascade');
 
-                $table->foreign('feature_id')
-                    ->references('id')
-                    ->on('features')
-                    ->onDelete('cascade');
+                $table->foreignIdFor(\App\Models\RoomsCategory::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
+                $table->foreignIdFor(\App\Models\RoomsFeature::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
 
-                $table->unique(['rooms_categories_id', 'feature_id']); // Contrainte d'unicité
             });
         }
 

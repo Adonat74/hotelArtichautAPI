@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rooms_categories', function (Blueprint $table) {
-            $table->id('rooms_categories_id');
+            $table->id();
             $table->string('description');
             $table->unsignedInteger('price_in_cents'); // Stocké en entier
             $table->integer('bed_size'); // En mètres carrés

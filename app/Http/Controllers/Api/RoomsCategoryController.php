@@ -144,4 +144,15 @@
 
             return response()->json(['message' => 'Feature detached successfully']);
         }
+
+        public function getFeatures($roomCategoryId): \Illuminate\Http\JsonResponse
+        {
+            $roomCategory = RoomsCategory::with('features')->findOrFail($roomCategoryId);
+
+            return response()->json([
+                'room_category' => $roomCategory->name,
+                'features' => $roomCategory->features,
+            ]);
+        }
+
     }
