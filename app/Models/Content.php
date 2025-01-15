@@ -10,7 +10,6 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'content_id';
 
 
     protected $fillable = [

@@ -15,11 +15,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('images', function (Blueprint $table) {
-            $table->id('image_id');
+            $table->id();
             $table->string('url');
-            $table->foreignId('fk_content_id')->nullable()->constrained('contents', 'content_id')->onDelete('cascade');
-            $table->foreignId('fk_news_article_id')->nullable()->constrained('news_articles', 'news_article_id')->onDelete('cascade');
-            $table->foreignId('fk_service_id')->nullable()->constrained('services', 'service_id')->onDelete('cascade');
+            $table->foreignIdFor(Content::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(NewsArticle::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Service::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
 //            $table->foreignIdFor('fk_rooms_category_id');
             $table->timestamps();
         });

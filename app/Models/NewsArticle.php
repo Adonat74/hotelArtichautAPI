@@ -10,7 +10,7 @@ class NewsArticle extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'news_article_id';
+
 
     protected $fillable = [
         'title',

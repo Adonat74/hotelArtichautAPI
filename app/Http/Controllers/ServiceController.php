@@ -53,7 +53,7 @@ class ServiceController extends Controller
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
                         'url' => $imagePath,
-                        'fk_service_id' => $service->service_id,
+                        'service_id' => $service->id,
                     ]);
                     $image->save();
 
@@ -101,7 +101,7 @@ class ServiceController extends Controller
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
                         'url' => $imagePath,
-                        'fk_service_id' => $service->service_id,
+                        'service_id' => $service->id,
                     ]);
                     $image->save();
                 }

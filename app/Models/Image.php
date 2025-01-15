@@ -13,10 +13,10 @@ class Image extends Model
 
     protected $fillable = [
         'url',
-        'fk_content_id',
-        'fk_news_id',
-        'fk_service_id',
-        'fk_rooms_category_id'
+        'content_id',
+        'news_id',
+        'service_id',
+        'rooms_category_id'
     ];
 
 
@@ -32,6 +32,6 @@ class Image extends Model
 
     public function service(): BelongsTo
     {
-        return $this->belongsTo(Service::class, 'fk_service_id', 'service_id');
+        return $this->belongsTo(Service::class);
     }
 }

@@ -11,7 +11,6 @@ class Service extends Model
     use HasFactory;
 
 
-    public $primaryKey = 'service_id';
 
     protected $fillable = [
         'title',
@@ -22,7 +21,7 @@ class Service extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(Image::class, 'fk_service_id', 'service_id');
+        return $this->hasMany(Image::class);
     }
 
 
