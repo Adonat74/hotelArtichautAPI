@@ -128,6 +128,6 @@ class ServiceController extends Controller
             }
         }
         $service->delete();
-        return response()->json(['deletedService' => $service]);
+        return response()->json(['deletedService' => $service->load('images')]);
     }
 }

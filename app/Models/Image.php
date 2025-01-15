@@ -14,7 +14,7 @@ class Image extends Model
     protected $fillable = [
         'url',
         'content_id',
-        'news_id',
+        'news_article_id',
         'service_id',
         'rooms_category_id'
     ];

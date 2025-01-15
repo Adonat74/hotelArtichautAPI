@@ -11,14 +11,13 @@ class NewsArticle extends Model
     use HasFactory;
 
 
-
     protected $fillable = [
         'title',
         'short_description',
         'description',
     ];
 
-    public function photos(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }

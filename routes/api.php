@@ -19,7 +19,7 @@ Route::prefix('content')->controller(ContentController::class)->group(function (
     //add ONE content
     Route::post('/', 'addContent');
     //modify ONE content
-    Route::put('/{id}', 'updateContent');
+    Route::post('/{id}', 'updateContent');
     //delete ONE content
     Route::delete('/{id}', 'deleteContent');
 });
@@ -33,7 +33,7 @@ Route::prefix('news')->controller(NewsArticleController::class)->group(function 
     //add ONE news
     Route::post('/', 'addNewsArticle');
     //modify ONE news
-    Route::put('/{id}', 'updateNewsArticle');
+    Route::post('/{id}', 'updateNewsArticle');
     //delete ONE news
     Route::delete('/{id}', 'deleteNewsArticle');
 });

@@ -22,7 +22,7 @@ class Content extends Model
         'link',
     ];
 
-    public function photos(): HasMany
+    public function images(): HasMany
     {
         return $this->hasMany(Image::class);
     }
