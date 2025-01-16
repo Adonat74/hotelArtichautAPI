@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('rooms_categories', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('description');
             $table->unsignedInteger('price_in_cents'); // Stocké en entier
             $table->integer('bed_size'); // En mètres carrés
