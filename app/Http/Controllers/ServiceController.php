@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Service;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,23 +13,118 @@ use Illuminate\Validation\ValidationException;
 
 class ServiceController extends Controller
 {
+
+    /**
+     * @OA\Get(
+     *     path="/api/service/{id}",
+     *     summary="Get one service by id",
+     *     tags={"Services"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="The ID of the service",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *      ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Service not found"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
     public function getSingleService(int $id): object {
-        // le with permet d'afficher les images liées au service sous forme de tableau
-        $service = Service::with('images')->findOrFail($id);
-        return response()->json([
-            'service'=>$service,
-        ]);
+        try {
+            // le with permet d'afficher les images liées au service sous forme de tableau
+            $service = Service::with('images')->findOrFail($id);
+            return response()->json([
+                'service' => $service,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Service not found',
+                'message' => $e->getMessage(),
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the service',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/service",
+     *     summary="Get all services",
+     *     tags={"Services"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
     public function getAllService(): JsonResponse
     {
-        $services = Service::with('images')->get();
-        return response()->json([
-            'services'=>$services,
-        ]);
+        try {
+            $services = Service::with('images')->get();
+            return response()->json([
+                'newsArticles' => $services,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the news articles',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/api/service",
+     *     summary="Add a service",
+     *     tags={"Services"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  @OA\Property(
+     *                      property="title",
+     *                      type="string",
+     *                      description="The title of the service"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="price_in_cent",
+     *                      type="integer",
+     *                      description="The price in cent, 1000 = 10.00$",
+     *                      minimum=0
+     *                  ),
+     *                  @OA\Property(
+     *                      property="duration_in_day",
+     *                      type="integer",
+     *                      description="The duration of the service in days",
+     *                      minimum=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="is_per_person",
+     *                      type="string",
+     *                      description="If the price is per person or not true or false"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="images[]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="string",
+     *                          format="binary",
+     *                          description="An array of image files"
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(response=201, description="Successful operation"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
     public function addService(Request $request): JsonResponse
     {
         try {
@@ -63,12 +160,78 @@ class ServiceController extends Controller
             }
             return response()->json([
                 'addedService' => $service->load('images'),
-            ]);
+            ], 201);
         } catch (ValidationException $exception) {
-            return response()->json($exception->errors());
+            return response()->json([
+                'error' => 'Validation failed',
+                'message' => $exception->errors()
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while adding the news article',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/service/{id}",
+     *     summary="Update a service by id",
+     *     tags={"Services"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the service",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  @OA\Property(
+     *                      property="title",
+     *                      type="string",
+     *                      description="The title of the service"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="price_in_cent",
+     *                      type="integer",
+     *                      description="The price in cent, 1000 = 10.00$",
+     *                      minimum=0
+     *                  ),
+     *                  @OA\Property(
+     *                      property="duration_in_day",
+     *                      type="integer",
+     *                      description="The duration of the service in days",
+     *                      minimum=1
+     *                  ),
+     *                  @OA\Property(
+     *                      property="is_per_person",
+     *                      type="string",
+     *                      description="If the price is per person or not true or false"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="images[]",
+     *                      type="array",
+     *                      @OA\Items(
+     *                          type="string",
+     *                          format="binary",
+     *                          description="An array of image files"
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Service not found"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
     public function updateService(Request $request, String $id): JsonResponse
     {
         try {
@@ -112,22 +275,67 @@ class ServiceController extends Controller
             return response()->json([
                 'updatedService' => $service->load('images'),
             ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Service not found',
+                'message' => $e->getMessage()
+            ], 404);
         } catch (ValidationException $exception) {
-            return response()->json($exception->errors());
+            return response()->json([
+                'error' => 'Validation failed',
+                'message' => $exception->errors()
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while updating the Service',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/service/{id}",
+     *     summary="Delete a service by id",
+     *     tags={"Services"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          description="The ID of the service",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *      ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Service not found"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
     public function deleteService(String $id): JsonResponse
     {
-        $service = Service::findOrFail($id);
-        $existingImages = $service->images()->get();
-        if ($existingImages) {
-            foreach ($existingImages as $existingImage) {
-                Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete();
+        try {
+            $service = Service::findOrFail($id);
+            $existingImages = $service->images()->get();
+
+            if ($existingImages) {
+                foreach ($existingImages as $existingImage) {
+                    Storage::disk('public')->delete($existingImage->url);
+                    $existingImage->delete();
+                }
             }
+
+            $service->delete();
+
+            return response()->json(['deletedNewsArticle' => $service]); // OK status code
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'error' => 'Service not found',
+                'message' => $e->getMessage()
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while deleting the service',
+                'message' => $e->getMessage()
+            ], 500);
         }
-        $service->delete();
-        return response()->json(['deletedService' => $service->load('images')]);
     }
 }
