@@ -69,7 +69,7 @@ class ServiceController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'An error occurred while fetching the news articles',
+                'error' => 'An error occurred while fetching the services',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -322,10 +322,9 @@ class ServiceController extends Controller
                     $existingImage->delete();
                 }
             }
-
             $service->delete();
 
-            return response()->json(['deletedNewsArticle' => $service]); // OK status code
+            return response()->json(['deletedNewsArticle' => $service]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Service not found',
