@@ -23,6 +23,11 @@ class DatabaseSeeder extends Seeder
             ContentSeeder::class,
             NewsArticleSeeder::class,
             ServiceSeeder::class,
+            RoomsCategorySeeder::class,
+            RoomsSeeder::class,
+            RoomsFeatureSeeder::class,
+            ReviewsSeeder::class,
+            RoomCategoryFeatureSeeder::class,
         ]);
 
 
