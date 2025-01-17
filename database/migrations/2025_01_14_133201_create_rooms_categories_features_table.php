@@ -11,7 +11,7 @@
          */
         public function up(): void
         {
-            Schema::create('room_category_feature', function (Blueprint $table) {
+            Schema::create('rooms_categories_features', function (Blueprint $table) {
                 $table->id();
 
 
@@ -26,6 +26,6 @@
          */
         public function down(): void
         {
-            Schema::dropIfExists('room_category_feature');
+            Schema::dropIfExists('rooms_categories_features');
         }
     };

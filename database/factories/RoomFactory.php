@@ -2,13 +2,13 @@
 
     namespace Database\Factories;
 
-    use App\Models\Rooms;
+    use App\Models\Room;
     use App\Models\RoomsCategory;
     use Illuminate\Database\Eloquent\Factories\Factory;
 
-    class RoomsFactory extends Factory
+    class RoomFactory extends Factory
     {
-        protected $model = Rooms::class;
+        protected $model = Room::class;
 
         // Suivi des numéros utilisés pour chaque catégorie
         protected static $usedNumbers = [

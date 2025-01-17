@@ -19,7 +19,7 @@ class RoomsCategory extends Model
 
     public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Rooms::class);
+        return $this->hasMany(Room::class);
     }
 
     public function features(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

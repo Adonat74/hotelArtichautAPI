@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
             NewsArticleSeeder::class,
             ServiceSeeder::class,
             RoomsCategorySeeder::class,
-            RoomsSeeder::class,
+            RoomSeeder::class,
             RoomsFeatureSeeder::class,
-            ReviewsSeeder::class,
+            ReviewSeeder::class,
             RoomCategoryFeatureSeeder::class,
         ]);
 

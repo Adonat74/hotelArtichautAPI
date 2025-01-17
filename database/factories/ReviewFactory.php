@@ -2,12 +2,11 @@
 
     namespace Database\Factories;
 
-    use App\Models\Reviews;
+    use App\Models\Review;
     use Illuminate\Database\Eloquent\Factories\Factory;
-
-    class ReviewsFactory extends Factory
+    class ReviewFactory extends Factory
     {
-        protected $model = Reviews::class;
+        protected $model = Review::class;
 
         public function definition(): array
         {

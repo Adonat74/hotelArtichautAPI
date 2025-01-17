@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Rooms;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 
-class RoomsController extends Controller
+class RoomController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $rooms = Rooms::all();
+        $rooms = Room::all();
         return response()->json($rooms);
     }
 
@@ -34,7 +33,7 @@ class RoomsController extends Controller
             ]);
 
             // Création et sauvegarde de la nouvelle catégorie
-            $room = new Rooms($validatedData);
+            $room = new Room($validatedData);
             $room->save();
 
             // Retourne une réponse JSON avec les données enregistrées
@@ -57,7 +56,7 @@ class RoomsController extends Controller
      */
     public function show(string $id): \Illuminate\Http\JsonResponse
     {
-        $room = Rooms::findOrFail($id);
+        $room = Room::findOrFail($id);
 
         if (!$room) {
             return response()->json(['error' => 'Chambre non trouvée'], 404);
@@ -79,7 +78,7 @@ class RoomsController extends Controller
                 'rooms_category_id' => 'bail|required|integer',
             ]);
 
-            $room = Rooms::findOrFail($id);
+            $room = Room::findOrFail($id);
 
             if (!$room) {
                 return response()->json(['error' => 'chambre non trouvée'], 404);
@@ -106,7 +105,7 @@ class RoomsController extends Controller
      */
     public function destroy(string $id): \Illuminate\Http\JsonResponse
     {
-        $room = Rooms::findOrFail($id);
+        $room = Room::findOrFail($id);
 
         if (!$room) {
             return response()->json(['error' => 'chambre non trouvée'], 404);

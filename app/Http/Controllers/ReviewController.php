@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Reviews;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 
-class ReviewsController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $reviews = Reviews::all();
+        $reviews = Review::all();
         return response()->json([$reviews]);
 
     }
@@ -33,7 +32,7 @@ class ReviewsController extends Controller
             ]);
 
 
-            $review = new Reviews($validatedData);
+            $review = new Review($validatedData);
             $review->save();
 
             return response()->json($review, 201);
@@ -55,7 +54,7 @@ class ReviewsController extends Controller
      */
     public function show(string $id)
     {
-        $reviews = Reviews :: findOrFail($id);
+        $reviews = Review :: findOrFail($id);
 
         if (!$reviews) {
             return response()->json(['error' => 'review non trouvée'], 404);
@@ -74,7 +73,7 @@ class ReviewsController extends Controller
                 'review_content' => 'bail|required|string',
                 'user_id' => 'bail|required|integer',
             ]);
-            $reviews = Reviews :: findOrFail($id);
+            $reviews = Review :: findOrFail($id);
 
             if (!$reviews) {
                 return response()->json(['error' => 'review non trouvée'], 404);
@@ -100,7 +99,7 @@ class ReviewsController extends Controller
      */
     public function destroy(string $id)
     {
-        $reviews = Reviews ::findOrFail($id);
+        $reviews = Review ::findOrFail($id);
         if (!$reviews) {
             return response()->json(['error' => 'review non trouvée']);
         }

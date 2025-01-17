@@ -2,12 +2,11 @@
 
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\NewsArticleController;
+use App\Http\Controllers\RoomsCategoryController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomsFeatureController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ReviewsController;
-use App\Http\Controllers\Api\RoomsCategoryController;
-use App\Http\Controllers\Api\RoomsController;
-use App\Http\Controllers\Api\RoomsFeatureController;
 
 //Route::get('/user', function (Request $request) {
 //    return $request->user();
@@ -66,11 +65,11 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
     });
 
     Route::prefix('rooms')->group(function () {
-        Route::get('/', [RoomsController::class, 'index']);
-        Route::post('/', [RoomsController::class, 'store']);
-        Route::get('/{id}', [RoomsController::class, 'show']);
-        Route::put('/{id}', [RoomsController::class, 'update']);
-        Route::delete('/{id}', [RoomsController::class, 'destroy']);
+        Route::get('/', [RoomController::class, 'index']);
+        Route::post('/', [RoomController::class, 'store']);
+        Route::get('/{id}', [RoomController::class, 'show']);
+        Route::put('/{id}', [RoomController::class, 'update']);
+        Route::delete('/{id}', [RoomController::class, 'destroy']);
     });
 
     Route::apiResource('rooms-features', RoomsFeatureController::class);
