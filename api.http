@@ -1,0 +1,105 @@
+@base_address = http://localhost:8000/api
+
+
+
+
+### GET all services
+GET {{base_address}}/service
+
+### GET one service
+GET {{base_address}}/service/1
+
+### POST one service
+POST {{base_address}}/service
+Content-Type: application/json
+
+{
+    "title": "Hello lucas est pd",
+    "price_in_cent": 1000,
+    "duration_in_day": 2,
+    "is_per_person": "true"
+}
+
+### PUT one service
+POST {{base_address}}/service/2
+Content-Type: application/json
+
+{
+    "title": "Hello et pas qu'un peu",
+    "price_in_cent": 1000,
+    "duration_in_day": 2,
+    "is_per_person": "true"
+}
+
+### DELETE one service
+DELETE {{base_address}}/service/3
+
+
+
+
+### GET all contents
+GET {{base_address}}/service
+
+### GET one content
+GET {{base_address}}/content/1
+
+### POST one content
+POST {{base_address}}/content
+Content-Type: application/json
+
+{
+    "name": "luuuuuuucas",
+    "title": "lucas est pd",
+    "short_description": "Petite description comme ça à la cool",
+    "description": "Grande description comme ça aussi à la cool",
+    "landing_page_display": "true",
+    "navbar_display": "false"
+}
+
+### PUT one content
+POST {{base_address}}/content/2
+Content-Type: application/json
+
+{
+    "name": "luuuuuuucas",
+    "title": "lucas est pd",
+    "short_description": "Petite description comme ça à la cool",
+    "description": "Grande description comme ça aussi à la cool",
+    "landing_page_display": "true",
+    "navbar_display": "false"
+}
+
+### DELETE one content
+DELETE {{base_address}}/content/3
+
+
+
+
+### GET all newss
+GET {{base_address}}/service
+
+### GET one news
+GET {{base_address}}/news/1
+
+### POST one news
+POST {{base_address}}/news
+Content-Type: application/json
+
+{
+    "title": "lucas est pd",
+    "short_description": "Petite description comme ça à la cool",
+    "description": "Grande description comme ça aussi à la cool"
+}
+
+### PUT one news
+POST {{base_address}}/news/2
+Content-Type: application/json
+
+{
+    "title": "lucas est pd",
+    "short_description": "Petite description comme ça à la cool",
+    "description": "Grande description comme ça aussi à la cool"
+}
+
+### DELETE one news
+DELETE {{base_address}}/news/3

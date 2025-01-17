@@ -1,0 +1,677 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Hotel Artichaut API",
+        "description": "API documentation for Hotel Artichaut API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/content/{id}": {
+            "get": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Get one content by id",
+                "operationId": "7e991201ed3de19487a7b882c38f8b9e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the content",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Content not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Update content by id",
+                "operationId": "303cd1bcc7c01579a8ddd42398a372ba",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the content",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "title",
+                                    "short_description",
+                                    "description",
+                                    "landing_page_display",
+                                    "navbar_display",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the content",
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "description": "The title of the content",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "A short description of the content",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The full description of the content",
+                                        "type": "string"
+                                    },
+                                    "landing_page_display": {
+                                        "description": "Landing page display option",
+                                        "type": "string"
+                                    },
+                                    "navbar_display": {
+                                        "description": "Navbar display option",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Content not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Delete content by id",
+                "operationId": "6280725e17802f77e5029843d887fbec",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the content",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Content not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/content": {
+            "get": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Get all contents",
+                "operationId": "b06ce0054b33431f4ff5152bb34bf55a",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Add content",
+                "operationId": "ce91ecc2c09ea51394154e8a1fc7b6e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "title",
+                                    "short_description",
+                                    "description",
+                                    "landing_page_display",
+                                    "navbar_display",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name of the content",
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "description": "The title of the content",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "A short description of the content",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The full description of the content",
+                                        "type": "string"
+                                    },
+                                    "landing_page_display": {
+                                        "description": "Landing page display option",
+                                        "type": "string"
+                                    },
+                                    "navbar_display": {
+                                        "description": "Navbar display option",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/news/{id}": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get one news by id",
+                "operationId": "60ce16d414a9c3e71989ed2f67cdb9a0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the news",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Update a news article by id",
+                "operationId": "74e290b2773173f71c79a30460a14ba7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the news article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "short_description",
+                                    "description",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "The title of the news article",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "Short description of the news article",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Full description of the news article",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "News not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Delete a news article by id",
+                "operationId": "654c643d6d36c35debc9e6259cc2e95d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the news article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "News not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/news": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get all news",
+                "operationId": "a6bce012c769a7722dcf8faf1798b1c4",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Add a news article",
+                "operationId": "ad8caa89d9ea11c22d751612547bad6c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "short_description",
+                                    "description",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "The title of the news article",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "Short description of the news article",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Full description of the news article",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/service/{id}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get one service by id",
+                "operationId": "47e89f875caf1f418383bfa4ef06aec5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Update a service by id",
+                "operationId": "55e079a9772cd3b2e7af344abf33a58f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "price_in_cent",
+                                    "duration_in_day",
+                                    "is_per_person",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "price_in_cent": {
+                                        "description": "The price in cent, 1000 = 10.00$",
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "duration_in_day": {
+                                        "description": "The duration of the service in days",
+                                        "type": "integer",
+                                        "minimum": 1
+                                    },
+                                    "is_per_person": {
+                                        "description": "If the price is per person or not true or false",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Delete a service by id",
+                "operationId": "1997e04557ef109e97d3f541e25acd98",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/service": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get all services",
+                "operationId": "d7894bfe64f4dbb9ef0dac605e633812",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Add a service",
+                "operationId": "0f5f1254603b0814c2f1ab49df832906",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "price_in_cent",
+                                    "duration_in_day",
+                                    "is_per_person",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "price_in_cent": {
+                                        "description": "The price in cent, 1000 = 10.00$",
+                                        "type": "integer",
+                                        "minimum": 0
+                                    },
+                                    "duration_in_day": {
+                                        "description": "The duration of the service in days",
+                                        "type": "integer",
+                                        "minimum": 1
+                                    },
+                                    "is_per_person": {
+                                        "description": "If the price is per person or not true or false",
+                                        "type": "string"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "description": "An array of image files",
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Contents",
+            "description": "Contents"
+        },
+        {
+            "name": "News",
+            "description": "News"
+        },
+        {
+            "name": "Services",
+            "description": "Services"
+        }
+    ]
+}
