@@ -1,8 +1,6 @@
 @base_address = http://localhost:8000/api
 
 
-
-
 ### GET all services
 GET {{base_address}}/service
 
@@ -38,7 +36,7 @@ DELETE {{base_address}}/service/3
 
 
 ### GET all contents
-GET {{base_address}}/service
+GET {{base_address}}/content
 
 ### GET one content
 GET {{base_address}}/content/1
@@ -75,8 +73,8 @@ DELETE {{base_address}}/content/3
 
 
 
-### GET all newss
-GET {{base_address}}/service
+### GET all news
+GET {{base_address}}/news
 
 ### GET one news
 GET {{base_address}}/news/1
@@ -103,3 +101,37 @@ Content-Type: application/json
 
 ### DELETE one news
 DELETE {{base_address}}/news/3
+
+
+
+
+### GET all room
+GET {{base_address}}/room
+
+### GET one room
+GET {{base_address}}/room/1
+
+### POST one room
+POST {{base_address}}/room
+Content-Type: application/json
+
+{
+    "number": 244,
+    "name": "Kling",
+    "description": "Nesciunt nostrum autem amet quia consequatur odio.",
+    "rooms_category_id": 2
+}
+
+### PUT one room
+POST {{base_address}}/room/2
+Content-Type: application/json
+
+{
+    "number": 244,
+    "name": "Kling",
+    "description": "Nesciunt nostrum autem amet quia consequatur odio.",
+    "rooms_category_id": 2
+}
+
+### DELETE one room
+DELETE {{base_address}}/room/5

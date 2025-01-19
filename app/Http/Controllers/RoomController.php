@@ -15,9 +15,22 @@ use Illuminate\Validation\ValidationException;
 class RoomController extends Controller
 {
 
-
     /**
-     * Display the specified resource.
+     * @OA\Get(
+     *     path="/api/room/{id}",
+     *     summary="Get one room by id",
+     *     tags={"Rooms"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the room",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=404, description="Room not found"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
      */
     public function getSingleRoom(int $id): JsonResponse
     {
@@ -37,9 +50,14 @@ class RoomController extends Controller
         }
     }
 
-
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *     path="/api/room",
+     *     summary="Get all rooms",
+     *     tags={"Rooms"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
      */
     public function getAllRooms(): JsonResponse
     {
@@ -54,8 +72,30 @@ class RoomController extends Controller
         }
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * @OA\Post(
+     *     path="/api/room",
+     *     summary="Add a new room",
+     *     tags={"Rooms"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  required={"number", "name", "description", "rooms_category_id"},
+     *                  @OA\Property(property="number", type="integer", description="Room number"),
+     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="description", type="string", description="Room description"),
+     *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(response=201, description="Room created successfully"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
      */
     public function addRoom(Request $request): JsonResponse
     {
@@ -65,7 +105,7 @@ class RoomController extends Controller
                 'number' => 'bail|required|integer',
                 'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
-                'rooms_category_id' => 'bail|required|integer',
+                'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -108,9 +148,37 @@ class RoomController extends Controller
     }
 
 
-
     /**
-     * Update the specified resource in storage.
+     * @OA\Post(
+     *     path="/api/room/{id}",
+     *     summary="Update an existing room",
+     *     tags={"Rooms"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Room ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  required={"number", "name", "description", "rooms_category_id", "images[]"},
+     *                  @OA\Property(property="number", type="integer", description="Room number"),
+     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="description", type="string", description="Room description"),
+     *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
+     *              )
+     *          )
+     *     ),
+     *     @OA\Response(response=200, description="Room updated successfully"),
+     *     @OA\Response(response=404, description="Room not found"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
      */
     public function updateRoom(Request $request, string $id): JsonResponse
     {
@@ -119,7 +187,7 @@ class RoomController extends Controller
                 'number' => 'bail|required|integer',
                 'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
-                'rooms_category_id' => 'bail|required|integer',
+                'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -176,9 +244,22 @@ class RoomController extends Controller
 
 
 
-
     /**
-     * Remove the specified resource from storage.
+     * @OA\Delete(
+     *     path="/api/room/{id}",
+     *     summary="Delete a room by ID",
+     *     tags={"Rooms"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the room to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Room deleted successfully"),
+     *     @OA\Response(response=404, description="Room not found"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
      */
     public function deleteRoom(string $id): JsonResponse
     {

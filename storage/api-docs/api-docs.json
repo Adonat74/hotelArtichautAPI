@@ -157,7 +157,7 @@
                     "Contents"
                 ],
                 "summary": "Get all contents",
-                "operationId": "b06ce0054b33431f4ff5152bb34bf55a",
+                "operationId": "17eea5db0871bdfd77732897a5f3760d",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -375,7 +375,7 @@
                     "News"
                 ],
                 "summary": "Get all news",
-                "operationId": "a6bce012c769a7722dcf8faf1798b1c4",
+                "operationId": "a73927f8b55e83ba817c6f5378e0b08f",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -432,6 +432,216 @@
                 "responses": {
                     "201": {
                         "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/room/{id}": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get one room by id",
+                "operationId": "bf39b5506844c3c099c67e30b4468321",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the room",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Update an existing room",
+                "operationId": "b588f595ad1087ba3940b1da52fdbbf7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "number",
+                                    "name",
+                                    "description",
+                                    "rooms_category_id",
+                                    "images[]"
+                                ],
+                                "properties": {
+                                    "number": {
+                                        "description": "Room number",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Room name",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Room description",
+                                        "type": "string"
+                                    },
+                                    "rooms_category_id": {
+                                        "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Room updated successfully"
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Delete a room by ID",
+                "operationId": "0e73d4b133bc4897da38d8139bb2b78d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the room to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room deleted successfully"
+                    },
+                    "404": {
+                        "description": "Room not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/room": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get all rooms",
+                "operationId": "85edfce3f676f08ca68242789e3f3d4d",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Add a new room",
+                "operationId": "32a8ad1be4c5af0292bcce5466d943cf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "number",
+                                    "name",
+                                    "description",
+                                    "rooms_category_id"
+                                ],
+                                "properties": {
+                                    "number": {
+                                        "description": "Room number",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Room name",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Room description",
+                                        "type": "string"
+                                    },
+                                    "rooms_category_id": {
+                                        "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "images[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Room created successfully"
                     },
                     "422": {
                         "description": "Validation failed"
@@ -585,7 +795,7 @@
                     "Services"
                 ],
                 "summary": "Get all services",
-                "operationId": "d7894bfe64f4dbb9ef0dac605e633812",
+                "operationId": "00b3a6c89f5ec10d5fbc1fc74d688a92",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -668,6 +878,10 @@
         {
             "name": "News",
             "description": "News"
+        },
+        {
+            "name": "Rooms",
+            "description": "Rooms"
         },
         {
             "name": "Services",
