@@ -27,8 +27,8 @@ class RoomController extends Controller
             // Validation des données entrantes
             $validatedData = $request->validate([
                 'number' => 'bail|required|integer',
+                'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
-                'price_in_cents' => 'bail|required|integer',
                 'rooms_category_id' => 'bail|required|integer',
             ]);
 
@@ -73,8 +73,8 @@ class RoomController extends Controller
         try {
             $validatedData = $request->validate([
                 'number' => 'bail|required|integer',
+                'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
-                'price_in_cents' => 'bail|required|integer',
                 'rooms_category_id' => 'bail|required|integer',
             ]);
 

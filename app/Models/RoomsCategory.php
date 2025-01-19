@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RoomsCategory extends Model
 {
@@ -13,18 +15,23 @@ class RoomsCategory extends Model
 
     protected $fillable = [
         'description',
-        'price_in_cents',
+        'price_in_cent',
         'bed_size',
     ];
 
-    public function rooms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function rooms(): HasMany
     {
         return $this->hasMany(Room::class);
     }
 
-    public function features(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function features(): BelongsToMany
     {
         return $this->belongsToMany(RoomsFeature::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
     }
 
 }

@@ -51,8 +51,8 @@
 
             return [
                 'number' => $roomNumber,
+                'name' => $this->faker->lastName(),
                 'description' => $this->faker->sentence(10),
-                'price_in_cents' => $this->faker->numberBetween(5000, 20000),
                 'rooms_category_id' => $category->id,
             ];
         }

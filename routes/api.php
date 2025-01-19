@@ -15,67 +15,52 @@ use Illuminate\Support\Facades\Route;
 
 // CONTENT ROUTES
 Route::prefix('content')->controller(ContentController::class)->group(function () {
-    //get ALL contents
-    Route::get('/', 'getAllContent');
-    //add ONE content
-    Route::get('/{id}', 'getSingleContent');
-    //add ONE content
-    Route::post('/', 'addContent');
-    //modify ONE content
-    Route::post('/{id}', 'updateContent');
-    //delete ONE content
-    Route::delete('/{id}', 'deleteContent');
+    Route::get('/', 'getAllContent'); // get ALL contents
+    Route::get('/{id}', 'getSingleContent'); // get ONE content
+    Route::post('/', 'addContent'); // add ONE content
+    Route::post('/{id}', 'updateContent'); // modify ONE content (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteContent'); // delete ONE content
 });
 
 // NEWS ARTICLES ROUTES
 Route::prefix('news')->controller(NewsArticleController::class)->group(function () {
-    //get ALL news
-    Route::get('/', 'getAllNewsArticle');
-    //add ONE news
-    Route::get('/{id}', 'getSingleNewsArticle');
-    //add ONE news
-    Route::post('/', 'addNewsArticle');
-    //modify ONE news
-    Route::post('/{id}', 'updateNewsArticle');
-    //delete ONE news
-    Route::delete('/{id}', 'deleteNewsArticle');
+    Route::get('/', 'getAllNewsArticle'); // get ALL news
+    Route::get('/{id}', 'getSingleNewsArticle'); // get ONE news
+    Route::post('/', 'addNewsArticle'); // add ONE news
+    Route::post('/{id}', 'updateNewsArticle'); // modify ONE news (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteNewsArticle'); // delete ONE news
 });
 
 // SERVICE ROUTES
 Route::prefix('service')->controller(ServiceController::class)->group(function () {
-    //get ALL service
-    Route::get('/', 'getAllService');
-    //add ONE service
-    Route::get('/{id}', 'getSingleService');
-    //add ONE service
-    Route::post('/', 'addService');
-    //modify ONE service POST pour les update car laravel ne prend pas en compte l'upload de fichier via PUT
-    Route::post('/{id}', 'updateService');
-    //delete ONE service
-    Route::delete('/{id}', 'deleteService');
+    Route::get('/', 'getAllService'); // get ALL services
+    Route::get('/{id}', 'getSingleService'); // get ONE service
+    Route::post('/', 'addService'); // add ONE service
+    Route::post('/{id}', 'updateService'); // modify ONE service (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteService'); // delete ONE service
 });
 
 
-    Route::prefix('rooms-categories')->group(function () {
-        Route::get('/', [RoomsCategoryController::class, 'index']); // Liste toutes les catégories
-        Route::post('/', [RoomsCategoryController::class, 'store']); // Crée une nouvelle catégorie
-        Route::get('/{id}', [RoomsCategoryController::class, 'show']); // Affiche une catégorie spécifique
-        Route::put('/{id}', [RoomsCategoryController::class, 'update']); // Met à jour une catégorie
-        Route::delete('/{id}', [RoomsCategoryController::class, 'destroy']); // Supprime une catégorie
-    });
+Route::prefix('rooms-category')->group(function () {
+    Route::get('/', [RoomsCategoryController::class, 'index']); // Liste toutes les catégories
+    Route::post('/', [RoomsCategoryController::class, 'store']); // Crée une nouvelle catégorie
+    Route::get('/{id}', [RoomsCategoryController::class, 'show']); // Affiche une catégorie spécifique
+    Route::post('/{id}', [RoomsCategoryController::class, 'update']); // Met à jour une catégorie
+    Route::delete('/{id}', [RoomsCategoryController::class, 'destroy']); // Supprime une catégorie
+});
 
-    Route::prefix('rooms')->group(function () {
-        Route::get('/', [RoomController::class, 'index']);
-        Route::post('/', [RoomController::class, 'store']);
-        Route::get('/{id}', [RoomController::class, 'show']);
-        Route::put('/{id}', [RoomController::class, 'update']);
-        Route::delete('/{id}', [RoomController::class, 'destroy']);
-    });
+Route::prefix('room')->group(function () {
+    Route::get('/', [RoomController::class, 'index']);
+    Route::post('/', [RoomController::class, 'store']);
+    Route::get('/{id}', [RoomController::class, 'show']);
+    Route::post('/{id}', [RoomController::class, 'update']);
+    Route::delete('/{id}', [RoomController::class, 'destroy']);
+});
 
-    Route::apiResource('rooms-features', RoomsFeatureController::class);
-    Route::prefix('rooms-categories')->group(function () {
-        Route::post('{id}/features', [RoomsCategoryController::class, 'attachFeature']);
-        Route::delete('{id}/features/{featureId}', [RoomsCategoryController::class, 'detachFeature']);
-        Route::get('{id}/features', [RoomsCategoryController::class, 'listFeatures']);
-    });
+Route::apiResource('rooms-feature', RoomsFeatureController::class);
+Route::prefix('rooms-categories')->group(function () {
+    Route::post('{id}/features', [RoomsCategoryController::class, 'attachFeature']);
+    Route::delete('{id}/features/{featureId}', [RoomsCategoryController::class, 'detachFeature']);
+    Route::get('{id}/features', [RoomsCategoryController::class, 'listFeatures']);
+});
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class RoomsFeature extends Model
 {
@@ -15,7 +16,7 @@ class RoomsFeature extends Model
         'description'
     ];
 
-    public function roomsCategories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function roomsCategories(): BelongsToMany
     {
         return $this->belongsToMany(RoomsCategory::class);
     }

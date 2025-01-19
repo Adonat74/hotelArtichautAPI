@@ -16,7 +16,8 @@ class Image extends Model
         'content_id',
         'news_article_id',
         'service_id',
-        'rooms_category_id'
+        'rooms_category_id',
+        'room_id',
     ];
 
 
@@ -33,5 +34,15 @@ class Image extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function roomsCategory(): BelongsTo
+    {
+        return $this->belongsTo(RoomsCategory::class);
+    }
+
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\RoomsFeature;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -11,7 +12,7 @@ class RoomsFeatureController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(): JsonResponse
     {
         $features = RoomsFeature::all();
         return response()->json($features);
@@ -20,7 +21,7 @@ class RoomsFeatureController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             // Validation des données entrantes
@@ -51,7 +52,7 @@ class RoomsFeatureController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): \Illuminate\Http\JsonResponse
+    public function show(string $id): JsonResponse
     {
         $feature = RoomsFeature::findOrFail($id);
 
@@ -65,7 +66,7 @@ class RoomsFeatureController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): \Illuminate\Http\JsonResponse
+    public function update(Request $request, string $id): JsonResponse
     {
         try {
             $validatedData = $request->validate([
@@ -98,7 +99,7 @@ class RoomsFeatureController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): \Illuminate\Http\JsonResponse
+    public function destroy(string $id): JsonResponse
     {
         $feature = RoomsFeature::findOrFail($id);
 

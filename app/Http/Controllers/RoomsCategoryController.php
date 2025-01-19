@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\Models\RoomsCategory;
+    use Illuminate\Http\JsonResponse;
     use Illuminate\Http\Request;
     use Illuminate\Validation\ValidationException;
 
@@ -11,7 +12,7 @@
         /**
          * Liste toutes les catégories de chambres.
          */
-        public function index(): \Illuminate\Http\JsonResponse
+        public function index(): JsonResponse
         {
             $categories = RoomsCategory::all();
             return response()->json($categories);
@@ -20,13 +21,13 @@
         /**
          * Crée une nouvelle catégorie de chambre.
          */
-        public function store(Request $request): \Illuminate\Http\JsonResponse
+        public function store(Request $request): JsonResponse
         {
             try {
                 // Validation des données entrantes
                 $validatedData = $request->validate([
                     'description' => 'bail|required|string|max:255',
-                    'price_in_cents' => 'bail|required|integer',
+                    'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
                 ]);
 
@@ -52,7 +53,7 @@
         /**
          * Affiche une catégorie spécifique par son ID.
          */
-        public function show($id): \Illuminate\Http\JsonResponse
+        public function show($id): JsonResponse
         {
             $category = RoomsCategory::findOrFail($id);
 
@@ -66,12 +67,12 @@
         /**
          * Met à jour une catégorie de chambre existante.
          */
-        public function update(Request $request, $id): \Illuminate\Http\JsonResponse
+        public function update(Request $request, $id): JsonResponse
         {
             try {
                 $validatedData = $request->validate([
                     'description' => 'bail|required|string|max:255',
-                    'price_in_cents' => 'bail|required|integer',
+                    'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
                 ]);
 
@@ -100,7 +101,7 @@
         /**
          * Supprime une catégorie de chambre existante.
          */
-        public function destroy($id): \Illuminate\Http\JsonResponse
+        public function destroy($id): JsonResponse
         {
             $category = RoomsCategory::findOrFail($id);
 
@@ -113,7 +114,7 @@
             return response()->json(['message' => 'Catégorie supprimée avec succès']);
         }
 
-        public function listFeatures($id): \Illuminate\Http\JsonResponse
+        public function listFeatures($id): JsonResponse
         {
             $category = RoomsCategory::findOrFail($id);
             $features = $category->features;
@@ -123,7 +124,7 @@
         /**
          * Associe une fonctionnalité à une catégorie.
          */
-        public function attachFeature(Request $request, $id): \Illuminate\Http\JsonResponse
+        public function attachFeature(Request $request, $id): JsonResponse
         {
             $request->validate(['feature_id' => 'required|exists:rooms_features,id']);
 
@@ -136,7 +137,7 @@
         /**
          * Dissocie une fonctionnalité d'une catégorie.
          */
-        public function detachFeature($id, $featureId): \Illuminate\Http\JsonResponse
+        public function detachFeature($id, $featureId): JsonResponse
         {
             $category = RoomsCategory::findOrFail($id);
             $category->features()->detach($featureId);
@@ -144,7 +145,7 @@
             return response()->json(['message' => 'Feature detached successfully']);
         }
 
-        public function getFeatures($roomCategoryId): \Illuminate\Http\JsonResponse
+        public function getFeatures($roomCategoryId): JsonResponse
         {
             $roomCategory = RoomsCategory::with('features')->findOrFail($roomCategoryId);
 
