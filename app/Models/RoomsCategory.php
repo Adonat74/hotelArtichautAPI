@@ -21,7 +21,7 @@ class RoomsCategory extends Model
 
     public function rooms(): HasMany
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Room::class, 'rooms_category_id', 'id');
     }
 
     public function features(): BelongsToMany

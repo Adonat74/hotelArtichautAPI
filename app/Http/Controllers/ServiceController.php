@@ -35,9 +35,7 @@ class ServiceController extends Controller
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
             $service = Service::with('images')->findOrFail($id);
-            return response()->json([
-                'service' => $service,
-            ]);
+            return response()->json($service);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Service not found',
@@ -60,13 +58,11 @@ class ServiceController extends Controller
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllService(): JsonResponse
+    public function getAllServices(): JsonResponse
     {
         try {
             $services = Service::with('images')->get();
-            return response()->json([
-                'newsArticles' => $services,
-            ]);
+            return response()->json($services);
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while fetching the services',
@@ -161,10 +157,10 @@ class ServiceController extends Controller
             return response()->json([
                 'addedService' => $service->load('images'),
             ], 201);
-        } catch (ValidationException $exception) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
-                'message' => $exception->errors()
+                'message' => $e->errors()
             ], 422);
         } catch (Exception $e) {
             return response()->json([
@@ -280,10 +276,10 @@ class ServiceController extends Controller
                 'error' => 'Service not found',
                 'message' => $e->getMessage()
             ], 404);
-        } catch (ValidationException $exception) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
-                'message' => $exception->errors()
+                'message' => $e->errors()
             ], 422);
         } catch (Exception $e) {
             return response()->json([
@@ -324,13 +320,13 @@ class ServiceController extends Controller
             }
             $service->delete();
 
-            return response()->json(['deletedNewsArticle' => $service]);
+            return response()->json(['message' => 'service deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Service not found',
                 'message' => $e->getMessage()
             ], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while deleting the service',
                 'message' => $e->getMessage()

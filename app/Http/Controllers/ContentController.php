@@ -34,9 +34,7 @@ class ContentController extends Controller
     {
         try {
             $content = Content::with('images')->findOrFail($id);
-            return response()->json([
-                'content' => $content,
-            ]);
+            return response()->json($content);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Content not found',
@@ -59,13 +57,11 @@ class ContentController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllContent(): JsonResponse
+    public function getAllContents(): JsonResponse
     {
         try {
             $contents = Content::with('images')->get();
-            return response()->json([
-                'contents' => $contents,
-            ]);
+            return response()->json($contents);
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while fetching the contents',
@@ -346,9 +342,7 @@ class ContentController extends Controller
 
             $content->delete();
 
-            return response()->json([
-                'deletedContent' => $content,
-            ]);
+            return response()->json(['message' => 'content deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Content not found',

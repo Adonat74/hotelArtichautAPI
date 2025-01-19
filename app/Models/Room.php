@@ -21,7 +21,7 @@ class Room extends Model
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(RoomsCategory::class);
+        return $this->belongsTo(RoomsCategory::class, 'rooms_category_id', 'id');
     }
 
     public function images(): HasMany

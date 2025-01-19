@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // CONTENT ROUTES
 Route::prefix('content')->controller(ContentController::class)->group(function () {
-    Route::get('/', 'getAllContent'); // get ALL contents
+    Route::get('/', 'getAllContents'); // get ALL contents
     Route::get('/{id}', 'getSingleContent'); // get ONE content
     Route::post('/', 'addContent'); // add ONE content
     Route::post('/{id}', 'updateContent'); // modify ONE content (POST is used for updates as Laravel doesn't support file uploads via PUT)
@@ -24,7 +24,7 @@ Route::prefix('content')->controller(ContentController::class)->group(function (
 
 // NEWS ARTICLES ROUTES
 Route::prefix('news')->controller(NewsArticleController::class)->group(function () {
-    Route::get('/', 'getAllNewsArticle'); // get ALL news
+    Route::get('/', 'getAllNewsArticles'); // get ALL news
     Route::get('/{id}', 'getSingleNewsArticle'); // get ONE news
     Route::post('/', 'addNewsArticle'); // add ONE news
     Route::post('/{id}', 'updateNewsArticle'); // modify ONE news (POST is used for updates as Laravel doesn't support file uploads via PUT)
@@ -33,7 +33,7 @@ Route::prefix('news')->controller(NewsArticleController::class)->group(function 
 
 // SERVICE ROUTES
 Route::prefix('service')->controller(ServiceController::class)->group(function () {
-    Route::get('/', 'getAllService'); // get ALL services
+    Route::get('/', 'getAllServices'); // get ALL services
     Route::get('/{id}', 'getSingleService'); // get ONE service
     Route::post('/', 'addService'); // add ONE service
     Route::post('/{id}', 'updateService'); // modify ONE service (POST is used for updates as Laravel doesn't support file uploads via PUT)
@@ -50,11 +50,11 @@ Route::prefix('rooms-category')->group(function () {
 });
 
 Route::prefix('room')->group(function () {
-    Route::get('/', [RoomController::class, 'index']);
-    Route::post('/', [RoomController::class, 'store']);
-    Route::get('/{id}', [RoomController::class, 'show']);
-    Route::post('/{id}', [RoomController::class, 'update']);
-    Route::delete('/{id}', [RoomController::class, 'destroy']);
+    Route::get('/', [RoomController::class, 'getAllRooms']);
+    Route::post('/', [RoomController::class, 'addRoom']);
+    Route::get('/{id}', [RoomController::class, 'getSingleRoom']);
+    Route::post('/{id}', [RoomController::class, 'updateRoom']);
+    Route::delete('/{id}', [RoomController::class, 'deleteRoom']);
 });
 
 Route::apiResource('rooms-feature', RoomsFeatureController::class);

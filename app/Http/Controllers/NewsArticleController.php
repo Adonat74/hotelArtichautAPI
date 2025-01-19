@@ -35,9 +35,7 @@ class NewsArticleController extends Controller
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
             $newsArticle = NewsArticle::with('images')->findOrFail($id);
-            return response()->json([
-                'newsArticle'=>$newsArticle,
-            ]);
+            return response()->json($newsArticle);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'News not found',
@@ -61,13 +59,11 @@ class NewsArticleController extends Controller
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllNewsArticle(): JsonResponse
+    public function getAllNewsArticles(): JsonResponse
     {
         try {
             $newsArticles = NewsArticle::with('images')->get();
-            return response()->json([
-                'newsArticles'=>$newsArticles,
-            ]);
+            return response()->json($newsArticles);
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while fetching the news articles',
@@ -308,7 +304,7 @@ class NewsArticleController extends Controller
 
             $newsArticle->delete();
 
-            return response()->json(['deletedNewsArticle' => $newsArticle]);
+            return response()->json(['message' => 'news deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'News not found',

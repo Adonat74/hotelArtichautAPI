@@ -10,7 +10,7 @@
     {
         public function run()
         {
-            RoomFactory::resetUsedNumbers();  // Réinitialiser les numéros utilisés
+//            RoomFactory::resetUsedNumbers();  // Réinitialiser les numéros utilisés
 
             // Créer directement 32 chambres sans catégorisation
             Room::factory()->count(32)->create();
