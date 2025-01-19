@@ -1,6 +1,6 @@
 @base_address = http://localhost:8000/api
 
-
+############################################################SERVICES
 ### GET all services
 GET {{base_address}}/service
 
@@ -34,7 +34,7 @@ DELETE {{base_address}}/service/3
 
 
 
-
+############################################################CONTENTS
 ### GET all contents
 GET {{base_address}}/content
 
@@ -72,7 +72,7 @@ DELETE {{base_address}}/content/3
 
 
 
-
+############################################################NEWS
 ### GET all news
 GET {{base_address}}/news
 
@@ -104,7 +104,7 @@ DELETE {{base_address}}/news/3
 
 
 
-
+############################################################ROOMS
 ### GET all room
 GET {{base_address}}/room
 
@@ -135,3 +135,36 @@ Content-Type: application/json
 
 ### DELETE one room
 DELETE {{base_address}}/room/5
+
+
+
+
+############################################################REVIEWS
+### GET all room
+GET {{base_address}}/review
+
+### GET one review
+GET {{base_address}}/review/1
+
+### POST one review
+POST {{base_address}}/review
+Content-Type: application/json
+
+{
+    "rate": 5,
+    "review_content": "not bad at all",
+    "user_id": 546
+}
+
+### PUT one review
+POST {{base_address}}/review/2
+Content-Type: application/json
+
+{
+    "rate": 2,
+    "review_content": "suck my dick",
+    "user_id": 69
+}
+
+### DELETE one review
+DELETE {{base_address}}/review/5

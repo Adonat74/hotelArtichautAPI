@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\NewsArticleController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoomsCategoryController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomsFeatureController;
@@ -40,6 +41,14 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
     Route::delete('/{id}', 'deleteService'); // delete ONE service
 });
 
+// REVIEW ROUTES
+Route::prefix('review')->controller(ReviewController::class)->group(function () {
+    Route::get('/', 'getAllReviews'); // get ALL reviews
+    Route::get('/{id}', 'getSingleReview'); // get ONE review
+    Route::post('/', 'addReview'); // add ONE review
+    Route::post('/{id}', 'updateReview'); // modify ONE review (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteReview'); // delete ONE review
+});
 
 Route::prefix('rooms-category')->group(function () {
     Route::get('/', [RoomsCategoryController::class, 'index']); // Liste toutes les catégories

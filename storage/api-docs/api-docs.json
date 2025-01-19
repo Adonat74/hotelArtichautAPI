@@ -442,6 +442,191 @@
                 }
             }
         },
+        "/api/review/{id}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get one review by id",
+                "operationId": "4b15c1314bc7795d6da3ef2d37038efd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the review",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Review not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Update a review by id",
+                "operationId": "86f9451e0d0d19c31dcfde484162cfd5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the review",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rate",
+                                    "review_content",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "rate": {
+                                        "description": "The rating of the review, between 1 and 5",
+                                        "type": "number"
+                                    },
+                                    "review_content": {
+                                        "description": "The content of the review",
+                                        "type": "string"
+                                    },
+                                    "user_id": {
+                                        "description": "The ID of the user who created the review",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Review not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Delete a review by id",
+                "operationId": "6aaac2ed13af9f0c01c281d8232a88f8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the review",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Review not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/review": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get all reviews",
+                "operationId": "b91bdd508b204f2afd0f11797a2ef631",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Add a review",
+                "operationId": "029fd4163616c636ab2d56b8951d780d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rate",
+                                    "review_content",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "rate": {
+                                        "description": "The rating of the review, between 1 and 5",
+                                        "type": "number"
+                                    },
+                                    "review_content": {
+                                        "description": "The content of the review",
+                                        "type": "string"
+                                    },
+                                    "user_id": {
+                                        "description": "The ID of the user who created the review",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/room/{id}": {
             "get": {
                 "tags": [
@@ -878,6 +1063,10 @@
         {
             "name": "News",
             "description": "News"
+        },
+        {
+            "name": "Reviews",
+            "description": "Reviews"
         },
         {
             "name": "Rooms",

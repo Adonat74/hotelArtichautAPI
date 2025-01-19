@@ -13,7 +13,6 @@ use Illuminate\Validation\ValidationException;
 
 class ServiceController extends Controller
 {
-
     /**
      * @OA\Get(
      *     path="/api/service/{id}",
