@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\Models\RoomsCategory;
+    use Exception;
     use Illuminate\Http\JsonResponse;
     use Illuminate\Http\Request;
     use Illuminate\Validation\ValidationException;
@@ -42,7 +43,7 @@
                     'error' => $exception->getMessage(),
                     'errors' => $exception->errors(),
                 ], 422);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 return response()->json([
                     'error' => 'Une erreur inattendue est survenue.',
                     'details' => $exception->getMessage(),
@@ -90,7 +91,7 @@
                     'error' => $exception->getMessage(),
                     'errors' => $exception->errors(),
                 ], 422);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 return response()->json([
                     'error' => 'Une erreur inattendue est survenue.',
                     'details' => $exception->getMessage(),
