@@ -51,11 +51,11 @@ Route::prefix('review')->controller(ReviewController::class)->group(function () 
 });
 
 Route::prefix('rooms-category')->group(function () {
-    Route::get('/', [RoomsCategoryController::class, 'index']); // Liste toutes les catégories
-    Route::post('/', [RoomsCategoryController::class, 'store']); // Crée une nouvelle catégorie
-    Route::get('/{id}', [RoomsCategoryController::class, 'show']); // Affiche une catégorie spécifique
-    Route::post('/{id}', [RoomsCategoryController::class, 'update']); // Met à jour une catégorie
-    Route::delete('/{id}', [RoomsCategoryController::class, 'destroy']); // Supprime une catégorie
+    Route::get('/', [RoomsCategoryController::class, 'getAllCategories']); // Liste toutes les catégories
+    Route::post('/', [RoomsCategoryController::class, 'addCategory']); // Crée une nouvelle catégorie
+    Route::get('/{id}', [RoomsCategoryController::class, 'getSingleCategory']); // Affiche une catégorie spécifique
+    Route::post('/{id}', [RoomsCategoryController::class, 'updateCategory']); // Met à jour une catégorie
+    Route::delete('/{id}', [RoomsCategoryController::class, 'deleteCategory']); // Supprime une catégorie
 });
 
 Route::prefix('room')->group(function () {
@@ -66,22 +66,11 @@ Route::prefix('room')->group(function () {
     Route::delete('/{id}', [RoomController::class, 'deleteRoom']);
 });
 
-/*Route::apiResource('rooms-feature', RoomsFeatureController::class);
-Route::prefix('rooms-categories')->group(function () {
-    Route::post('{id}/features', [RoomsCategoryController::class, 'attachFeature']);
-    Route::delete('{id}/features/{featureId}', [RoomsCategoryController::class, 'detachFeature']);
-    Route::get('{id}/features', [RoomsCategoryController::class, 'listFeatures'])->name('rooms-category.features');
-    Route::get('/', [RoomsCategoryController::class, 'show']);*/
-
-
 Route::prefix('rooms-feature')->group(function () {
-    Route::get('/', [RoomsFeatureController::class, 'show']);
-    Route::get('/{id}', [RoomsFeatureController::class, 'showById'])->name('rooms-features.show');
-    Route::post('/', [RoomsFeatureController::class, 'store']);
-    Route::delete('/{id}', [RoomsFeatureController::class, 'destroy']);
-    Route::post('{id}/features', [RoomsFeatureController::class, 'update']);
-
-
-
+    Route::get('/', [RoomsFeatureController::class, 'getAllFeatures']);
+    Route::post('/', [RoomsFeatureController::class, 'addFeature']);
+    Route::get('/{id}', [RoomsFeatureController::class, 'getSingleFeature']);
+    Route::post('/{id}', [RoomsFeatureController::class, 'updateFeature']);
+    Route::delete('/{id}', [RoomsFeatureController::class, 'deleteFeature']);
 });
 

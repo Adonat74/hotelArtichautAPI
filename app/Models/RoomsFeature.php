@@ -11,6 +11,8 @@ class RoomsFeature extends Model
     use HasFactory;
     protected $table = 'rooms_features';
 
+    protected $hidden = ['created_at', 'updated_at', 'pivot'];
+
     protected $fillable = [
         'name',
         'description'

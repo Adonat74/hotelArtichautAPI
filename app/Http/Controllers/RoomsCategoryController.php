@@ -14,16 +14,30 @@
         /**
          * Liste toutes les catégories de chambres.
          */
-        public function index(): JsonResponse
+        public function getAllCategories(): JsonResponse
         {
             $categories = RoomsCategory::all();
             return response()->json($categories);
         }
 
         /**
+         * Affiche une catégorie spécifique par son ID.
+         */
+        public function getSingleCategory($id): JsonResponse
+        {
+            $category = RoomsCategory::findOrFail($id);
+
+            if (!$category) {
+                return response()->json(['error' => 'Catégorie non trouvée'], 404);
+            }
+
+            return response()->json($category);
+        }
+
+        /**
          * Crée une nouvelle catégorie de chambre.
          */
-        public function store(Request $request): JsonResponse
+        public function addCategory(Request $request): JsonResponse
         {
             try {
                 // Validation des données entrantes
@@ -59,24 +73,12 @@
             }
         }
 
-        /**
-         * Affiche une catégorie spécifique par son ID.
-         */
-        public function show($id): JsonResponse
-        {
-            $category = RoomsCategory::findOrFail($id);
 
-            if (!$category) {
-                return response()->json(['error' => 'Catégorie non trouvée'], 404);
-            }
-
-            return response()->json($category);
-        }
 
         /**
          * Met à jour une catégorie de chambre existante.
          */
-        public function update(Request $request, $id): JsonResponse
+        public function updateCategory(Request $request, $id): JsonResponse
         {
             try {
                 // Validation des données entrantes
@@ -118,7 +120,7 @@
         /**
          * Supprime une catégorie de chambre existante.
          */
-        public function destroy($id): JsonResponse
+        public function deleteCategory($id): JsonResponse
         {
             try {
                 // Récupérer la catégorie avec ses relations

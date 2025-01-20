@@ -13,6 +13,8 @@ class RoomsCategory extends Model
 
     protected $table = 'rooms_categories';
 
+    protected $hidden = ['created_at', 'updated_at', 'pivot'];
+
     protected $fillable = [
         'description',
         'price_in_cent',

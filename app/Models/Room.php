@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Room extends Model
 {
     use HasFactory;
-    protected $table = 'rooms';
+
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
         'number',
