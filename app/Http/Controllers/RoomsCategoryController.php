@@ -4,6 +4,7 @@
 
     use App\Models\RoomsCategory;
     use Exception;
+    use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
     use Illuminate\Http\Request;
     use Illuminate\Validation\ValidationException;
@@ -30,11 +31,18 @@
                     'description' => 'bail|required|string|max:255',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'features' => 'array', // Accepter un tableau de features
+                    'features.*' => 'exists:rooms_features,id', // Valider que chaque feature existe
                 ]);
 
                 // Création et sauvegarde de la nouvelle catégorie
                 $roomCategory = new RoomsCategory($validatedData);
                 $roomCategory->save();
+
+                // Si des features sont fournies, les associer à la catégorie
+                if (!empty($validatedData['features'])) {
+                    $roomCategory->features()->sync($validatedData['features']);
+                }
 
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($roomCategory, 201);
@@ -71,21 +79,28 @@
         public function update(Request $request, $id): JsonResponse
         {
             try {
+                // Validation des données entrantes
                 $validatedData = $request->validate([
                     'description' => 'bail|required|string|max:255',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'features' => 'array', // Accepter un tableau de features
+                    'features.*' => 'exists:rooms_features,id', // Valider que chaque feature existe
                 ]);
 
+                // Récupérer la catégorie
                 $category = RoomsCategory::findOrFail($id);
 
-                if (!$category) {
-                    return response()->json(['error' => 'Catégorie non trouvée'], 404);
-                }
-
+                // Mettre à jour les champs de la catégorie
                 $category->update($validatedData);
 
-                return response()->json($category);
+                // Si des features sont fournies, les associer à la catégorie
+                if (isset($validatedData['features'])) {
+                    $category->features()->sync($validatedData['features']);
+                }
+
+                // Charger les relations pour la réponse
+                return response()->json($category->load('features'));
             } catch (ValidationException $exception) {
                 return response()->json([
                     'error' => $exception->getMessage(),
@@ -99,25 +114,37 @@
             }
         }
 
+
         /**
          * Supprime une catégorie de chambre existante.
          */
         public function destroy($id): JsonResponse
         {
-            $category = RoomsCategory::findOrFail($id);
+            try {
+                // Récupérer la catégorie avec ses relations
+                $category = RoomsCategory::findOrFail($id);
 
-            if (!$category) {
+                // Supprimer les relations avec les features
+                $category->features()->detach();
+
+                // Supprimer la catégorie
+                $category->delete();
+
+                return response()->json(['message' => 'Catégorie supprimée avec succès'], 204);
+            } catch (ModelNotFoundException $exception) {
                 return response()->json(['error' => 'Catégorie non trouvée'], 404);
+            } catch (\Exception $exception) {
+                return response()->json([
+                    'error' => 'Une erreur inattendue est survenue.',
+                    'details' => $exception->getMessage(),
+                ], 500);
             }
-
-            $category->delete();
-
-            return response()->json(['message' => 'Catégorie supprimée avec succès']);
         }
+
 
         public function listFeatures($id): JsonResponse
         {
-            $category = RoomsCategory::findOrFail($id);
+            $category = RoomsCategory::with('roomsFeatures')->findOrFail($id);
             $features = $category->features;
             return response()->json($features);
         }

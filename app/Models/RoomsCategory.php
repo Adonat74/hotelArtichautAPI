@@ -26,7 +26,7 @@ class RoomsCategory extends Model
 
     public function features(): BelongsToMany
     {
-        return $this->belongsToMany(RoomsFeature::class);
+        return $this->belongsToMany(RoomsFeature::class, 'room_category_feature',  'rooms_features_id', 'rooms_categories_id');
     }
 
     public function images(): HasMany

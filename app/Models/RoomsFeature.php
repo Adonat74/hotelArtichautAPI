@@ -18,6 +18,6 @@ class RoomsFeature extends Model
 
     public function roomsCategories(): BelongsToMany
     {
-        return $this->belongsToMany(RoomsCategory::class);
+        return $this->belongsToMany(RoomsCategory::class, 'room_category_feature',  'rooms_features_id','rooms_categories_id', );
     }
 }
