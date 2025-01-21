@@ -16,7 +16,7 @@
         /**
          * Display the specified resource.
          */
-        public function getSingleFeature(string $id): JsonResponse
+        public function getSingleFeature(int $id): JsonResponse
         {
             try {
                 $feature = RoomsFeature::with('roomsCategories')->findOrFail($id);
@@ -60,8 +60,8 @@
 
             try {
                 $validatedData = $request->validate([
-                    'name' => 'required|string|max:100',
-                    'description' => 'required|string|max:1000',
+                    'name' => 'bail|required|string|max:100',
+                    'description' => 'bail|required|string|max:1000',
                     'rooms_categories' => 'nullable|array',  // Validation des catégories
                     'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
                 ]);
@@ -70,7 +70,6 @@
 
                 // Attachez les catégories à l'équipement
                 if (isset($validatedData['rooms_categories'])) {
-
                     $feature->roomsCategories()->attach($validatedData['rooms_categories']);
                 }
 
@@ -136,7 +135,7 @@
         /**
          * Remove the specified resource from storage.
          */
-        public function deleteFeature(string $id): JsonResponse
+        public function deleteFeature(int $id): JsonResponse
         {
             try{
                 $feature = RoomsFeature::findOrFail($id);

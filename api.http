@@ -168,3 +168,71 @@ Content-Type: application/json
 
 ### DELETE one review
 DELETE {{base_address}}/review/5
+
+
+############################################################FEATURES
+### GET all room
+GET {{base_address}}/rooms-feature
+
+### GET one rooms-feature
+GET {{base_address}}/rooms-feature/1
+
+### POST one rooms-feature
+POST {{base_address}}/rooms-feature
+Content-Type: application/json
+
+{
+    "name": "Tv",
+    "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
+    "rooms_categories": [1, 2]
+}
+
+### PUT one rooms-feature
+POST {{base_address}}/rooms-feature/2
+Content-Type: application/json
+
+{
+    "name": "Tv",
+    "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
+    "rooms_categories": [1, 2]
+}
+
+### DELETE one rooms-category
+DELETE {{base_address}}/rooms-category/5
+
+
+############################################################CATEGORIES
+### GET all room
+GET {{base_address}}/rooms-category
+
+### GET one rooms-category
+GET {{base_address}}/rooms-category/1
+
+### POST one rooms-category
+POST {{base_address}}/rooms-category
+Content-Type: application/json
+
+{
+    "name": "StandardRooms2",
+    "description": "Spacious room with a great vi,nhg,g,,hg,ew.",
+    "price_in_cent": 1000000,
+    "bed_size": 701,
+    "rooms_features": [1,2],
+    "images": []
+}
+
+### PUT one rooms-category
+POST {{base_address}}/rooms-category/2
+Content-Type: application/json
+
+{
+    "name": "StandardRooms2",
+    "description": "Spacious room with a great vi,nhg,g,,hg,ew.",
+    "price_in_cent": 1000000,
+    "bed_size": 701,
+    "rooms_features": [1,2],
+    "images": []
+}
+
+### DELETE one rooms-category
+DELETE {{base_address}}/rooms-category/5
