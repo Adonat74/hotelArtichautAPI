@@ -124,7 +124,7 @@ class RoomController extends Controller
                     //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'room_id' => $room->id,
                     ]);
                     $image->save();
@@ -213,7 +213,7 @@ class RoomController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'room_id' => $room->id,
                     ]);
                     $image->save();

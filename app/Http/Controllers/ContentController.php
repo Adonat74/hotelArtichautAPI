@@ -156,7 +156,7 @@ class ContentController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'content_id' => $content->id,
                     ]);
                     $image->save();
@@ -282,7 +282,7 @@ class ContentController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'content_id' => $content->id,
                     ]);
                     $image->save();

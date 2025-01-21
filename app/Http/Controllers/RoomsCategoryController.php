@@ -90,7 +90,7 @@
                     foreach ($request->file('images') as $image) {
                         $imagePath = $image->store('images', 'public');
                         $image = new Image([
-                            'url' => $imagePath,
+                            'url' => url('storage/' . $imagePath),
                             'rooms_category_id' => $roomCategory->id,
                         ]);
                         $image->save();
@@ -154,7 +154,7 @@
                     foreach ($request->file('images') as $image) {
                         $imagePath = $image->store('images', 'public');
                         $image = new Image([
-                            'url' => $imagePath,
+                            'url' => url('storage/' . $imagePath),
                             'rooms_category_id' => $roomCategory->id,
                         ]);
                         $image->save();

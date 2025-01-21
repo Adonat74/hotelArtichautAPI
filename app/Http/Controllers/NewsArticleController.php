@@ -138,7 +138,7 @@ class NewsArticleController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'news_article_id' => $newsArticle->id,
                     ]);
                     $image->save();
@@ -245,7 +245,7 @@ class NewsArticleController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $newImage = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'news_article_id' => $newsArticle->id,
                     ]);
                     $newImage->save();
