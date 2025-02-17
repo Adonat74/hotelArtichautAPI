@@ -34,7 +34,7 @@ class NewsArticleController extends Controller
     public function getSingleNewsArticle(int $id): object {
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
-            $newsArticle = NewsArticle::with('images')->findOrFail($id);
+            $newsArticle = NewsArticle::with(['images', 'language'])->findOrFail($id);
             return response()->json($newsArticle);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -52,17 +52,24 @@ class NewsArticleController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/news",
+     *     path="/api/news/lang-{lang}",
      *     summary="Get all news",
      *     tags={"News"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllNewsArticles(): JsonResponse
+    public function getAllNewsArticles(int $lang): JsonResponse
     {
         try {
-            $newsArticles = NewsArticle::with('images')->get();
+            $newsArticles = NewsArticle::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($newsArticles);
         } catch (Exception $e) {
             return response()->json([
@@ -100,6 +107,11 @@ class NewsArticleController extends Controller
      *                      description="Full description of the news article"
      *                  ),
      *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
+     *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
      *                      @OA\Items(
@@ -123,6 +135,7 @@ class NewsArticleController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -131,6 +144,7 @@ class NewsArticleController extends Controller
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $newsArticle->save();
 
@@ -145,9 +159,7 @@ class NewsArticleController extends Controller
                 }
             }
 
-            return response()->json([
-                'addedNews' => $newsArticle->load('images'),
-            ], 201);
+            return response()->json($newsArticle->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -197,6 +209,11 @@ class NewsArticleController extends Controller
      *                      description="Full description of the news article"
      *                  ),
      *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
+     *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
      *                      @OA\Items(
@@ -221,6 +238,7 @@ class NewsArticleController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -230,6 +248,7 @@ class NewsArticleController extends Controller
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -252,9 +271,7 @@ class NewsArticleController extends Controller
                 }
             }
 
-            return response()->json([
-                'updatedNews' => $newsArticle->load('images'),
-            ]);
+            return response()->json($newsArticle->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'News not found',

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('short_description');
             $table->text('description');
+            $table->string('language_id');
             $table->timestamps();
         });
     }

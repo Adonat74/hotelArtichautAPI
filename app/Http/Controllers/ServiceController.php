@@ -33,7 +33,7 @@ class ServiceController extends Controller
     public function getSingleService(int $id): object {
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
-            $service = Service::with('images')->findOrFail($id);
+            $service = Service::with(['images', 'language'])->findOrFail($id);
             return response()->json($service);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -50,17 +50,24 @@ class ServiceController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/service",
-     *     summary="Get all services",
+     *     path="/api/service/lang-{lang}",
+     *     summary="Get all servicesby language selected",
      *     tags={"Services"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllServices(): JsonResponse
+    public function getAllServices(int $lang): JsonResponse
     {
         try {
-            $services = Service::with('images')->get();
+            $services = Service::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($services);
         } catch (Exception $e) {
             return response()->json([
@@ -103,6 +110,11 @@ class ServiceController extends Controller
      *                      type="string",
      *                      description="If the price is per person or not true or false"
      *                  ),
+     *                   @OA\Property(
+     *                       property="language_id",
+     *                       type="integer",
+     *                       description="The ID of the language"
+     *                   ),
      *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
@@ -128,6 +140,7 @@ class ServiceController extends Controller
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|nullable|string|max:5',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -138,6 +151,7 @@ class ServiceController extends Controller
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $service->save();
 
@@ -154,7 +168,7 @@ class ServiceController extends Controller
                 }
             }
             return response()->json([
-                'addedService' => $service->load('images'),
+                'addedService' => $service->load(['images', 'language']),
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -210,6 +224,11 @@ class ServiceController extends Controller
      *                      description="If the price is per person or not true or false"
      *                  ),
      *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
+     *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
      *                      @OA\Items(
@@ -235,6 +254,7 @@ class ServiceController extends Controller
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|required|string|max:5',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -244,6 +264,7 @@ class ServiceController extends Controller
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -268,7 +289,7 @@ class ServiceController extends Controller
             }
 
             return response()->json([
-                'updatedService' => $service->load('images'),
+                'updatedService' => $service->load(['images', 'language']),
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([

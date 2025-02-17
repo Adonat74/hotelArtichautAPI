@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('landing_page_display', length: 5);
             $table->string('navbar_display', length: 5);
             $table->string('link')->nullable();
+            $table->string('language_id');
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->unsignedInteger('price_in_cent'); // Stocké en entier
             $table->integer('bed_size'); // En mètres carrés
+            $table->string('language_id');
             $table->timestamps();
         });
     }

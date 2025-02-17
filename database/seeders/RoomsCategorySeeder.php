@@ -14,9 +14,9 @@
         {
             // Crée des catégories prédéfinies
             $categories = [
-                ['name' => 'StandardRooms', 'description' => 'Spacious room with a great view.', 'price_in_cent' => 100000, 'bed_size' => 70],  // Prix en centimes
-                ['name' => 'DeluxeRooms', 'description' => 'Luxurious room with premium amenities.', 'price_in_cent' => 200000, 'bed_size' => 100],
-                ['name' => 'SuiteRooms', 'description' => 'A suite with a living area and bedroom.', 'price_in_cent' => 300000, 'bed_size' => 120],
+                ['name' => 'StandardRooms', 'description' => 'Spacious room with a great view.', 'price_in_cent' => 100000, 'bed_size' => 70, 'language_id' => 1],  // Prix en centimes
+                ['name' => 'DeluxeRooms', 'description' => 'Luxurious room with premium amenities.', 'price_in_cent' => 200000, 'bed_size' => 100, 'language_id' => 1],
+                ['name' => 'SuiteRooms', 'description' => 'A suite with a living area and bedroom.', 'price_in_cent' => 300000, 'bed_size' => 120, 'language_id' => 1],
             ];
 
             foreach ($categories as $category) {

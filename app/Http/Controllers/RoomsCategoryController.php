@@ -16,12 +16,26 @@
 
 
         /**
-         * Affiche une catégorie spécifique par son ID.
+         * @OA\Get(
+         *     path="/api/rooms-category/{id}",
+         *     summary="Get one rooms-category by id",
+         *     tags={"RoomsCategories"},
+         *      @OA\Parameter(
+         *          name="id",
+         *          in="path",
+         *          description="The ID of the rooms-category",
+         *          required=true,
+         *          @OA\Schema(type="integer")
+         *      ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="Service not found"),
+         *     @OA\Response(response=500, description="An error occured")
+         * )
          */
         public function getSingleCategory(int $id): JsonResponse
         {
             try {
-                $category = RoomsCategory::with(['features', 'rooms', 'images'])->findOrFail($id);
+                $category = RoomsCategory::with(['features', 'rooms', 'images', 'language'])->findOrFail($id);
                 return response()->json($category);
             } catch (ModelNotFoundException $e) {
                 return response()->json([
@@ -40,12 +54,25 @@
 
 
         /**
-         * Liste toutes les catégories de chambres.
+         * @OA\Get(
+         *     path="/api/rooms-category/lang-{lang}",
+         *     summary="Get all rooms-category by lang",
+         *     tags={"RoomsCategories"},
+         *       @OA\Parameter(
+         *            name="lang",
+         *            in="path",
+         *            description="The lang desired",
+         *            required=true,
+         *            @OA\Schema(type="integer")
+         *       ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=500, description="An error occured")
+         * )
          */
-        public function getAllCategories(): JsonResponse
+        public function getAllCategories(int $lang): JsonResponse
         {
             try {
-                $categories = RoomsCategory::with(['features', 'rooms', 'images'])->get();
+                $categories = RoomsCategory::where('language_id', $lang)->with(['features', 'rooms', 'images', 'language'])->get();
                 return response()->json($categories);
             } catch (Exception $e) {
                 return response()->json([
@@ -58,8 +85,69 @@
 
 
         /**
-         * Crée une nouvelle catégorie de chambre.
+         * @OA\Post(
+         *     path="/api/rooms-category",
+         *     summary="Add a rooms-category article",
+         *     tags={"RoomsCategories"},
+         *     @OA\RequestBody(
+         *         required=true,
+         *         @OA\MediaType(
+         *             mediaType="multipart/form-data",
+         *             @OA\Schema(
+         *                 required={"name", "description", "price_in_cent", "bed_size"},
+         *                 @OA\Property(
+         *                     property="name",
+         *                     type="string",
+         *                     description="The name of the rooms-category article",
+         *                     example="Deluxe Room"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="description",
+         *                     type="string",
+         *                     description="Description of the rooms-category article",
+         *                     example="A luxurious room with a sea view."
+         *                 ),
+         *                 @OA\Property(
+         *                     property="price_in_cent",
+         *                     type="integer",
+         *                     description="The price in cents",
+         *                     example=15000
+         *                 ),
+         *                 @OA\Property(
+         *                     property="bed_size",
+         *                     type="integer",
+         *                     description="The bed size as an integer value",
+         *                     example=2
+         *                 ),
+         *                 @OA\Property(
+         *                     property="rooms_features",
+         *                     type="array",
+         *                     description="An array of rooms_feature IDs",
+         *                     @OA\Items(type="integer", example=3)
+         *                 ),
+         *                 @OA\Property(
+         *                     property="language_id",
+         *                     type="integer",
+         *                     description="The ID of the language"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="images",
+         *                     type="array",
+         *                     description="An array of image files",
+         *                     @OA\Items(
+         *                         type="string",
+         *                         format="binary"
+         *                     )
+         *                 )
+         *             )
+         *         )
+         *     ),
+         *     @OA\Response(response=201, description="Successful operation"),
+         *     @OA\Response(response=422, description="Validation failed"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
+
         public function addCategory(Request $request): JsonResponse
         {
             try {
@@ -68,6 +156,7 @@
                     'description' => 'bail|required|string|max:1000',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'language_id' => 'bail|required|numeric',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',
@@ -78,6 +167,7 @@
                     'description' => $validatedData['description'],
                     'price_in_cent' => $validatedData['price_in_cent'],
                     'bed_size' => $validatedData['bed_size'],
+                    'language_id' => $validatedData['language_id'],
                 ]);
                 $roomCategory->save();
 
@@ -97,7 +187,7 @@
                     }
                 }
                 // Retourne une réponse JSON avec les données enregistrées
-                return response()->json($roomCategory->load(['features', 'images']), 201);
+                return response()->json($roomCategory->load(['features', 'rooms', 'images', 'language']), 201);
             } catch (ValidationException $e) {
                 return response()->json([
                     'error' => 'Validation failed',
@@ -114,8 +204,77 @@
 
 
         /**
-         * Met à jour une catégorie de chambre existante.
+         * @OA\Post(
+         *     path="/api/rooms-category/{id}",
+         *     summary="Update a rooms-category article by id",
+         *     tags={"RoomsCategories"},
+         *     @OA\Parameter(
+         *         name="id",
+         *         in="path",
+         *         description="The ID of the rooms-category article",
+         *         required=true,
+         *         @OA\Schema(type="integer")
+         *     ),
+         *     @OA\RequestBody(
+         *         required=true,
+         *         @OA\MediaType(
+         *             mediaType="multipart/form-data",
+         *             @OA\Schema(
+         *                 required={"name", "description", "price_in_cent", "bed_size"},
+         *                 @OA\Property(
+         *                     property="name",
+         *                     type="string",
+         *                     description="The name of the rooms-category article",
+         *                     example="Deluxe Room"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="description",
+         *                     type="string",
+         *                     description="Description of the rooms-category article",
+         *                     example="A luxurious room with a sea view."
+         *                 ),
+         *                 @OA\Property(
+         *                     property="price_in_cent",
+         *                     type="integer",
+         *                     description="The price in cents",
+         *                     example=15000
+         *                 ),
+         *                 @OA\Property(
+         *                     property="bed_size",
+         *                     type="integer",
+         *                     description="The bed size as an integer value",
+         *                     example=2
+         *                 ),
+         *                 @OA\Property(
+         *                     property="rooms_features",
+         *                     type="array",
+         *                     description="An array of rooms_feature IDs",
+         *                     @OA\Items(type="integer", example=3)
+         *                 ),
+         *                 @OA\Property(
+         *                     property="language_id",
+         *                     type="integer",
+         *                     description="The ID of the language"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="images",
+         *                     type="array",
+         *                     description="An array of image files",
+         *                     @OA\Items(
+         *                         type="string",
+         *                         format="binary"
+         *                     )
+         *                 )
+         *             )
+         *         )
+         *     ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="RoomsCategories not found"),
+         *     @OA\Response(response=422, description="Validation failed"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
+
         public function updateCategory(Request $request, $id): JsonResponse
         {
             try {
@@ -124,6 +283,7 @@
                     'description' => 'bail|required|string|max:1000',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'language_id' => 'bail|required|numeric',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',
@@ -135,6 +295,7 @@
                     'description' => $validatedData['description'],
                     'price_in_cent' => $validatedData['price_in_cent'],
                     'bed_size' => $validatedData['bed_size'],
+                    'language_id' => $validatedData['language_id'],
                 ]);
 
                 // Si des features sont fournies, les associer à la catégorie
@@ -161,7 +322,7 @@
                     }
                 }
 
-                return response()->json($roomCategory->load(['features', 'images']));
+                return response()->json($roomCategory->load(['features',  'rooms', 'images', 'language']));
 
             } catch (ModelNotFoundException $e) {
                 return response()->json([
@@ -183,7 +344,21 @@
 
 
         /**
-         * Supprime une catégorie de chambre existante.
+         * @OA\Delete(
+         *     path="/api/rooms-category/{id}",
+         *     summary="Delete a rooms-category article by id",
+         *     tags={"RoomsCategories"},
+         *      @OA\Parameter(
+         *          name="id",
+         *          in="path",
+         *          description="The ID of the rooms-category article",
+         *          required=true,
+         *          @OA\Schema(type="integer")
+         *      ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="RoomsCategories not found"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
         public function deleteCategory(int $id): JsonResponse
         {

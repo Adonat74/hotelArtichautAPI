@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -29,7 +30,7 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getSingleReview(string $id)
+    public function getSingleReview(int $id): JsonResponse
     {
         try {
             $review = Review::findOrFail($id);
@@ -57,7 +58,7 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllReviews()
+    public function getAllReviews(): JsonResponse
     {
         try {
             $reviews = Review::all();
@@ -95,7 +96,7 @@ class ReviewController extends Controller
      *                      property="user_id",
      *                      type="integer",
      *                      description="The ID of the user who created the review"
-     *                  )
+     *                  ),
      *              )
      *          )
      *     ),
@@ -104,7 +105,7 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addReview(Request $request)
+    public function addReview(Request $request): JsonResponse
     {
         try {
             $validatedData = $request->validate([
@@ -163,7 +164,7 @@ class ReviewController extends Controller
      *                      property="user_id",
      *                      type="integer",
      *                      description="The ID of the user who created the review"
-     *                  )
+     *                  ),
      *              )
      *          )
      *     ),
@@ -173,7 +174,7 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateReview(Request $request, string $id)
+    public function updateReview(Request $request, string $id): JsonResponse
     {
         try{
             $validatedData = $request->validate([
@@ -220,10 +221,10 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function deleteReview(string $id)
+    public function deleteReview(string $id): JsonResponse
     {
         try {
-            $review = Review ::findOrFail($id);
+            $review = Review::findOrFail($id);
             $review->delete();
 
             return response()->json(['message' => 'review deleted successfully']);

@@ -20,7 +20,7 @@ use Illuminate\Database\Migrations\Migration;
                 $table->string('name');
                 $table->string('description');
                 $table->foreignIdFor(RoomsCategory::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
-// Description de la chambre
+                $table->string('language_id');
                 $table->timestamps();                 // Colonnes created_at et updated_at
 
             });

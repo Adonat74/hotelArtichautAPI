@@ -18,13 +18,13 @@ class ContentController extends Controller
      *     path="/api/content/{id}",
      *     summary="Get one content by id",
      *     tags={"Contents"},
-     *      @OA\Parameter(
+     *     @OA\Parameter(
      *          name="id",
      *          in="path",
      *          description="The ID of the content",
      *          required=true,
      *          @OA\Schema(type="integer")
-     *      ),
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="Content not found"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -33,7 +33,7 @@ class ContentController extends Controller
     public function getSingleContent(int $id): JsonResponse
     {
         try {
-            $content = Content::with('images')->findOrFail($id);
+            $content = Content::with(['images', 'language'])->findOrFail($id);
             return response()->json($content);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -50,17 +50,24 @@ class ContentController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/content",
-     *     summary="Get all contents",
+     *     path="/api/content/lang-{lang}",
+     *     summary="Get all contents by language selected",
      *     tags={"Contents"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllContents(): JsonResponse
+    public function getAllContents(string $lang): JsonResponse
     {
         try {
-            $contents = Content::with('images')->get();
+            $contents = Content::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($contents);
         } catch (Exception $e) {
             return response()->json([
@@ -112,6 +119,11 @@ class ContentController extends Controller
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
+     *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
      *                      @OA\Items(
@@ -138,6 +150,7 @@ class ContentController extends Controller
                 'description' => 'bail|required|string|max:1000',
                 'landing_page_display' => 'bail|required|string',
                 'navbar_display' => 'bail|required|string',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -149,6 +162,7 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $content->save();
 
@@ -163,9 +177,7 @@ class ContentController extends Controller
                 }
             }
 
-            return response()->json([
-                'addedContent' => $content->load('images'),
-            ], 201);
+            return response()->json($content->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -228,6 +240,11 @@ class ContentController extends Controller
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
+     *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
      *                      @OA\Items(
@@ -255,6 +272,7 @@ class ContentController extends Controller
                 'description' => 'bail|required|string|max:1000',
                 'landing_page_display' => 'bail|required|string',
                 'navbar_display' => 'bail|required|string',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -267,6 +285,7 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -289,9 +308,7 @@ class ContentController extends Controller
                 }
             }
 
-            return response()->json([
-                'updatedContent' => $content->load('images'),
-            ]);
+            return response()->json($content->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Content not found',

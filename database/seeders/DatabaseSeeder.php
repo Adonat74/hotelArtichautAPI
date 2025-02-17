@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             RoomsFeatureSeeder::class,
             ReviewSeeder::class,
             RoomCategoryFeatureSeeder::class,
+            LanguageSeeder::class,
         ]);
 
 

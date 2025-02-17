@@ -14,12 +14,26 @@
 
 
         /**
-         * Display the specified resource.
+         * @OA\Get(
+         *     path="/api/rooms-feature/{id}",
+         *     summary="Get one rooms-feature by id",
+         *     tags={"RoomsFeatures"},
+         *      @OA\Parameter(
+         *          name="id",
+         *          in="path",
+         *          description="The ID of the rooms-feature",
+         *          required=true,
+         *          @OA\Schema(type="integer")
+         *      ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="Service not found"),
+         *     @OA\Response(response=500, description="An error occured")
+         * )
          */
         public function getSingleFeature(int $id): JsonResponse
         {
             try {
-                $feature = RoomsFeature::with('roomsCategories')->findOrFail($id);
+                $feature = RoomsFeature::with(['roomsCategories', 'language'])->findOrFail($id);
                 return response()->json($feature);
             } catch (ModelNotFoundException $e) {
                 return response()->json([
@@ -37,10 +51,25 @@
 
 
 
-
-        public function getAllFeatures(): JsonResponse{
+        /**
+         * @OA\Get(
+         *     path="/api/rooms-feature/lang-{lang}",
+         *     summary="Get all rooms-feature by lang",
+         *     tags={"RoomsFeatures"},
+         *       @OA\Parameter(
+         *            name="lang",
+         *            in="path",
+         *            description="The lang desired",
+         *            required=true,
+         *            @OA\Schema(type="integer")
+         *       ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=500, description="An error occured")
+         * )
+         */
+        public function getAllFeatures(int $lang): JsonResponse{
             try {
-                $features = RoomsFeature::with('roomsCategories')->get();
+                $features = RoomsFeature::where('language_id', $lang)->with(['roomsCategories', 'language'])->get();
                 return response()->json($features);
             } catch (Exception $e) {
                 return response()->json([
@@ -53,8 +82,48 @@
 
 
         /**
-         * Store a newly created resource in storage.
+         * @OA\Post(
+         *     path="/api/rooms-feature",
+         *     summary="Add a rooms-feature article",
+         *     tags={"RoomsFeatures"},
+         *     @OA\RequestBody(
+         *         required=true,
+         *         @OA\MediaType(
+         *             mediaType="multipart/form-data",
+         *             @OA\Schema(
+         *                 required={"name", "description"},
+         *                 @OA\Property(
+         *                     property="name",
+         *                     type="string",
+         *                     description="The name of the rooms-feature article",
+         *                     example="Ocean View"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="description",
+         *                     type="string",
+         *                     description="Description of the rooms-feature article",
+         *                     example="A feature describing the ocean view from the room."
+         *                 ),
+         *                 @OA\Property(
+         *                     property="language_id",
+         *                     type="integer",
+         *                     description="The ID of the language"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="rooms_categories",
+         *                     type="array",
+         *                     description="An array of rooms_category IDs",
+         *                     @OA\Items(type="integer", example=5)
+         *                 )
+         *             )
+         *         )
+         *     ),
+         *     @OA\Response(response=201, description="Successful operation"),
+         *     @OA\Response(response=422, description="Validation failed"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
+
         public function addFeature(Request $request): JsonResponse
         {
 
@@ -62,6 +131,7 @@
                 $validatedData = $request->validate([
                     'name' => 'bail|required|string|max:100',
                     'description' => 'bail|required|string|max:1000',
+                    'language_id' => 'bail|required|numeric',
                     'rooms_categories' => 'nullable|array',  // Validation des catégories
                     'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
                 ]);
@@ -74,7 +144,7 @@
                 }
 
                 // Retourne une réponse JSON avec les données enregistrées
-                return response()->json($feature->load('roomsCategories'), 201);
+                return response()->json($feature->load(['roomsCategories', 'language']), 201);
             } catch (ValidationException $e) {
                 return response()->json([
                     'error' => 'Validation failed',
@@ -94,14 +164,63 @@
 
 
         /**
-         * Update the specified resource in storage.
+         * @OA\Post(
+         *     path="/api/rooms-feature/{id}",
+         *     summary="Update a rooms-feature article by id",
+         *     tags={"RoomsFeatures"},
+         *     @OA\Parameter(
+         *         name="id",
+         *         in="path",
+         *         description="The ID of the rooms-feature article",
+         *         required=true,
+         *         @OA\Schema(type="integer")
+         *     ),
+         *     @OA\RequestBody(
+         *         required=true,
+         *         @OA\MediaType(
+         *             mediaType="multipart/form-data",
+         *             @OA\Schema(
+         *                 required={"name", "description"},
+         *                 @OA\Property(
+         *                     property="name",
+         *                     type="string",
+         *                     description="The name of the rooms-feature article",
+         *                     example="Ocean View"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="description",
+         *                     type="string",
+         *                     description="Description of the rooms-feature article",
+         *                     example="A feature describing the ocean view from the room."
+         *                 ),
+         *                 @OA\Property(
+         *                     property="language_id",
+         *                     type="integer",
+         *                     description="The ID of the language"
+         *                 ),
+         *                 @OA\Property(
+         *                     property="rooms_categories",
+         *                     type="array",
+         *                     description="An array of rooms_category IDs",
+         *                     @OA\Items(type="integer", example=5)
+         *                 )
+         *             )
+         *         )
+         *     ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="RoomsFeature not found"),
+         *     @OA\Response(response=422, description="Validation failed"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
+
         public function updateFeature(Request $request, string $id): JsonResponse
         {
             try {
                 $validatedData = $request->validate([
                     'name' => 'required|string|max:100',
                     'description' => 'required|string|max:1000',
+                    'language_id' => 'bail|required|numeric',
                     'rooms_categories' => 'nullable|array',  // Validation des catégories
                     'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
                 ]);
@@ -112,7 +231,7 @@
                     $feature->roomsCategories()->sync($validatedData['rooms_categories']);
                 }
 
-                return response()->json($feature->load('roomsCategories'));
+                return response()->json($feature->load(['roomsCategories', 'language']));
 
             } catch (ModelNotFoundException $e) {
                 return response()->json([
@@ -133,7 +252,21 @@
         }
 
         /**
-         * Remove the specified resource from storage.
+         * @OA\Delete(
+         *     path="/api/rooms-feature/{id}",
+         *     summary="Delete a rooms-feature article by id",
+         *     tags={"RoomsFeatures"},
+         *      @OA\Parameter(
+         *          name="id",
+         *          in="path",
+         *          description="The ID of the rooms-feature article",
+         *          required=true,
+         *          @OA\Schema(type="integer")
+         *      ),
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=404, description="RoomsFeature not found"),
+         *     @OA\Response(response=500, description="An error occurred")
+         * )
          */
         public function deleteFeature(int $id): JsonResponse
         {

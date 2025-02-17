@@ -35,7 +35,7 @@ class RoomController extends Controller
     public function getSingleRoom(int $id): JsonResponse
     {
         try {
-            $room = Room::with(['images', 'category'])->findOrFail($id);
+            $room = Room::with(['images', 'category', 'language'])->findOrFail($id);
             return response()->json($room);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -52,17 +52,24 @@ class RoomController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/room",
-     *     summary="Get all rooms",
+     *     path="/api/room/lang-{lang}",
+     *     summary="Get all roomsby language selected",
      *     tags={"Rooms"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllRooms(): JsonResponse
+    public function getAllRooms(int $lang): JsonResponse
     {
         try {
-            $rooms = Room::with(['images', 'category'])->get();
+            $rooms = Room::where('language_id', $lang)->with(['images', 'category', 'language'])->get();
             return response()->json($rooms);
         } catch (Exception $e) {
             return response()->json([
@@ -88,6 +95,11 @@ class RoomController extends Controller
      *                  @OA\Property(property="name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
      *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
      *              )
      *          )
@@ -106,6 +118,7 @@ class RoomController extends Controller
                 'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -116,6 +129,7 @@ class RoomController extends Controller
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $room->save();
 
@@ -131,9 +145,7 @@ class RoomController extends Controller
                 }
             }
             // Retourne une réponse JSON avec les données enregistrées
-            return response()->json([
-                'addedRoom' => $room->load(['images', 'category']),
-            ], 201);
+            return response()->json($room->load(['images', 'category', 'language']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -170,6 +182,11 @@ class RoomController extends Controller
      *                  @OA\Property(property="name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
      *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
      *              )
      *          )
@@ -188,6 +205,7 @@ class RoomController extends Controller
                 'name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -197,6 +215,7 @@ class RoomController extends Controller
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -221,9 +240,7 @@ class RoomController extends Controller
             }
 
 
-            return response()->json([
-                'updatedRoom' => $room->load(['images', 'category']),
-            ]);
+            return response()->json($room->load(['images', 'category', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Room not found',

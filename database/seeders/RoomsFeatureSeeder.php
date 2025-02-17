@@ -14,9 +14,9 @@ class RoomsFeatureSeeder extends Seeder
     public function run(): void
     {
         $features = [
-            ['name' => 'Tv', 'description' => 'Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.'],
-            ['name' => 'Wifi', 'description' => 'Connexion Internet sans fil haut débit, accessible gratuitement dans la chambre, idéale pour travailler, naviguer sur le web ou diffuser du contenu en ligne.'],
-            ['name' => 'Mini bar', 'description' => 'Un mini-réfrigérateur rempli de boissons fraîches et de collations, offrant aux clients un confort supplémentaire et des rafraîchissements à portée de main.'],
+            ['name' => 'Tv', 'description' => 'Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.', 'language_id' => 1],
+            ['name' => 'Wifi', 'description' => 'Connexion Internet sans fil haut débit, accessible gratuitement dans la chambre, idéale pour travailler, naviguer sur le web ou diffuser du contenu en ligne.', 'language_id' => 1],
+            ['name' => 'Mini bar', 'description' => 'Un mini-réfrigérateur rempli de boissons fraîches et de collations, offrant aux clients un confort supplémentaire et des rafraîchissements à portée de main.', 'language_id' => 1],
         ];
 
         foreach ($features as $feature) {

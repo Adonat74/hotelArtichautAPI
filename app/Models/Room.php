@@ -17,7 +17,8 @@ class Room extends Model
         'number',
         'name',
         'description',
-        'rooms_category_id'
+        'rooms_category_id',
+        'language_id',
     ];
 
     public function category(): BelongsTo
@@ -28,5 +29,10 @@ class Room extends Model
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
     }
 }
