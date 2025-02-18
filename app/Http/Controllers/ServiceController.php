@@ -87,7 +87,7 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "language_id"},
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -200,7 +200,7 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "language_id"},
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",

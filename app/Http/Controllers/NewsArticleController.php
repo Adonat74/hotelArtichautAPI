@@ -90,7 +90,7 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "images[]"},
+     *                  required={"title", "short_description", "description", "language_id"},
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -192,7 +192,7 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "images[]"},
+     *                  required={"title", "short_description", "description", "language_id"},
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",

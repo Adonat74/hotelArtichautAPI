@@ -1,8 +1,8 @@
 @base_address = http://localhost:8000/api
 
 ############################################################SERVICES
-### GET all services
-GET {{base_address}}/service
+### GET all services by language:  1 = fr, 2 = en
+GET {{base_address}}/service/lang-1
 
 ### GET one service
 GET {{base_address}}/service/1
@@ -12,10 +12,11 @@ POST {{base_address}}/service
 Content-Type: application/json
 
 {
-    "title": "Hello lucas est pd",
+    "title": "Hello lucas ",
     "price_in_cent": 1000,
     "duration_in_day": 2,
-    "is_per_person": "true"
+    "is_per_person": "true",
+    "language_id": 1
 }
 
 ### PUT one service
@@ -26,7 +27,8 @@ Content-Type: application/json
     "title": "Hello et pas qu'un peu",
     "price_in_cent": 1000,
     "duration_in_day": 2,
-    "is_per_person": "true"
+    "is_per_person": "true",
+    "language_id": 2
 }
 
 ### DELETE one service
@@ -35,8 +37,8 @@ DELETE {{base_address}}/service/3
 
 
 ############################################################CONTENTS
-### GET all contents
-GET {{base_address}}/content
+### GET all contents by language:  1 = fr, 2 = en
+GET {{base_address}}/content/lang-2
 
 ### GET one content
 GET {{base_address}}/content/1
@@ -51,7 +53,9 @@ Content-Type: application/json
     "short_description": "Petite description comme ça à la cool",
     "description": "Grande description comme ça aussi à la cool",
     "landing_page_display": "true",
-    "navbar_display": "false"
+    "navbar_display": "false",
+    "language_id": 1
+
 }
 
 ### PUT one content
@@ -64,7 +68,8 @@ Content-Type: application/json
     "short_description": "Petite description comme ça à la cool",
     "description": "Grande description comme ça aussi à la cool",
     "landing_page_display": "true",
-    "navbar_display": "false"
+    "navbar_display": "false",
+    "language_id": 2
 }
 
 ### DELETE one content
@@ -73,8 +78,8 @@ DELETE {{base_address}}/content/3
 
 
 ############################################################NEWS
-### GET all news
-GET {{base_address}}/news
+### GET all news by language:  1 = fr, 2 = en
+GET {{base_address}}/news/lang-1
 
 ### GET one news
 GET {{base_address}}/news/1
@@ -86,7 +91,8 @@ Content-Type: application/json
 {
     "title": "lucas est pd",
     "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool"
+    "description": "Grande description comme ça aussi à la cool",
+    "language_id": 2
 }
 
 ### PUT one news
@@ -96,7 +102,8 @@ Content-Type: application/json
 {
     "title": "lucas est pd",
     "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool"
+    "description": "Grande description comme ça aussi à la cool",
+    "language_id": 1
 }
 
 ### DELETE one news
@@ -105,8 +112,8 @@ DELETE {{base_address}}/news/3
 
 
 ############################################################ROOMS
-### GET all room
-GET {{base_address}}/room
+### GET all room by language:  1 = fr, 2 = en
+GET {{base_address}}/room/lang-2
 
 ### GET one room
 GET {{base_address}}/room/1
@@ -119,7 +126,8 @@ Content-Type: application/json
     "number": 244,
     "name": "Kling",
     "description": "Nesciunt nostrum autem amet quia consequatur odio.",
-    "rooms_category_id": 2
+    "rooms_category_id": 2,
+    "language_id": 1
 }
 
 ### PUT one room
@@ -130,7 +138,8 @@ Content-Type: application/json
     "number": 244,
     "name": "Kling",
     "description": "Nesciunt nostrum autem amet quia consequatur odio.",
-    "rooms_category_id": 2
+    "rooms_category_id": 2,
+    "language_id": 2
 }
 
 ### DELETE one room
@@ -140,7 +149,7 @@ DELETE {{base_address}}/room/5
 
 
 ############################################################REVIEWS
-### GET all room
+### GET all reviews
 GET {{base_address}}/review
 
 ### GET one review
@@ -171,8 +180,8 @@ DELETE {{base_address}}/review/5
 
 
 ############################################################FEATURES
-### GET all room
-GET {{base_address}}/rooms-feature
+### GET all room-features by language:  1 = fr, 2 = en
+GET {{base_address}}/rooms-feature/lang-1
 
 ### GET one rooms-feature
 GET {{base_address}}/rooms-feature/1
@@ -184,7 +193,8 @@ Content-Type: application/json
 {
     "name": "Tv",
     "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
-    "rooms_categories": [1, 2]
+    "rooms_categories": [1, 2],
+    "language_id": 2
 }
 
 ### PUT one rooms-feature
@@ -194,7 +204,8 @@ Content-Type: application/json
 {
     "name": "Tv",
     "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
-    "rooms_categories": [1, 2]
+    "rooms_categories": [1, 2],
+    "language_id": 1
 }
 
 ### DELETE one rooms-category
@@ -202,8 +213,8 @@ DELETE {{base_address}}/rooms-category/5
 
 
 ############################################################CATEGORIES
-### GET all room
-GET {{base_address}}/rooms-category
+### GET all rooms-categories  by language:  1 = fr, 2 = en
+GET {{base_address}}/rooms-category/lang-2
 
 ### GET one rooms-category
 GET {{base_address}}/rooms-category/1
@@ -218,6 +229,7 @@ Content-Type: application/json
     "price_in_cent": 1000000,
     "bed_size": 701,
     "rooms_features": [1,2],
+    "language_id": 1,
     "images": []
 }
 
@@ -231,8 +243,36 @@ Content-Type: application/json
     "price_in_cent": 1000000,
     "bed_size": 701,
     "rooms_features": [1,2],
+    "language_id": 2,
     "images": []
 }
 
 ### DELETE one rooms-category
 DELETE {{base_address}}/rooms-category/5
+
+
+############################################################LANGUAGE
+### GET all language
+GET {{base_address}}/language
+
+### GET one language
+GET {{base_address}}/language/1
+
+### POST one language
+POST {{base_address}}/language
+Content-Type: application/json
+
+{
+    "lang": "sp"
+}
+
+### PUT one language
+POST {{base_address}}/language/2
+Content-Type: application/json
+
+{
+    "lang": "it"
+}
+
+### DELETE one language
+DELETE {{base_address}}/language/3

@@ -91,7 +91,7 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description"},
+         *                 required={"name", "description", "language_id"},
          *                 @OA\Property(
          *                     property="name",
          *                     type="string",
@@ -180,7 +180,7 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description"},
+         *                 required={"name", "description", "language_id"},
          *                 @OA\Property(
          *                     property="name",
          *                     type="string",

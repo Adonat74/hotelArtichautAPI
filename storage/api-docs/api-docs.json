@@ -65,7 +65,7 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -202,7 +202,7 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -481,7 +481,7 @@
                                     "title",
                                     "short_description",
                                     "description",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "title": {
@@ -603,7 +603,7 @@
                                     "title",
                                     "short_description",
                                     "description",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "title": {
@@ -891,7 +891,7 @@
                                     "name",
                                     "description",
                                     "rooms_category_id",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "number": {
@@ -1016,7 +1016,8 @@
                                     "number",
                                     "name",
                                     "description",
-                                    "rooms_category_id"
+                                    "rooms_category_id",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "number": {
@@ -1121,7 +1122,8 @@
                                     "name",
                                     "description",
                                     "price_in_cent",
-                                    "bed_size"
+                                    "bed_size",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -1259,7 +1261,8 @@
                                     "name",
                                     "description",
                                     "price_in_cent",
-                                    "bed_size"
+                                    "bed_size",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -1375,7 +1378,8 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "description"
+                                    "description",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -1493,7 +1497,8 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "description"
+                                    "description",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -1594,7 +1599,7 @@
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "title": {
@@ -1723,7 +1728,7 @@
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
-                                    "images[]"
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "title": {

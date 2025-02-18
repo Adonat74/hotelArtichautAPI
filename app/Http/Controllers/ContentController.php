@@ -87,7 +87,7 @@ class ContentController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "language_id"},
      *                  @OA\Property(
      *                      property="name",
      *                      type="string",
@@ -208,7 +208,7 @@ class ContentController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "language_id"},
      *                  @OA\Property(
      *                      property="name",
      *                      type="string",

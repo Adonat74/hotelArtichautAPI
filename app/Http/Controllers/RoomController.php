@@ -90,7 +90,7 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id"},
+     *                  required={"number", "name", "description", "rooms_category_id", "language_id"},
      *                  @OA\Property(property="number", type="integer", description="Room number"),
      *                  @OA\Property(property="name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
@@ -177,7 +177,7 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id", "images[]"},
+     *                  required={"number", "name", "description", "rooms_category_id", "language_id"},
      *                  @OA\Property(property="number", type="integer", description="Room number"),
      *                  @OA\Property(property="name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),

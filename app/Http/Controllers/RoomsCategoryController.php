@@ -94,7 +94,7 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description", "price_in_cent", "bed_size"},
+         *                 required={"name", "description", "price_in_cent", "bed_size", "language_id"},
          *                 @OA\Property(
          *                     property="name",
          *                     type="string",
@@ -220,7 +220,7 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description", "price_in_cent", "bed_size"},
+         *                 required={"name", "description", "price_in_cent", "bed_size", "language_id"},
          *                 @OA\Property(
          *                     property="name",
          *                     type="string",
