@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Language;
-use App\Models\Image;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class LanguageController extends Controller

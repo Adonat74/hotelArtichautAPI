@@ -15,6 +15,7 @@ class Review extends Model
     protected $fillable = [
         'rate',
         'review_content',
+        'display_order',
         'user_id',
     ];
    /* public function user(){

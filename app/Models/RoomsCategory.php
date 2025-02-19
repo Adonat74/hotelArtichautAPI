@@ -18,9 +18,11 @@ class RoomsCategory extends Model
 
     protected $fillable = [
         'name',
+        'category_name',
         'description',
         'price_in_cent',
         'bed_size',
+        'display_order',
         'language_id',
     ];
 

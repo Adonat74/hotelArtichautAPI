@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('rate');
             $table->string('review_content');
+            $table->string('display_order');
             $table->integer('user_id');
             $table->timestamps();
         });

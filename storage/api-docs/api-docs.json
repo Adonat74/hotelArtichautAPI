@@ -29,7 +29,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
                     },
                     "500": {
                         "description": "An error occurred"
@@ -65,6 +65,7 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
@@ -92,6 +93,10 @@
                                         "description": "Navbar display option",
                                         "type": "string"
                                     },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
                                     "language_id": {
                                         "description": "The ID of the language",
                                         "type": "integer"
@@ -115,7 +120,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
                     },
                     "422": {
                         "description": "Validation failed"
@@ -147,7 +152,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
                     },
                     "500": {
                         "description": "An error occurred"
@@ -161,7 +166,7 @@
                     "Contents"
                 ],
                 "summary": "Get all contents by language selected",
-                "operationId": "508dc74368ebe4ff86b992cd9af0ed61",
+                "operationId": "cf43e6a8787e555961b16fa05e69e82a",
                 "parameters": [
                     {
                         "name": "lang",
@@ -184,6 +189,21 @@
             }
         },
         "/api/content": {
+            "get": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Get all contents",
+                "operationId": "17eea5db0871bdfd77732897a5f3760d",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Contents"
@@ -202,6 +222,7 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
@@ -228,6 +249,10 @@
                                     "navbar_display": {
                                         "description": "Navbar display option",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -478,12 +503,18 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
                                     "short_description",
                                     "description",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the news article",
                                         "type": "string"
@@ -495,6 +526,10 @@
                                     "description": {
                                         "description": "Full description of the news article",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -565,7 +600,7 @@
                     "News"
                 ],
                 "summary": "Get all news",
-                "operationId": "6ecaf6ad0fa89f775114dc9872e5e0ca",
+                "operationId": "aaec8649c26e426b81ca4265bd45485f",
                 "parameters": [
                     {
                         "name": "lang",
@@ -588,6 +623,21 @@
             }
         },
         "/api/news": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get all news",
+                "operationId": "a73927f8b55e83ba817c6f5378e0b08f",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "News"
@@ -600,12 +650,18 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
                                     "short_description",
                                     "description",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the news article",
                                         "type": "string"
@@ -617,6 +673,10 @@
                                     "description": {
                                         "description": "Full description of the news article",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -704,6 +764,7 @@
                                 "required": [
                                     "rate",
                                     "review_content",
+                                    "display_order",
                                     "user_id"
                                 ],
                                 "properties": {
@@ -712,8 +773,12 @@
                                         "type": "number"
                                     },
                                     "review_content": {
-                                        "description": "The content of the review",
+                                        "description": "The Content_models of the review",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "user_id": {
                                         "description": "The ID of the user who created the review",
@@ -800,6 +865,7 @@
                                 "required": [
                                     "rate",
                                     "review_content",
+                                    "display_order",
                                     "user_id"
                                 ],
                                 "properties": {
@@ -808,8 +874,12 @@
                                         "type": "number"
                                     },
                                     "review_content": {
-                                        "description": "The content of the review",
+                                        "description": "The Content_models of the review",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "user_id": {
                                         "description": "The ID of the user who created the review",
@@ -887,19 +957,25 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "number",
                                     "name",
+                                    "number",
+                                    "room_name",
                                     "description",
                                     "rooms_category_id",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "number": {
                                         "description": "Room number",
                                         "type": "integer"
                                     },
-                                    "name": {
-                                        "description": "Room name",
+                                    "room_name": {
+                                        "description": "Room room_name",
                                         "type": "string"
                                     },
                                     "description": {
@@ -908,6 +984,10 @@
                                     },
                                     "rooms_category_id": {
                                         "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
                                         "type": "integer"
                                     },
                                     "language_id": {
@@ -978,7 +1058,7 @@
                     "Rooms"
                 ],
                 "summary": "Get all roomsby language selected",
-                "operationId": "fa0247e8b2ffbc83313e93257dae361a",
+                "operationId": "2cfb4b4162eaf6a0c2c06b6cb49dd6a6",
                 "parameters": [
                     {
                         "name": "lang",
@@ -1001,6 +1081,21 @@
             }
         },
         "/api/room": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get all rooms",
+                "operationId": "85edfce3f676f08ca68242789e3f3d4d",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Rooms"
@@ -1013,18 +1108,24 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "number",
                                     "name",
+                                    "number",
+                                    "room_name",
                                     "description",
                                     "rooms_category_id",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "number": {
                                         "description": "Room number",
                                         "type": "integer"
                                     },
-                                    "name": {
+                                    "room_name": {
                                         "description": "Room name",
                                         "type": "string"
                                     },
@@ -1034,6 +1135,10 @@
                                     },
                                     "rooms_category_id": {
                                         "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
                                         "type": "integer"
                                     },
                                     "language_id": {
@@ -1120,14 +1225,20 @@
                             "schema": {
                                 "required": [
                                     "name",
+                                    "category_name",
                                     "description",
                                     "price_in_cent",
                                     "bed_size",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "The name of the rooms-category article",
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "category_name": {
+                                        "description": "The category_name of the rooms-category article",
                                         "type": "string",
                                         "example": "Deluxe Room"
                                     },
@@ -1153,6 +1264,10 @@
                                             "type": "integer",
                                             "example": 3
                                         }
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -1223,7 +1338,7 @@
                     "RoomsCategories"
                 ],
                 "summary": "Get all rooms-category by lang",
-                "operationId": "e088b465b0716f9289729d3da16fea52",
+                "operationId": "54cbae976048700ab245ee79069907f6",
                 "parameters": [
                     {
                         "name": "lang",
@@ -1246,6 +1361,21 @@
             }
         },
         "/api/rooms-category": {
+            "get": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Get all rooms-category",
+                "operationId": "803d0df89157482be4e0b78287c1ddec",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "RoomsCategories"
@@ -1259,14 +1389,20 @@
                             "schema": {
                                 "required": [
                                     "name",
+                                    "category_name",
                                     "description",
                                     "price_in_cent",
                                     "bed_size",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "The name of the rooms-category article",
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "category_name": {
+                                        "description": "The category_name of the rooms-category article",
                                         "type": "string",
                                         "example": "Deluxe Room"
                                     },
@@ -1292,6 +1428,10 @@
                                             "type": "integer",
                                             "example": 3
                                         }
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -1378,12 +1518,18 @@
                             "schema": {
                                 "required": [
                                     "name",
+                                    "feature_name",
                                     "description",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "The name of the rooms-feature article",
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "feature_name": {
+                                        "description": "The feature_name of the rooms-feature article",
                                         "type": "string",
                                         "example": "Ocean View"
                                     },
@@ -1391,6 +1537,10 @@
                                         "description": "Description of the rooms-feature article",
                                         "type": "string",
                                         "example": "A feature describing the ocean view from the room."
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -1461,7 +1611,7 @@
                     "RoomsFeatures"
                 ],
                 "summary": "Get all rooms-feature by lang",
-                "operationId": "e1602710c2bf45edcaf6e3e661abbc29",
+                "operationId": "f4a865b92992195a15361f36d7ce8d29",
                 "parameters": [
                     {
                         "name": "lang",
@@ -1484,6 +1634,21 @@
             }
         },
         "/api/rooms-feature": {
+            "get": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Get all rooms-feature",
+                "operationId": "5f0cf0da5ff53afec56f678d8ff197d3",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "RoomsFeatures"
@@ -1497,12 +1662,18 @@
                             "schema": {
                                 "required": [
                                     "name",
+                                    "feature_name",
                                     "description",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
                                     "name": {
-                                        "description": "The name of the rooms-feature article",
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "feature_name": {
+                                        "description": "The feature_name of the rooms-feature article",
                                         "type": "string",
                                         "example": "Ocean View"
                                     },
@@ -1510,6 +1681,10 @@
                                         "description": "Description of the rooms-feature article",
                                         "type": "string",
                                         "example": "A feature describing the ocean view from the room."
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -1595,15 +1770,36 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
+                                    "short_decription",
+                                    "description",
+                                    "link",
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "The short_description of the service",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The description of the service",
+                                        "type": "string"
+                                    },
+                                    "link": {
+                                        "description": "The link of the service",
                                         "type": "string"
                                     },
                                     "price_in_cent": {
@@ -1619,6 +1815,10 @@
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",
@@ -1689,7 +1889,7 @@
                     "Services"
                 ],
                 "summary": "Get all servicesby language selected",
-                "operationId": "bc390444052f3da0d79283283a427749",
+                "operationId": "123bd31135ebc6578d1b87aeff51e222",
                 "parameters": [
                     {
                         "name": "lang",
@@ -1712,6 +1912,21 @@
             }
         },
         "/api/service": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get all services",
+                "operationId": "00b3a6c89f5ec10d5fbc1fc74d688a92",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Services"
@@ -1724,15 +1939,36 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
+                                    "short_decription",
+                                    "description",
+                                    "link",
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
+                                    "display_order",
                                     "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "The short_description of the service",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The description of the service",
+                                        "type": "string"
+                                    },
+                                    "link": {
+                                        "description": "The link of the service",
                                         "type": "string"
                                     },
                                     "price_in_cent": {
@@ -1748,6 +1984,10 @@
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
                                     },
                                     "language_id": {
                                         "description": "The ID of the language",

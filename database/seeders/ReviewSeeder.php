@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\RoomsFeature;
 use Database\Factories\ReviewFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder

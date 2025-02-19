@@ -64,10 +64,32 @@ class ServiceController extends Controller
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllServices(int $lang): JsonResponse
+    public function getAllServicesByLang(int $lang): JsonResponse
     {
         try {
             $services = Service::where('language_id', $lang)->with(['images', 'language'])->get();
+            return response()->json($services);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the services',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/service",
+     *     summary="Get all services",
+     *     tags={"Services"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
+    public function getAllServices(): JsonResponse
+    {
+        try {
+            $services = Service::with(['images', 'language'])->get();
             return response()->json($services);
         } catch (Exception $e) {
             return response()->json([
@@ -87,12 +109,32 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "language_id"},
+     *                  required={"name", "title", "short_decription", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
      *                      description="The title of the service"
      *                  ),
+     *                   @OA\Property(
+     *                       property="short_description",
+     *                       type="string",
+     *                       description="The short_description of the service"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="description",
+     *                       type="string",
+     *                       description="The description of the service"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="link",
+     *                       type="string",
+     *                       description="The link of the service"
+     *                   ),
      *                  @OA\Property(
      *                      property="price_in_cent",
      *                      type="integer",
@@ -110,6 +152,11 @@ class ServiceController extends Controller
      *                      type="string",
      *                      description="If the price is per person or not true or false"
      *                  ),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *                   @OA\Property(
      *                       property="language_id",
      *                       type="integer",
@@ -136,10 +183,15 @@ class ServiceController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
+                'short_description' => 'bail|required|string|max:200',
+                'description' => 'bail|required|string|max:1000',
+                'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|nullable|string|max:5',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
@@ -147,10 +199,15 @@ class ServiceController extends Controller
 
             // n'enregistre que les fields de service
             $service = new Service([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
+                'short_description' => $validatedData['short_description'],
+                'description' => $validatedData['description'],
+                'link' => $validatedData['link'],
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
             $service->save();
@@ -200,12 +257,32 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "language_id"},
+     *                  required={"name", "title", "short_decription", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
      *                      description="The title of the service"
      *                  ),
+     *                    @OA\Property(
+     *                        property="short_description",
+     *                        type="string",
+     *                        description="The short_description of the service"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="description",
+     *                        type="string",
+     *                        description="The description of the service"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="link",
+     *                        type="string",
+     *                        description="The link of the service"
+     *                    ),
      *                  @OA\Property(
      *                      property="price_in_cent",
      *                      type="integer",
@@ -223,6 +300,11 @@ class ServiceController extends Controller
      *                      type="string",
      *                      description="If the price is per person or not true or false"
      *                  ),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *                  @OA\Property(
      *                      property="language_id",
      *                      type="integer",
@@ -250,20 +332,30 @@ class ServiceController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
+                'short_description' => 'bail|required|string|max:200',
+                'description' => 'bail|required|string|max:1000',
+                'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|required|string|max:5',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
             $service = Service::findOrFail($id);
             $service->update([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
+                'short_description' => $validatedData['short_description'],
+                'description' => $validatedData['description'],
+                'link' => $validatedData['link'],
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
 

@@ -16,7 +16,9 @@ class RoomsFeature extends Model
 
     protected $fillable = [
         'name',
+        'feature_name',
         'description',
+        'display_order',
         'language_id',
     ];
 

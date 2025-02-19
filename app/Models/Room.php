@@ -14,10 +14,12 @@ class Room extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
-        'number',
         'name',
+        'number',
+        'room_name',
         'description',
         'rooms_category_id',
+        'display_order',
         'language_id',
     ];
 

@@ -21,6 +21,7 @@ class Content extends Model
         'landing_page_display',
         'navbar_display',
         'link',
+        'display_order',
         'language_id',
     ];
 
