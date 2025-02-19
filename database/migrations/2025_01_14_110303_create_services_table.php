@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('link', length: 50);
             $table->integer('price_in_cent');
             $table->integer('duration_in_day');
-            $table->string('is_per_person', length: 5);
+            $table->boolean('is_per_person');
             $table->string('display_order');
             $table->string('language_id');
             $table->timestamps();

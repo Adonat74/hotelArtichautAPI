@@ -8,6 +8,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomsCategoryController;
 use App\Http\Controllers\RoomsFeatureController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// USER ROUTES
+Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/', 'getAllUsers'); // get ALL contents
+    Route::get('/{id}', 'getSingleUser'); // get ONE User_models
+    Route::post('/', 'addUser'); // add ONE User_models
+    Route::post('/{id}', 'updateUser'); // modify ONE User_models (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteUser'); // delete ONE User_models
+});
 
+///////////// CMS /////////////////////
 // CONTENT ROUTES
 Route::prefix('content')->controller(ContentController::class)->group(function () {
     Route::get('/lang-{lang}', 'getAllContentsByLang'); // get ALL contents by language

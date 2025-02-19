@@ -109,7 +109,7 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_decription", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                  required={"name", "title", "short_description", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
      *                    @OA\Property(
      *                        property="name",
      *                        type="string",
@@ -149,7 +149,7 @@ class ServiceController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="is_per_person",
-     *                      type="string",
+     *                      type="integer",
      *                      description="If the price is per person or not true or false"
      *                  ),
      *                   @OA\Property(
@@ -190,7 +190,7 @@ class ServiceController extends Controller
                 'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|nullable|string|max:5',
+                'is_per_person' => 'bail|nullable|boolean',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
@@ -224,9 +224,7 @@ class ServiceController extends Controller
                     $image->save();
                 }
             }
-            return response()->json([
-                'addedService' => $service->load(['images', 'language']),
-            ], 201);
+            return response()->json($service->load(['images', 'language']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -297,7 +295,7 @@ class ServiceController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="is_per_person",
-     *                      type="string",
+     *                      type="integer",
      *                      description="If the price is per person or not true or false"
      *                  ),
      *                   @OA\Property(
@@ -339,7 +337,7 @@ class ServiceController extends Controller
                 'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|required|string|max:5',
+                'is_per_person' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',

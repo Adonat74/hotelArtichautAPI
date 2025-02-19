@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('title', length: 50);
             $table->string('short_description');
             $table->text('description');
-            $table->string('landing_page_display', length: 5);
-            $table->string('navbar_display', length: 5);
+            $table->boolean('landing_page_display');
+            $table->boolean('navbar_display');
             $table->string('link')->nullable();
             $table->string('display_order');
             $table->string('language_id');

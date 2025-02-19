@@ -132,12 +132,12 @@ class ContentController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="landing_page_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Landing page display option"
      *                  ),
      *                  @OA\Property(
      *                      property="navbar_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
@@ -175,8 +175,8 @@ class ContentController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|string',
-                'navbar_display' => 'bail|required|string',
+                'landing_page_display' => 'bail|required|boolean',
+                'navbar_display' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
@@ -260,12 +260,12 @@ class ContentController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="landing_page_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Landing page display option"
      *                  ),
      *                  @OA\Property(
      *                      property="navbar_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
@@ -304,8 +304,8 @@ class ContentController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|string',
-                'navbar_display' => 'bail|required|string',
+                'landing_page_display' => 'bail|required|boolean',
+                'navbar_display' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',

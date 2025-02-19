@@ -18,12 +18,8 @@ class Review extends Model
         'display_order',
         'user_id',
     ];
-   /* public function user(){
-        return $this->belongsTo(Users::class);
-    }*/
 
-    public function language(): BelongsTo
-    {
-        return $this->belongsTo(Language::class);
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

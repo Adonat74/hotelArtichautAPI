@@ -87,11 +87,11 @@
                                     },
                                     "landing_page_display": {
                                         "description": "Landing page display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "navbar_display": {
                                         "description": "Navbar display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
@@ -244,11 +244,11 @@
                                     },
                                     "landing_page_display": {
                                         "description": "Landing page display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "navbar_display": {
                                         "description": "Navbar display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
@@ -1814,7 +1814,7 @@
                                     },
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
@@ -1941,7 +1941,7 @@
                                 "required": [
                                     "name",
                                     "title",
-                                    "short_decription",
+                                    "short_description",
                                     "description",
                                     "link",
                                     "price_in_cent",
@@ -1983,7 +1983,7 @@
                                     },
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
@@ -2010,6 +2010,283 @@
                 "responses": {
                     "201": {
                         "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/user/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get one user by id",
+                "operationId": "872b763758398bc0a2492976972417aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update an existing user",
+                "operationId": "0c3a70ac5b05d1923ee03be654c0c639",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role",
+                                    "isVIP"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "description": "User's role",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "status": {
+                                        "description": "User's status (optional)",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "isVIP": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete a user by id",
+                "operationId": "159036e20e48c9b57b682ba5ba42a976",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users",
+                "operationId": "f7ed34533b03a76b646c6c92b3e80a0c",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Add a new user",
+                "operationId": "3298348dcdef0f4ed21856672489c4ba",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role",
+                                    "isVIP"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "description": "User's role",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "status": {
+                                        "description": "User's status (optional)",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "isVIP": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
                     },
                     "422": {
                         "description": "Validation failed"
@@ -2053,6 +2330,10 @@
         {
             "name": "Services",
             "description": "Services"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
         }
     ]
 }

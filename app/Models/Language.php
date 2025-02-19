@@ -23,11 +23,6 @@ class Language extends Model
         return $this->hasMany(NewsArticle::class);
     }
 
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
-    }
-
     public function rooms(): HasMany
     {
         return $this->hasMany(Room::class);

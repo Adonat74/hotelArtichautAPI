@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-//        User::factory()->create([
-//            'name' => 'Test User',
+//        UserController::factory()->create([
+//            'name' => 'Test UserController',
 //            'email' => 'test@example.com',
 //        ]);
 
@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             RoomCategoryFeatureSeeder::class,
             LanguageSeeder::class,
+            UserSeeder::class,
         ]);
 
 
