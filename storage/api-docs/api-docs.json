@@ -394,12 +394,18 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "lang"
+                                    "lang",
+                                    "image"
                                 ],
                                 "properties": {
                                     "lang": {
                                         "description": "The language",
                                         "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The language image",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -477,15 +483,21 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "lang"
+                                    "lang",
+                                    "image"
                                 ],
                                 "properties": {
                                     "lang": {
                                         "description": "The language",
                                         "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The language image",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"

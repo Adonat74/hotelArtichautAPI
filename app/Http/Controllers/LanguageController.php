@@ -78,7 +78,7 @@ class LanguageController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *              mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  required={"lang", "image"},
      *                  @OA\Property(
@@ -118,7 +118,7 @@ class LanguageController extends Controller
                 $imagePath = $image->store('images', 'public');
                 $image = new Image([
                     'url' => url('storage/' . $imagePath),
-                    'content_id' => $language->id,
+                    'language_id' => $language->id,
                 ]);
                 $image->save();
             }
@@ -166,7 +166,7 @@ class LanguageController extends Controller
      *                      format="binary",
      *                      description="The language image"
      *                  ),
-     *
+     *              )
      *          )
      *     ),
      *     @OA\Response(response=200, description="Successful operation"),
@@ -189,7 +189,7 @@ class LanguageController extends Controller
             ]);
 
             if ($request->hasFile('image')) {
-                $existingImage = $language->image()->get();
+                $existingImage = $language->image;
 
                 if ($existingImage) {
                     Storage::disk('public')->delete($existingImage->url);
@@ -200,7 +200,7 @@ class LanguageController extends Controller
                 $imagePath = $image->store('images', 'public');
                 $image = new Image([
                     'url' => url('storage/' . $imagePath),
-                    'content_id' => $language->id,
+                    'language_id' => $language->id,
                 ]);
                 $image->save();
             }
