@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Language;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class LanguageController extends Controller
@@ -31,7 +33,7 @@ class LanguageController extends Controller
     public function getSingleLanguage(int $id): JsonResponse
     {
         try {
-            $language = Language::findOrFail($id);
+            $language = Language::with(['image'])->findOrFail($id);
             return response()->json($language);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -58,7 +60,7 @@ class LanguageController extends Controller
     public function getAllLanguages(): JsonResponse
     {
         try {
-            $languages = Language::all();
+            $languages = Language::with(['image'])->get();
             return response()->json($languages);
         } catch (Exception $e) {
             return response()->json([
@@ -78,12 +80,18 @@ class LanguageController extends Controller
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  required={"lang"},
+     *                  required={"lang", "image"},
      *                  @OA\Property(
      *                      property="lang",
      *                      type="string",
      *                      description="The language"
-     *                  )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="image",
+     *                      type="string",
+     *                      format="binary",
+     *                      description="The language image"
+     *                  ),
      *              )
      *          )
      *     ),
@@ -97,12 +105,25 @@ class LanguageController extends Controller
         try {
             $validatedData = $request->validate([
                 'lang' => 'bail|required|string|max:5',
+                'image' => 'bail|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $language = new Language($validatedData);
+            $language = new Language([
+                'lang' => $validatedData['lang']
+            ]);
             $language->save();
 
-            return response()->json($language, 201);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'content_id' => $language->id,
+                ]);
+                $image->save();
+            }
+
+            return response()->json($language->load(['image']), 201);
         } catch (ValidationException $exception) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -133,13 +154,19 @@ class LanguageController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"lang"},
+     *                  required={"lang", "image"},
      *                  @OA\Property(
      *                      property="lang",
      *                      type="string",
      *                      description="The language"
-     *                  )
-     *              )
+     *                  ),
+     *                  @OA\Property(
+     *                      property="image",
+     *                      type="string",
+     *                      format="binary",
+     *                      description="The language image"
+     *                  ),
+     *
      *          )
      *     ),
      *     @OA\Response(response=200, description="Successful operation"),
@@ -153,12 +180,32 @@ class LanguageController extends Controller
         try {
             $validatedData = $request->validate([
                 'lang' => 'bail|required|string|max:5',
+                'image' => 'bail|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $language = Language::findOrFail($id);
-            $language->update($validatedData);
+            $language->update([
+                'lang' => $validatedData['lang']
+            ]);
 
-            return response()->json($language);
+            if ($request->hasFile('image')) {
+                $existingImage = $language->image()->get();
+
+                if ($existingImage) {
+                    Storage::disk('public')->delete($existingImage->url);
+                    $existingImage->delete();
+                }
+
+                $image = $request->file('image');
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'content_id' => $language->id,
+                ]);
+                $image->save();
+            }
+
+            return response()->json($language->load(['image']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Language not found',
@@ -198,6 +245,15 @@ class LanguageController extends Controller
     {
         try {
             $language = Language::findOrFail($id);
+            $existingImage = $language->image()->get();
+
+            if ($existingImage) {
+                Storage::disk('public')->delete($existingImage->url);
+                $existingImage->delete();
+
+            }
+
+
             $language->delete();
 
             return response()->json(['message' => 'language deleted successfully']);

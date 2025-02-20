@@ -106,7 +106,7 @@ class UserController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc,dns|unique:App\Models\User,email',
+                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
                 'password' => 'bail|required|string|min:10',
                 'firstname' => 'bail|required|string|max:50',
                 'lastname' => 'bail|required|string|max:50',
@@ -179,7 +179,7 @@ class UserController extends Controller
     {
         try{
             $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc,dns|unique:App\Models\User,email',
+                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
                 'password' => 'bail|required|string|min:10',
                 'firstname' => 'bail|required|string|max:50',
                 'lastname' => 'bail|required|string|max:50',

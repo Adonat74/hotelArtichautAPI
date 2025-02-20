@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NewsArticleController;
@@ -9,12 +10,14 @@ use App\Http\Controllers\RoomsCategoryController;
 use App\Http\Controllers\RoomsFeatureController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+//->middleware('auth:sanctum');
+// AUTH ROUTES
+Route::post('/login', [AuthenticationController::class, 'login']);
+Route::post('/logout', [AuthenticationController::class, 'logout']);
+
 
 // USER ROUTES
 Route::prefix('user')->controller(UserController::class)->group(function () {
