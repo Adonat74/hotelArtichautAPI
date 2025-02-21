@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NewsArticleController;
@@ -13,20 +13,22 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
-//->middleware('auth:sanctum');
 // AUTH ROUTES
-Route::post('/login', [AuthenticationController::class, 'login']);
-Route::post('/logout', [AuthenticationController::class, 'logout']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
-
-// USER ROUTES
-Route::prefix('user')->controller(UserController::class)->group(function () {
-    Route::get('/', 'getAllUsers'); // get ALL contents
-    Route::get('/{id}', 'getSingleUser'); // get ONE User_models
-    Route::post('/', 'addUser'); // add ONE User_models
-    Route::post('/{id}', 'updateUser'); // modify ONE User_models (POST is used for updates as Laravel doesn't support file uploads via PUT)
-    Route::delete('/{id}', 'deleteUser'); // delete ONE User_models
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/refresh', [AuthController::class, 'getAuthUser']);
+    // USER ROUTES
+    Route::prefix('user')->controller(UserController::class)->group(function () {
+        Route::get('/', 'getAllUsers'); // get ALL contents
+        Route::get('/{id}', 'getSingleUser'); // get ONE User_models
+        Route::post('/{id}', 'updateUser'); // modify ONE User_models (POST is used for updates as Laravel doesn't support file uploads via PUT)
+        Route::delete('/{id}', 'deleteUser'); // delete ONE User_models
+    });
 });
+
 
 ///////////// CMS /////////////////////
 // CONTENT ROUTES

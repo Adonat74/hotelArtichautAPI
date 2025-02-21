@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `cache`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -47,8 +47,8 @@ DROP TABLE IF EXISTS `cache_locks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -72,19 +72,19 @@ DROP TABLE IF EXISTS `contents`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contents` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `landing_page_display` tinyint(1) NOT NULL,
   `navbar_display` tinyint(1) NOT NULL,
-  `link` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `contents` (
 
 LOCK TABLES `contents` WRITE;
 /*!40000 ALTER TABLE `contents` DISABLE KEYS */;
-INSERT INTO `contents` VALUES (1,'Healthcare Support Worker','Barton, Runte and Leffler','See how eagerly the lobsters and the Hatter went on eagerly. \'That\'s enough about lessons,\' the Gryphon interrupted in a loud, indignant voice, but she ran with all their simple sorrows, and find a.','It\'s the most confusing thing I ask! It\'s always six o\'clock now.\' A bright idea came into her eyes; and once she remembered the number of cucumber-frames there must be!\' thought Alice. \'I\'m glad they\'ve begun asking riddles.--I believe I can do without lobsters, you know. Please, Ma\'am, is this New Zealand or Australia?\' (and she tried to say a word, but slowly followed her back to the Gryphon. \'The reason is,\' said the Duchess; \'and most of \'em do.\' \'I don\'t think--\' \'Then you keep moving round, I suppose?\' said Alice. \'Why, you don\'t know what a delightful thing a Lobster Quadrille is!\' \'No, indeed,\' said Alice. \'Well, then,\' the Gryphon as if she was quite pleased to find that she was about a whiting before.\' \'I can see you\'re trying to touch her. \'Poor little thing!\' It did so indeed, and much sooner than she had not gone (We know it was a large arm-chair at one and then Alice put down the chimney!\' \'Oh! So Bill\'s got to the other side, the puppy made another rush at Alice as it.',1,1,NULL,'11','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(2,'Biologist','Spinka Group','I mentioned before, And have grown most uncommonly fat; Yet you finished the goose, with the tarts, you know--\' (pointing with his head!\' or \'Off with her face like the three gardeners, but she did.','Pigeon had finished. \'As if I shall only look up in a great hurry; \'this paper has just been picked up.\' \'What\'s in it?\' said the Dormouse; \'--well in.\' This answer so confused poor Alice, \'it would be only rustling in the schoolroom, and though this was the White Rabbit was no label this time she saw them, they were mine before. If I or she fell very slowly, for she was as steady as ever; Yet you finished the guinea-pigs!\' thought Alice. \'I\'ve read that in some book, but I THINK I can say.\' This was not a bit of the court,\" and I never understood what it might not escape again, and went on muttering over the list, feeling very glad that it was very deep, or she fell very slowly, for she had forgotten the Duchess to play with, and oh! ever so many tea-things are put out here?\' she asked. \'Yes, that\'s it,\' said the Caterpillar contemptuously. \'Who are YOU?\' Which brought them back again to the Cheshire Cat, she was quite out of it, and behind it when she had forgotten the words.\' So.',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(3,'Broadcast News Analyst','Bruen Group','Oh, how I wish you were all in bed!\' On various pretexts they all crowded round it, panting, and asking, \'But who is Dinah, if I shall be late!\' (when she thought it would like the look of the.','ALL RETURNED FROM HIM TO YOU,\"\' said Alice. \'Anything you like,\' said the March Hare said--\' \'I didn\'t!\' the March Hare interrupted, yawning. \'I\'m getting tired of being all alone here!\' As she said to herself how she would manage it. \'They were learning to draw, you know--\' She had already heard her voice sounded hoarse and strange, and the moment she quite forgot you didn\'t sign it,\' said the Mock Turtle replied, counting off the fire, and at last turned sulky, and would only say, \'I am older than you, and don\'t speak a word till I\'ve finished.\' So they went up to the rose-tree, she went on eagerly: \'There is such a rule at processions; \'and besides, what would happen next. \'It\'s--it\'s a very decided tone: \'tell her something about the temper of your nose-- What made you so awfully clever?\' \'I have answered three questions, and that is enough,\' Said his father; \'don\'t give yourself airs! Do you think, at your age, it is to find quite a long and a large piece out of the house!\'.',0,0,NULL,'5','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(4,'Middle School Teacher','Simonis Ltd','Alice was beginning to grow up again! Let me think: was I the same words as before, \'and things are worse than ever,\' thought the poor little thing grunted in reply (it had left off sneezing by this.','I know!\' exclaimed Alice, who always took a great thistle, to keep herself from being broken. She hastily put down yet, before the trial\'s over!\' thought Alice. \'I\'ve read that in the air. Even the Duchess replied, in a low curtain she had never forgotten that, if you were all ornamented with hearts. Next came an angry voice--the Rabbit\'s--\'Pat! Pat! Where are you?\' said Alice, in a more subdued tone, and everybody laughed, \'Let the jury had a head could be beheaded, and that you had been found and handed them round as prizes. There was no one to listen to me! When I used to it in time,\' said the King, with an anxious look at the great question is, what?\' The great question certainly was, what? Alice looked very uncomfortable. The first question of course was, how to spell \'stupid,\' and that if you were or might have been changed several times since then.\' \'What do you want to stay in here any longer!\' She waited for some minutes. Alice thought to herself, \'in my going out.',0,0,NULL,'13','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(5,'Foundry Mold and Coremaker','Gleason LLC','And welcome little fishes in With gently smiling jaws!\' \'I\'m sure I\'m not particular as to prevent its undoing itself,) she carried it off. * * * * * * * * * * * * * * * * CHAPTER II. The Pool of.','Presently the Rabbit hastily interrupted. \'There\'s a great many teeth, so she went round the rosetree; for, you see, so many tea-things are put out here?\' she asked. \'Yes, that\'s it,\' said Five, \'and I\'ll tell him--it was for bringing the cook tulip-roots instead of onions.\' Seven flung down his brush, and had to stoop to save her neck kept getting entangled among the trees, a little timidly, \'why you are painting those roses?\' Five and Seven said nothing, but looked at Alice, and looking anxiously round to see if she meant to take out of breath, and till the eyes appeared, and then dipped suddenly down, so suddenly that Alice said; but was dreadfully puzzled by the English, who wanted leaders, and had been jumping about like that!\' But she did not notice this question, but hurriedly went on, yawning and rubbing its eyes, \'Of course, of course; just what I should think very likely it can talk: at any rate he might answer questions.--How am I to do?\' said Alice. \'And where HAVE my.',0,0,NULL,'2','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(6,'Tank Car','Zboncak-Schaden','Mabel, for I know I do!\' said Alice very meekly: \'I\'m growing.\' \'You\'ve no right to think,\' said Alice very meekly: \'I\'m growing.\' \'You\'ve no right to grow to my right size: the next verse,\' the.','And she tried to say to itself, half to herself, as usual. I wonder what I should understand that better,\' Alice said very humbly; \'I won\'t interrupt again. I dare say there may be different,\' said Alice; \'you needn\'t be so stingy about it, even if my head would go round and look up and rubbed its eyes: then it watched the Queen put on her hand, watching the setting sun, and thinking of little Alice was very glad she had looked under it, and talking over its head. \'Very uncomfortable for the hedgehogs; and in despair she put one arm out of it, and then nodded. \'It\'s no use speaking to it,\' she said to Alice. \'Only a thimble,\' said Alice as he found it advisable--\"\' \'Found WHAT?\' said the King, the Queen, who were all shaped like the tone of this remark, and thought to herself, \'whenever I eat one of the song, perhaps?\' \'I\'ve heard something like this:-- \'Fury said to the Cheshire Cat, she was quite pleased to have no sort of mixed flavour of cherry-tart, custard, pine-apple, roast.',1,0,NULL,'11','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(7,'Marine Architect','Moen Group','I\'ll never go THERE again!\' said Alice indignantly, and she heard a little shaking among the people near the King very decidedly, and there she saw them, they set to work nibbling at the Queen.','English!\' said the Mock Turtle went on \'And how do you know the meaning of it at all. However, \'jury-men\' would have called him Tortoise because he was going on, as she had never seen such a curious plan!\' exclaimed Alice. \'That\'s very important,\' the King said to the other, looking uneasily at the sides of it, and finding it very nice, (it had, in fact, a sort of knot, and then unrolled the parchment scroll, and read as follows:-- \'The Queen of Hearts, who only bowed and smiled in reply. \'Idiot!\' said the Gryphon. \'We can do without lobsters, you know. So you see, as she could, and waited till she was walking hand in hand, in couples: they were all in bed!\' On various pretexts they all crowded round her at the Footman\'s head: it just missed her. Alice caught the baby was howling so much contradicted in her life before, and he hurried off. Alice thought over all she could not tell whether they were gardeners, or soldiers, or courtiers, or three pairs of tiny white kid gloves while.',0,0,NULL,'9','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(8,'Valve Repairer OR Regulator Repairer','Kuvalis PLC','Queen to-day?\' \'I should like it put the Lizard in head downwards, and the sound of a large pool all round her once more, while the rest of it in with the distant green leaves. As there seemed to.','Digging for apples, yer honour!\' (He pronounced it \'arrum.\') \'An arm, you goose! Who ever saw in my size; and as Alice could see this, as she picked her way out. \'I shall do nothing of tumbling down stairs! How brave they\'ll all think me for asking! No, it\'ll never do to ask: perhaps I shall be late!\' (when she thought to herself, rather sharply; \'I advise you to death.\"\' \'You are all dry, he is gay as a drawing of a book,\' thought Alice to herself, as she listened, or seemed to have got in as well,\' the Hatter was out of sight, he said in a hurried nervous manner, smiling at everything about her, to pass away the time. Alice had been anything near the right distance--but then I wonder what was going off into a sort of way to fly up into a tree. \'Did you say it.\' \'That\'s nothing to do: once or twice, and shook itself. Then it got down off the top with its eyelids, so he with his head!\"\' \'How dreadfully savage!\' exclaimed Alice. \'And be quick about it,\' added the Queen. \'Well, I never.',1,1,NULL,'7','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(9,'Medical Records Technician','Mertz-Murray','Dodo managed it.) First it marked out a box of comfits, (luckily the salt water had not the smallest idea how confusing it is all the unjust things--\' when his eye chanced to fall a long way. So.','Queen?\' said the King. On this the whole she thought it must be collected at once without waiting for the hot day made her look up and said, \'It WAS a curious plan!\' exclaimed Alice. \'That\'s the most important piece of bread-and-butter in the middle, being held up by wild beasts and other unpleasant things, all because they WOULD not remember ever having seen such a thing before, and she set to work nibbling at the other end of your nose-- What made you so awfully clever?\' \'I have answered three questions, and that he shook his head sadly. \'Do I look like one, but it did not feel encouraged to ask the question?\' said the Mock Turtle, \'they--you\'ve seen them, of course?\' \'Yes,\' said Alice in a trembling voice, \'--and I hadn\'t gone down that rabbit-hole--and yet--and yet--it\'s rather curious, you know, upon the other side, the puppy jumped into the sea, though you mayn\'t believe it--\' \'I never heard of \"Uglification,\"\' Alice ventured to ask. \'Suppose we change the subject. \'Go on with.',0,1,NULL,'19','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(10,'Night Shift','Ritchie LLC','THESE?\' said the Cat in a louder tone. \'ARE you to get rather sleepy, and went stamping about, and crept a little recovered from the Queen put on one knee. \'I\'m a poor man, your Majesty,\' he began.','That your eye was as much as she went slowly after it: \'I never heard before, \'Sure then I\'m here! Digging for apples, yer honour!\' \'Digging for apples, yer honour!\' \'Digging for apples, indeed!\' said the Dormouse again, so violently, that she had found the fan and gloves, and, as the jury had a head could be NO mistake about it: it was very likely to eat her up in a thick wood. \'The first thing she heard something like it,\' said Alice, \'because I\'m not looking for it, while the Dodo said, \'EVERYBODY has won, and all would change to tinkling sheep-bells, and the jury wrote it down \'important,\' and some of the guinea-pigs cheered, and was coming to, but it did not come the same thing, you know.\' \'Not the same thing as \"I sleep when I got up this morning? I almost wish I\'d gone to see what I like\"!\' \'You might just as the March Hare. Alice sighed wearily. \'I think you could draw treacle out of court! Suppress him! Pinch him! Off with his knuckles. It was so ordered about by mice and.',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(11,'Fitness Trainer','Pfeffer and Sons','I\'ve had such a pleasant temper, and thought it would be as well as she spoke. Alice did not sneeze, were the verses to himself: \'\"WE KNOW IT TO BE TRUE--\" that\'s the queerest thing about it.\' (The.','King, with an M--\' \'Why with an important air, \'are you all ready? This is the same words as before, \'It\'s all about it!\' Last came a little bird as soon as there seemed to listen, the whole party at once set to work very diligently to write with one elbow against the roof bear?--Mind that loose slate--Oh, it\'s coming down! Heads below!\' (a loud crash)--\'Now, who did that?--It was Bill, the Lizard) could not join the dance?\"\' \'Thank you, it\'s a set of verses.\' \'Are they in the world! Oh, my dear paws! Oh my fur and whiskers! She\'ll get me executed, as sure as ferrets are ferrets! Where CAN I have to go down the middle, being held up by two guinea-pigs, who were giving it something out of its mouth and yawned once or twice, and shook itself. Then it got down off the mushroom, and raised herself to some tea and bread-and-butter, and then the different branches of Arithmetic--Ambition, Distraction, Uglification, and Derision.\' \'I never saw one, or heard of uglifying!\' it exclaimed. \'You.',1,0,NULL,'2','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(12,'System Administrator','Baumbach, Medhurst and Nader','I\'ll get into the earth. At last the Gryphon went on, \'What\'s your name, child?\' \'My name is Alice, so please your Majesty,\' he began, \'for bringing these in: but I grow up, I\'ll write one--but I\'m.','Alice said to herself what such an extraordinary ways of living would be of very little use without my shoulders. Oh, how I wish I hadn\'t quite finished my tea when I got up and rubbed its eyes: then it chuckled. \'What fun!\' said the Dormouse; \'VERY ill.\' Alice tried to speak, but for a conversation. \'You don\'t know of any that do,\' Alice said to herself. \'Shy, they seem to have been changed for Mabel! I\'ll try if I shall be a book written about me, that there was mouth enough for it was indeed: she was a large kitchen, which was the first position in which the March Hare interrupted, yawning. \'I\'m getting tired of swimming about here, O Mouse!\' (Alice thought this must be getting somewhere near the centre of the wood--(she considered him to you, Though they were all ornamented with hearts. Next came the royal children, and make one repeat lessons!\' thought Alice; \'only, as it\'s asleep, I suppose you\'ll be telling me next that you think I can remember feeling a little shriek, and.',0,1,NULL,'5','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(13,'Rolling Machine Setter','Bayer Group','Mock Turtle. So she set the little door, so she went round the refreshments!\' But there seemed to think to herself, and shouted out, \'You\'d better not do that again!\' which produced another dead.','I know!\' exclaimed Alice, who was reading the list of singers. \'You may go,\' said the Cat: \'we\'re all mad here. I\'m mad. You\'re mad.\' \'How do you know the song, \'I\'d have said to the other: the Duchess sneezed occasionally; and as it went. So she swallowed one of the treat. When the sands are all pardoned.\' \'Come, THAT\'S a good deal worse off than before, as the rest of it at all,\' said Alice: \'--where\'s the Duchess?\' \'Hush! Hush!\' said the Duchess, digging her sharp little chin into Alice\'s head. \'Is that the mouse to the law, And argued each case with my wife; And the moral of that is--\"The more there is of mine, the less there is of mine, the less there is of yours.\"\' \'Oh, I know!\' exclaimed Alice, who felt very glad to get through the wood. \'If it had fallen into it: there was nothing on it except a tiny little thing!\' said the Dormouse, without considering at all like the look of the March Hare. \'Yes, please do!\' but the Mouse was speaking, so that they could not help bursting.',0,0,NULL,'1','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(14,'Sociology Teacher','Kassulke-Toy','Lory hastily. \'I don\'t know what to uglify is, you see, Miss, we\'re doing our best, afore she comes, to--\' At this the White Rabbit as he spoke. \'A cat may look at it!\' This speech caused a.','It was as long as there was Mystery,\' the Mock Turtle drew a long silence after this, and she went on, taking first one side and then said \'The fourth.\' \'Two days wrong!\' sighed the Lory, with a great crowd assembled about them--all sorts of little cartwheels, and the bright eager eyes were looking up into a large caterpillar, that was trickling down his cheeks, he went on to the Gryphon. \'How the creatures argue. It\'s enough to get through the door, and knocked. \'There\'s no sort of thing that would be like, \'--for they haven\'t got much evidence YET,\' she said to herself, in a Little Bill It was high time you were never even spoke to Time!\' \'Perhaps not,\' Alice cautiously replied, not feeling at all know whether it was just beginning to end,\' said the Hatter; \'so I should think you\'ll feel it a very grave voice, \'until all the jelly-fish out of their hearing her; and the Dormouse followed him: the March Hare: she thought it must be growing small again.\' She got up and straightening.',1,1,NULL,'14','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(15,'Sewing Machine Operator','Schuster Inc','How I wonder if I\'ve been changed several times since then.\' \'What do you know the song, she kept on puzzling about it just at first, the two creatures, who had been broken to pieces. \'Please.','I hadn\'t cried so much!\' Alas! it was an old Turtle--we used to it in a Little Bill It was so much contradicted in her hands, and began:-- \'You are not the right size for ten minutes together!\' \'Can\'t remember WHAT things?\' said the March Hare. \'He denies it,\' said the Mock Turtle said: \'I\'m too stiff. And the Gryphon replied very politely, \'if I had our Dinah here, I know all the rest, Between yourself and me.\' \'That\'s the first to speak. \'What size do you know what to do this, so she began again: \'Ou est ma chatte?\' which was sitting next to no toys to play croquet.\' The Frog-Footman repeated, in the common way. So she called softly after it, and then the Rabbit\'s little white kid gloves: she took courage, and went on growing, and she tried her best to climb up one of the ground.\' So she tucked her arm affectionately into Alice\'s, and they repeated their arguments to her, so she went on \'And how do you call it sad?\' And she tried to look for her, and the words \'DRINK ME\'.',0,0,NULL,'17','1','2025-02-19 13:18:30','2025-02-19 13:18:30');
+INSERT INTO `contents` VALUES (1,'room-content','Nos Chambres','Un raffinement jusque dans l\'oreiller','À l’Hôtel 5 étoiles Artichaut, chaque chambre est une promesse de luxe et de confort. De la chambre standard cosy à la suite présidentielle digne d’un chef d’État en vacances, nos espaces allient élégance et raffinement. Literie moelleuse, Wi-Fi ultra-rapide, salles de bain somptueuses et petites attentions délicates transforment chaque séjour en une parenthèse enchantée. Que vous veniez pour affaires ou pour le plaisir, préparez-vous à une expérience où chaque détail compte… même la douceur des oreillers !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:08:23'),(2,'Biologist','Spinka Group','I mentioned before, And have grown most uncommonly fat; Yet you finished the goose, with the tarts, you know--\' (pointing with his head!\' or \'Off with her face like the three gardeners, but she did.','Pigeon had finished. \'As if I shall only look up in a great hurry; \'this paper has just been picked up.\' \'What\'s in it?\' said the Dormouse; \'--well in.\' This answer so confused poor Alice, \'it would be only rustling in the schoolroom, and though this was the White Rabbit was no label this time she saw them, they were mine before. If I or she fell very slowly, for she was as steady as ever; Yet you finished the guinea-pigs!\' thought Alice. \'I\'ve read that in some book, but I THINK I can say.\' This was not a bit of the court,\" and I never understood what it might not escape again, and went on muttering over the list, feeling very glad that it was very deep, or she fell very slowly, for she had forgotten the Duchess to play with, and oh! ever so many tea-things are put out here?\' she asked. \'Yes, that\'s it,\' said the Caterpillar contemptuously. \'Who are YOU?\' Which brought them back again to the Cheshire Cat, she was quite out of it, and behind it when she had forgotten the words.\' So.',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(3,'spa-content','Parcours Bien être','Poiur le bonheur de vos pieds','Niché entre des peignoires douillets, claquettes en ouate, bain fumant, expérience de pluie d\'Amazonie,  hamman de bivouak saharien, sauna de Norvège puis plongeon dans notre bassine de saumon. Le tout avec distribution de champagne gratuite.',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:11:28'),(4,'Middle School Teacher','Simonis Ltd','Alice was beginning to grow up again! Let me think: was I the same words as before, \'and things are worse than ever,\' thought the poor little thing grunted in reply (it had left off sneezing by this.','I know!\' exclaimed Alice, who always took a great thistle, to keep herself from being broken. She hastily put down yet, before the trial\'s over!\' thought Alice. \'I\'ve read that in the air. Even the Duchess replied, in a low curtain she had never forgotten that, if you were all ornamented with hearts. Next came an angry voice--the Rabbit\'s--\'Pat! Pat! Where are you?\' said Alice, in a more subdued tone, and everybody laughed, \'Let the jury had a head could be beheaded, and that you had been found and handed them round as prizes. There was no one to listen to me! When I used to it in time,\' said the King, with an anxious look at the great question is, what?\' The great question certainly was, what? Alice looked very uncomfortable. The first question of course was, how to spell \'stupid,\' and that if you were or might have been changed several times since then.\' \'What do you want to stay in here any longer!\' She waited for some minutes. Alice thought to herself, \'in my going out.',0,0,NULL,'13','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(5,'massage-content','Massages','Relachez, vous êtes massé','Nos massages sont une invitation au lâcher-prise absolu. Qu’il s’agisse d’un modelage relaxant, d’un massage deep tissue ou d’un soin aux pierres chaudes, chaque pression est pensée pour dénouer vos tensions et vous plonger dans un océan de bien-être. Entre mains expertes et huiles précieuses, votre seul effort sera de ne pas vous endormir trop vite… mais on ne vous en voudra pas !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:13:49'),(6,'Tank Car','Zboncak-Schaden','Mabel, for I know I do!\' said Alice very meekly: \'I\'m growing.\' \'You\'ve no right to think,\' said Alice very meekly: \'I\'m growing.\' \'You\'ve no right to grow to my right size: the next verse,\' the.','And she tried to say to itself, half to herself, as usual. I wonder what I should understand that better,\' Alice said very humbly; \'I won\'t interrupt again. I dare say there may be different,\' said Alice; \'you needn\'t be so stingy about it, even if my head would go round and look up and rubbed its eyes: then it watched the Queen put on her hand, watching the setting sun, and thinking of little Alice was very glad she had looked under it, and talking over its head. \'Very uncomfortable for the hedgehogs; and in despair she put one arm out of it, and then nodded. \'It\'s no use speaking to it,\' she said to Alice. \'Only a thimble,\' said Alice as he found it advisable--\"\' \'Found WHAT?\' said the King, the Queen, who were all shaped like the tone of this remark, and thought to herself, \'whenever I eat one of the song, perhaps?\' \'I\'ve heard something like this:-- \'Fury said to the Cheshire Cat, she was quite pleased to have no sort of mixed flavour of cherry-tart, custard, pine-apple, roast.',1,0,NULL,'11','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(7,'wine-content','Nos Vins','Une selection, des plus reconnues au monde','Notre sélection de vins est un voyage sensoriel à travers les plus beaux terroirs. Des rouges puissants aux blancs délicats, en passant par des bulles festives, chaque bouteille est choisie avec soin pour sublimer vos repas… ou simplement pour le plaisir. Laissez nos sommeliers vous guider, et que votre seul dilemme soit de choisir entre un grand cru et un coup de cœur. Santé ! 🍷',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:16:03'),(8,'Valve Repairer OR Regulator Repairer','Kuvalis PLC','Queen to-day?\' \'I should like it put the Lizard in head downwards, and the sound of a large pool all round her once more, while the rest of it in with the distant green leaves. As there seemed to.','Digging for apples, yer honour!\' (He pronounced it \'arrum.\') \'An arm, you goose! Who ever saw in my size; and as Alice could see this, as she picked her way out. \'I shall do nothing of tumbling down stairs! How brave they\'ll all think me for asking! No, it\'ll never do to ask: perhaps I shall be late!\' (when she thought to herself, rather sharply; \'I advise you to death.\"\' \'You are all dry, he is gay as a drawing of a book,\' thought Alice to herself, as she listened, or seemed to have got in as well,\' the Hatter was out of sight, he said in a hurried nervous manner, smiling at everything about her, to pass away the time. Alice had been anything near the right distance--but then I wonder what was going off into a sort of way to fly up into a tree. \'Did you say it.\' \'That\'s nothing to do: once or twice, and shook itself. Then it got down off the top with its eyelids, so he with his head!\"\' \'How dreadfully savage!\' exclaimed Alice. \'And be quick about it,\' added the Queen. \'Well, I never.',1,1,NULL,'7','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(10,'Night Shift','Ritchie LLC','THESE?\' said the Cat in a louder tone. \'ARE you to get rather sleepy, and went stamping about, and crept a little recovered from the Queen put on one knee. \'I\'m a poor man, your Majesty,\' he began.','That your eye was as much as she went slowly after it: \'I never heard before, \'Sure then I\'m here! Digging for apples, yer honour!\' \'Digging for apples, yer honour!\' \'Digging for apples, indeed!\' said the Dormouse again, so violently, that she had found the fan and gloves, and, as the jury had a head could be NO mistake about it: it was very likely to eat her up in a thick wood. \'The first thing she heard something like it,\' said Alice, \'because I\'m not looking for it, while the Dodo said, \'EVERYBODY has won, and all would change to tinkling sheep-bells, and the jury wrote it down \'important,\' and some of the guinea-pigs cheered, and was coming to, but it did not come the same thing, you know.\' \'Not the same thing as \"I sleep when I got up this morning? I almost wish I\'d gone to see what I like\"!\' \'You might just as the March Hare. Alice sighed wearily. \'I think you could draw treacle out of court! Suppress him! Pinch him! Off with his knuckles. It was so ordered about by mice and.',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(11,'Fitness Trainer','Pfeffer and Sons','I\'ve had such a pleasant temper, and thought it would be as well as she spoke. Alice did not sneeze, were the verses to himself: \'\"WE KNOW IT TO BE TRUE--\" that\'s the queerest thing about it.\' (The.','King, with an M--\' \'Why with an important air, \'are you all ready? This is the same words as before, \'It\'s all about it!\' Last came a little bird as soon as there seemed to listen, the whole party at once set to work very diligently to write with one elbow against the roof bear?--Mind that loose slate--Oh, it\'s coming down! Heads below!\' (a loud crash)--\'Now, who did that?--It was Bill, the Lizard) could not join the dance?\"\' \'Thank you, it\'s a set of verses.\' \'Are they in the world! Oh, my dear paws! Oh my fur and whiskers! She\'ll get me executed, as sure as ferrets are ferrets! Where CAN I have to go down the middle, being held up by two guinea-pigs, who were giving it something out of its mouth and yawned once or twice, and shook itself. Then it got down off the mushroom, and raised herself to some tea and bread-and-butter, and then the different branches of Arithmetic--Ambition, Distraction, Uglification, and Derision.\' \'I never saw one, or heard of uglifying!\' it exclaimed. \'You.',1,0,NULL,'2','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(12,'System Administrator','Baumbach, Medhurst and Nader','I\'ll get into the earth. At last the Gryphon went on, \'What\'s your name, child?\' \'My name is Alice, so please your Majesty,\' he began, \'for bringing these in: but I grow up, I\'ll write one--but I\'m.','Alice said to herself what such an extraordinary ways of living would be of very little use without my shoulders. Oh, how I wish I hadn\'t quite finished my tea when I got up and rubbed its eyes: then it chuckled. \'What fun!\' said the Dormouse; \'VERY ill.\' Alice tried to speak, but for a conversation. \'You don\'t know of any that do,\' Alice said to herself. \'Shy, they seem to have been changed for Mabel! I\'ll try if I shall be a book written about me, that there was mouth enough for it was indeed: she was a large kitchen, which was the first position in which the March Hare interrupted, yawning. \'I\'m getting tired of swimming about here, O Mouse!\' (Alice thought this must be getting somewhere near the centre of the wood--(she considered him to you, Though they were all ornamented with hearts. Next came the royal children, and make one repeat lessons!\' thought Alice; \'only, as it\'s asleep, I suppose you\'ll be telling me next that you think I can remember feeling a little shriek, and.',0,1,NULL,'5','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(13,'Rolling Machine Setter','Bayer Group','Mock Turtle. So she set the little door, so she went round the refreshments!\' But there seemed to think to herself, and shouted out, \'You\'d better not do that again!\' which produced another dead.','I know!\' exclaimed Alice, who was reading the list of singers. \'You may go,\' said the Cat: \'we\'re all mad here. I\'m mad. You\'re mad.\' \'How do you know the song, \'I\'d have said to the other: the Duchess sneezed occasionally; and as it went. So she swallowed one of the treat. When the sands are all pardoned.\' \'Come, THAT\'S a good deal worse off than before, as the rest of it at all,\' said Alice: \'--where\'s the Duchess?\' \'Hush! Hush!\' said the Duchess, digging her sharp little chin into Alice\'s head. \'Is that the mouse to the law, And argued each case with my wife; And the moral of that is--\"The more there is of mine, the less there is of mine, the less there is of yours.\"\' \'Oh, I know!\' exclaimed Alice, who felt very glad to get through the wood. \'If it had fallen into it: there was nothing on it except a tiny little thing!\' said the Dormouse, without considering at all like the look of the March Hare. \'Yes, please do!\' but the Mouse was speaking, so that they could not help bursting.',0,0,NULL,'1','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(14,'Sociology Teacher','Kassulke-Toy','Lory hastily. \'I don\'t know what to uglify is, you see, Miss, we\'re doing our best, afore she comes, to--\' At this the White Rabbit as he spoke. \'A cat may look at it!\' This speech caused a.','It was as long as there was Mystery,\' the Mock Turtle drew a long silence after this, and she went on, taking first one side and then said \'The fourth.\' \'Two days wrong!\' sighed the Lory, with a great crowd assembled about them--all sorts of little cartwheels, and the bright eager eyes were looking up into a large caterpillar, that was trickling down his cheeks, he went on to the Gryphon. \'How the creatures argue. It\'s enough to get through the door, and knocked. \'There\'s no sort of thing that would be like, \'--for they haven\'t got much evidence YET,\' she said to herself, in a Little Bill It was high time you were never even spoke to Time!\' \'Perhaps not,\' Alice cautiously replied, not feeling at all know whether it was just beginning to end,\' said the Hatter; \'so I should think you\'ll feel it a very grave voice, \'until all the jelly-fish out of their hearing her; and the Dormouse followed him: the March Hare: she thought it must be growing small again.\' She got up and straightening.',1,1,NULL,'14','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(15,'Sewing Machine Operator','Schuster Inc','How I wonder if I\'ve been changed several times since then.\' \'What do you know the song, she kept on puzzling about it just at first, the two creatures, who had been broken to pieces. \'Please.','I hadn\'t cried so much!\' Alas! it was an old Turtle--we used to it in a Little Bill It was so much contradicted in her hands, and began:-- \'You are not the right size for ten minutes together!\' \'Can\'t remember WHAT things?\' said the March Hare. \'He denies it,\' said the Mock Turtle said: \'I\'m too stiff. And the Gryphon replied very politely, \'if I had our Dinah here, I know all the rest, Between yourself and me.\' \'That\'s the first to speak. \'What size do you know what to do this, so she began again: \'Ou est ma chatte?\' which was sitting next to no toys to play croquet.\' The Frog-Footman repeated, in the common way. So she called softly after it, and then the Rabbit\'s little white kid gloves: she took courage, and went on growing, and she tried her best to climb up one of the ground.\' So she tucked her arm affectionately into Alice\'s, and they repeated their arguments to her, so she went on \'And how do you call it sad?\' And she tried to look for her, and the words \'DRINK ME\'.',0,0,NULL,'17','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(16,'string','string','string','string',0,0,NULL,'0','3','2025-02-20 09:25:32','2025-02-20 09:25:32');
 /*!40000 ALTER TABLE `contents` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,11 +106,11 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -135,7 +135,7 @@ DROP TABLE IF EXISTS `images`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `images` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `content_id` bigint unsigned DEFAULT NULL,
   `news_article_id` bigint unsigned DEFAULT NULL,
   `service_id` bigint unsigned DEFAULT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE `images` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,6 +154,7 @@ CREATE TABLE `images` (
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
+INSERT INTO `images` VALUES (2,'http://0.0.0.0:8000/storage/images/vDe8LrkECIaqdFng1sPWvDpThFHZOw2VJ71KuD8Y.png',16,NULL,NULL,NULL,NULL,NULL,'2025-02-20 09:25:32','2025-02-20 09:25:32'),(5,'http://192.168.1.245:8000/storage/images/IboFq5ay6ujHMGmVnRglTwZfT8IDKyLIyAbHg8n8.png',NULL,NULL,NULL,NULL,NULL,1,'2025-02-20 14:11:39','2025-02-20 14:11:39'),(6,'http://192.168.1.245:8000/storage/images/dfAmoGVG0ObU3ZtZfaLO6YJJoHcctUoRPw3QobwG.png',NULL,NULL,NULL,NULL,NULL,2,'2025-02-20 14:18:23','2025-02-20 14:18:23'),(7,'http://192.168.1.245:8000/storage/images/sLsJGqoiD6j0x23uQNnL4ZlsqtoMeAqVvguxvItF.png',1,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:08:23','2025-02-21 07:08:23'),(8,'http://192.168.1.245:8000/storage/images/jFITU9PN4Gz70F1mRwDEiy3oN1webRKnt2W05hEA.png',3,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:11:28','2025-02-21 07:11:28'),(9,'http://192.168.1.245:8000/storage/images/AFAZheXojlD1N7v6dsydrrIx6fBB5NilBBqfKUWH.png',5,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:13:49','2025-02-21 07:13:49'),(10,'http://192.168.1.245:8000/storage/images/UQexHiF5vPet0f41mS0kzCqv8D7kw1O9RcuDcuNk.png',7,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:16:03','2025-02-21 07:16:03');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,13 +166,13 @@ DROP TABLE IF EXISTS `job_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `job_batches` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
@@ -197,8 +198,8 @@ DROP TABLE IF EXISTS `jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint unsigned NOT NULL,
   `reserved_at` int unsigned DEFAULT NULL,
   `available_at` int unsigned NOT NULL,
@@ -226,11 +227,11 @@ DROP TABLE IF EXISTS `languages`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `languages` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `lang` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +240,7 @@ CREATE TABLE `languages` (
 
 LOCK TABLES `languages` WRITE;
 /*!40000 ALTER TABLE `languages` DISABLE KEYS */;
-INSERT INTO `languages` VALUES (1,'fr',NULL,NULL),(2,'en',NULL,NULL);
+INSERT INTO `languages` VALUES (1,'fr',NULL,'2025-02-20 14:11:38'),(2,'en',NULL,NULL);
 /*!40000 ALTER TABLE `languages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -252,7 +253,7 @@ DROP TABLE IF EXISTS `migrations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -277,12 +278,12 @@ DROP TABLE IF EXISTS `news_articles`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `news_articles` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -307,8 +308,8 @@ DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -332,11 +333,11 @@ DROP TABLE IF EXISTS `personal_access_tokens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -366,8 +367,8 @@ DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `rate` int NOT NULL,
-  `review_content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `review_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -425,13 +426,13 @@ DROP TABLE IF EXISTS `rooms`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rooms` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `number` int NOT NULL,
-  `room_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `room_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rooms_category_id` bigint unsigned DEFAULT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -457,13 +458,13 @@ DROP TABLE IF EXISTS `rooms_categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rooms_categories` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price_in_cent` int unsigned NOT NULL,
   `bed_size` int NOT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -489,11 +490,11 @@ DROP TABLE IF EXISTS `rooms_features`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rooms_features` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `feature_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `feature_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -519,16 +520,16 @@ DROP TABLE IF EXISTS `services`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `services` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `link` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `short_description` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `link` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `price_in_cent` int NOT NULL,
   `duration_in_day` int NOT NULL,
   `is_per_person` tinyint(1) NOT NULL,
-  `display_order` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -553,11 +554,11 @@ DROP TABLE IF EXISTS `sessions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
@@ -583,19 +584,19 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `firstname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lastname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `city` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `postal_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lastname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postal_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `isVIP` tinyint(1) NOT NULL DEFAULT '0',
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -622,4 +623,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-20 11:08:01
+-- Dump completed on 2025-02-21  9:16:47

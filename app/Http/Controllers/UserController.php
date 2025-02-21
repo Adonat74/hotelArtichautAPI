@@ -72,68 +72,39 @@ class UserController extends Controller
 
 
 
-    /**
-     * @OA\Post(
-     *     path="/api/user",
-     *     summary="Add a new user",
-     *     tags={"Users"},
-     *     @OA\RequestBody(
-     *          required=true,
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  required={"email", "password", "firstname", "lastname", "address", "city", "postal_code", "phone", "role", "isVIP"},
-     *                  @OA\Property(property="email", type="string", format="email", description="User's email address"),
-     *                  @OA\Property(property="password", type="string", description="User's password (minimum 10 characters)"),
-     *                  @OA\Property(property="firstname", type="string", maxLength=50, description="User's first name"),
-     *                  @OA\Property(property="lastname", type="string", maxLength=50, description="User's last name"),
-     *                  @OA\Property(property="address", type="string", maxLength=100, description="User's address"),
-     *                  @OA\Property(property="city", type="string", maxLength=100, description="User's city"),
-     *                  @OA\Property(property="postal_code", type="string", description="User's postal code (5 digits)"),
-     *                  @OA\Property(property="phone", type="string", description="User's phone number (10 digits)"),
-     *                  @OA\Property(property="role", type="string", maxLength=20, description="User's role"),
-     *                  @OA\Property(property="status", type="string", maxLength=20, description="User's status (optional)"),
-     *                  @OA\Property(property="isVIP", type="boolean", description="Indicates if the user is VIP"),
-     *              )
-     *          )
-     *     ),
-     *     @OA\Response(response=201, description="User successfully created"),
-     *     @OA\Response(response=422, description="Validation failed"),
-     *     @OA\Response(response=500, description="An error occurred")
-     * )
-     */
-    public function addUser(Request $request): JsonResponse
-    {
-        try {
-            $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
-                'password' => 'bail|required|string|min:10',
-                'firstname' => 'bail|required|string|max:50',
-                'lastname' => 'bail|required|string|max:50',
-                'address' => 'bail|required|string|max:100',
-                'city' => 'bail|required|string|max:100',
-                'postal_code' => 'bail|required|string|max:15',
-                'phone' => 'bail|required|string|max:12',
-                'role' => 'bail|required|string|max:20',
-                'status' => 'nullable|string|max:20',
-                'isVIP' => 'bail|required|boolean',
-            ]);
-            $user = new User($validatedData);
-            $user->save();
 
-            return response()->json($user, 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the user',
-                'message'=>    $e->getMessage(),
-            ], 500);
-        }
-    }
+//    public function addUser(Request $request): JsonResponse
+//    {
+//        try {
+//            $validatedData = $request->validate([
+//                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
+//                'password' => 'bail|required|string|min:10',
+//                'firstname' => 'bail|required|string|max:50',
+//                'lastname' => 'bail|required|string|max:50',
+//                'address' => 'bail|required|string|max:100',
+//                'city' => 'bail|required|string|max:100',
+//                'postal_code' => 'bail|required|string|max:15',
+//                'phone' => 'bail|required|string|max:12',
+//                'role' => 'bail|required|string|max:20',
+//                'status' => 'nullable|string|max:20',
+//                'isVIP' => 'bail|required|boolean',
+//            ]);
+//            $user = new User($validatedData);
+//            $user->save();
+//
+//            return response()->json($user, 201);
+//        } catch (ValidationException $e) {
+//            return response()->json([
+//                'error' => 'Validation failed',
+//                'errors' => $e->errors(),
+//            ], 422);
+//        } catch (Exception $e) {
+//            return response()->json([
+//                'error' => 'An error occurred while adding the user',
+//                'message'=>    $e->getMessage(),
+//            ], 500);
+//        }
+//    }
 
 
 
@@ -152,7 +123,7 @@ class UserController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *               mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  required={"email", "password", "firstname", "lastname", "address", "city", "postal_code", "phone", "role", "isVIP"},
      *                  @OA\Property(property="email", type="string", format="email", description="User's email address"),
@@ -249,9 +220,4 @@ class UserController extends Controller
             ], 500);
         }
     }
-
-
-
-
-
 }

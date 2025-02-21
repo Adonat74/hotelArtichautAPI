@@ -104,7 +104,7 @@ class LanguageController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'lang' => 'bail|required|string|max:5',
+                'lang' => 'bail|required|string|max:25',
                 'image' => 'bail|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
@@ -179,7 +179,7 @@ class LanguageController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'lang' => 'bail|required|string|max:5',
+                'lang' => 'bail|required|string|max:25',
                 'image' => 'bail|required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
@@ -245,7 +245,7 @@ class LanguageController extends Controller
     {
         try {
             $language = Language::findOrFail($id);
-            $existingImage = $language->image()->get();
+            $existingImage = $language->image;
 
             if ($existingImage) {
                 Storage::disk('public')->delete($existingImage->url);

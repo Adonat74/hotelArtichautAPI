@@ -9,14 +9,14 @@
         "/api/login": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auth"
                 ],
                 "summary": "Login",
-                "operationId": "9c7361a02ab87c6f7609f2293c9abf69",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "email",
@@ -48,16 +48,125 @@
                 }
             }
         },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register new user",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role",
+                                    "isVIP"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "description": "User's role",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "status": {
+                                        "description": "User's status (optional)",
+                                        "type": "string",
+                                        "maxLength": 20
+                                    },
+                                    "isVIP": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/logout": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auth"
                 ],
                 "summary": "Logout",
-                "operationId": "6c9562d211d58e878cfd7d1c68aa02c8",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
                 "responses": {
                     "200": {
                         "description": "User successfully logout"
+                    }
+                }
+            }
+        },
+        "/api/refresh": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "get authenticated user",
+                "operationId": "86e894df0ccad042116bf937e5593629",
+                "responses": {
+                    "200": {
+                        "description": "User fetched"
                     }
                 }
             }
@@ -827,7 +936,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "rate",
@@ -928,7 +1037,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "rate",
@@ -2138,7 +2247,7 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "email",
@@ -2270,106 +2379,13 @@
                         "description": "An error occurred"
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Add a new user",
-                "operationId": "3298348dcdef0f4ed21856672489c4ba",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "email",
-                                    "password",
-                                    "firstname",
-                                    "lastname",
-                                    "address",
-                                    "city",
-                                    "postal_code",
-                                    "phone",
-                                    "role",
-                                    "isVIP"
-                                ],
-                                "properties": {
-                                    "email": {
-                                        "description": "User's email address",
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "description": "User's password (minimum 10 characters)",
-                                        "type": "string"
-                                    },
-                                    "firstname": {
-                                        "description": "User's first name",
-                                        "type": "string",
-                                        "maxLength": 50
-                                    },
-                                    "lastname": {
-                                        "description": "User's last name",
-                                        "type": "string",
-                                        "maxLength": 50
-                                    },
-                                    "address": {
-                                        "description": "User's address",
-                                        "type": "string",
-                                        "maxLength": 100
-                                    },
-                                    "city": {
-                                        "description": "User's city",
-                                        "type": "string",
-                                        "maxLength": 100
-                                    },
-                                    "postal_code": {
-                                        "description": "User's postal code (5 digits)",
-                                        "type": "string"
-                                    },
-                                    "phone": {
-                                        "description": "User's phone number (10 digits)",
-                                        "type": "string"
-                                    },
-                                    "role": {
-                                        "description": "User's role",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "status": {
-                                        "description": "User's status (optional)",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "isVIP": {
-                                        "description": "Indicates if the user is VIP",
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "User successfully created"
-                    },
-                    "422": {
-                        "description": "Validation failed"
-                    },
-                    "500": {
-                        "description": "An error occurred"
-                    }
-                }
             }
         }
     },
     "tags": [
         {
-            "name": "Authentication",
-            "description": "Authentication"
+            "name": "Auth",
+            "description": "Auth"
         },
         {
             "name": "Contents",

@@ -81,7 +81,7 @@ class ReviewController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  required={"rate", "review_content", "display_order", "user_id"},
      *                  @OA\Property(
@@ -155,7 +155,7 @@ class ReviewController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
      *                  required={"rate", "review_content", "display_order", "user_id"},
      *                  @OA\Property(
