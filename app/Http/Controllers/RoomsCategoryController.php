@@ -69,10 +69,32 @@
          *     @OA\Response(response=500, description="An error occured")
          * )
          */
-        public function getAllCategories(int $lang): JsonResponse
+        public function getAllCategoriesByLang(int $lang): JsonResponse
         {
             try {
                 $categories = RoomsCategory::where('language_id', $lang)->with(['features', 'rooms', 'images', 'language'])->get();
+                return response()->json($categories);
+            } catch (Exception $e) {
+                return response()->json([
+                    'error' => 'An error occurred while fetching the categories',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+        }
+
+        /**
+         * @OA\Get(
+         *     path="/api/rooms-category",
+         *     summary="Get all rooms-category",
+         *     tags={"RoomsCategories"},
+         *     @OA\Response(response=200, description="Successful operation"),
+         *     @OA\Response(response=500, description="An error occured")
+         * )
+         */
+        public function getAllCategories(): JsonResponse
+        {
+            try {
+                $categories = RoomsCategory::with(['features', 'rooms', 'images', 'language'])->get();
                 return response()->json($categories);
             } catch (Exception $e) {
                 return response()->json([
@@ -94,11 +116,16 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description", "price_in_cent", "bed_size", "language_id"},
+         *                 required={"name", "category_name", "description", "price_in_cent", "bed_size", "display_order", "language_id"},
+         *                    @OA\Property(
+         *                        property="name",
+         *                        type="string",
+         *                        description="The name to group with other languages"
+         *                    ),
          *                 @OA\Property(
-         *                     property="name",
+         *                     property="category_name",
          *                     type="string",
-         *                     description="The name of the rooms-category article",
+         *                     description="The category_name of the rooms-category article",
          *                     example="Deluxe Room"
          *                 ),
          *                 @OA\Property(
@@ -125,6 +152,11 @@
          *                     description="An array of rooms_feature IDs",
          *                     @OA\Items(type="integer", example=3)
          *                 ),
+         *                   @OA\Property(
+         *                       property="display_order",
+         *                       type="integer",
+         *                       description="The desired disaly order the items should be"
+         *                   ),
          *                 @OA\Property(
          *                     property="language_id",
          *                     type="integer",
@@ -152,10 +184,12 @@
         {
             try {
                 $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:255',
+                    'name' => 'bail|required|string|max:50',
+                    'category_name' => 'bail|required|string|max:255',
                     'description' => 'bail|required|string|max:1000',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'display_order' => 'bail|required|integer',
                     'language_id' => 'bail|required|numeric',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
@@ -164,9 +198,11 @@
                 ]);
                 $roomCategory = new RoomsCategory([
                     'name' => $validatedData['name'],
+                    'category_name' => $validatedData['category_name'],
                     'description' => $validatedData['description'],
                     'price_in_cent' => $validatedData['price_in_cent'],
                     'bed_size' => $validatedData['bed_size'],
+                    'display_order' => $validatedData['display_order'],
                     'language_id' => $validatedData['language_id'],
                 ]);
                 $roomCategory->save();
@@ -220,11 +256,16 @@
          *         @OA\MediaType(
          *             mediaType="multipart/form-data",
          *             @OA\Schema(
-         *                 required={"name", "description", "price_in_cent", "bed_size", "language_id"},
+         *                 required={"name", "category_name", "description", "price_in_cent", "bed_size", "display_order", "language_id"},
+         *                    @OA\Property(
+         *                        property="name",
+         *                        type="string",
+         *                        description="The name to group with other languages"
+         *                    ),
          *                 @OA\Property(
-         *                     property="name",
+         *                     property="category_name",
          *                     type="string",
-         *                     description="The name of the rooms-category article",
+         *                     description="The category_name of the rooms-category article",
          *                     example="Deluxe Room"
          *                 ),
          *                 @OA\Property(
@@ -251,6 +292,11 @@
          *                     description="An array of rooms_feature IDs",
          *                     @OA\Items(type="integer", example=3)
          *                 ),
+         *                   @OA\Property(
+         *                       property="display_order",
+         *                       type="integer",
+         *                       description="The desired disaly order the items should be"
+         *                   ),
          *                 @OA\Property(
          *                     property="language_id",
          *                     type="integer",
@@ -279,10 +325,12 @@
         {
             try {
                 $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:255',
+                    'name' => 'bail|required|string|max:50',
+                    'category_name' => 'bail|required|string|max:255',
                     'description' => 'bail|required|string|max:1000',
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
+                    'display_order' => 'bail|required|integer',
                     'language_id' => 'bail|required|numeric',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
@@ -292,9 +340,11 @@
                 $roomCategory = RoomsCategory::findOrFail($id);
                 $roomCategory->update([
                     'name' => $validatedData['name'],
+                    'category_name' => $validatedData['category_name'],
                     'description' => $validatedData['description'],
                     'price_in_cent' => $validatedData['price_in_cent'],
                     'bed_size' => $validatedData['bed_size'],
+                    'display_order' => $validatedData['display_order'],
                     'language_id' => $validatedData['language_id'],
                 ]);
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Content;
+use App\Models\Language;
 use App\Models\NewsArticle;
 use App\Models\Room;
 use App\Models\RoomsCategory;
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->foreignIdFor(Service::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(RoomsCategory::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
             $table->foreignIdFor(Room::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Language::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

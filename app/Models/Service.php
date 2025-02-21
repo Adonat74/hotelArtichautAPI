@@ -15,10 +15,15 @@ class Service extends Model
 
 
     protected $fillable = [
+        'name',
         'title',
+        'short_description',
+        'description',
+        'link',
         'price_in_cent',
         'duration_in_day',
         'is_per_person',
+        'display_order',
         'language_id',
     ];
 

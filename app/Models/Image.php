@@ -20,6 +20,7 @@ class Image extends Model
         'service_id',
         'rooms_category_id',
         'room_id',
+        'language_id',
     ];
 
 
@@ -46,5 +47,10 @@ class Image extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
     }
 }

@@ -35,7 +35,7 @@ class RoomController extends Controller
     public function getSingleRoom(int $id): JsonResponse
     {
         try {
-            $room = Room::with(['images', 'category', 'language'])->findOrFail($id);
+            $room = Room::with(['images', 'category.features', 'language'])->findOrFail($id);
             return response()->json($room);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -66,10 +66,32 @@ class RoomController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllRooms(int $lang): JsonResponse
+    public function getAllRoomsByLang(int $lang): JsonResponse
     {
         try {
             $rooms = Room::where('language_id', $lang)->with(['images', 'category', 'language'])->get();
+            return response()->json($rooms);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the services',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/room",
+     *     summary="Get all rooms",
+     *     tags={"Rooms"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllRooms(): JsonResponse
+    {
+        try {
+            $rooms = Room::with(['images', 'category', 'language'])->get();
             return response()->json($rooms);
         } catch (Exception $e) {
             return response()->json([
@@ -90,11 +112,21 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id", "language_id"},
+     *                  required={"name", "number", "room_name", "description", "rooms_category_id", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(property="number", type="integer", description="Room number"),
-     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="room_name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *                  @OA\Property(
      *                      property="language_id",
      *                      type="integer",
@@ -114,10 +146,12 @@ class RoomController extends Controller
         try {
             // Validation des données entrantes
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'number' => 'bail|required|integer',
-                'name' => 'bail|required|string|max:255',
+                'room_name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
@@ -125,10 +159,12 @@ class RoomController extends Controller
 
             // Création et sauvegarde de la nouvelle catégorie
             $room = new Room([
-                'number' => $validatedData['number'],
                 'name' => $validatedData['name'],
+                'number' => $validatedData['number'],
+                'room_name' => $validatedData['room_name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
             $room->save();
@@ -177,11 +213,21 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id", "language_id"},
+     *                  required={"name", "number", "room_name", "description", "rooms_category_id", "display_order", "language_id"},
+     *                   @OA\Property(
+     *                       property="name",
+     *                       type="string",
+     *                       description="The name to group with other languages"
+     *                   ),
      *                  @OA\Property(property="number", type="integer", description="Room number"),
-     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="room_name", type="string", description="Room room_name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *                  @OA\Property(
      *                      property="language_id",
      *                      type="integer",
@@ -201,20 +247,24 @@ class RoomController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'number' => 'bail|required|integer',
-                'name' => 'bail|required|string|max:255',
+                'room_name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
             $room = Room::findOrFail($id);
             $room->update([
-                'number' => $validatedData['number'],
                 'name' => $validatedData['name'],
+                'number' => $validatedData['number'],
+                'room_name' => $validatedData['room_name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
 

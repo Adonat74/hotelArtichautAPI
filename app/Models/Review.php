@@ -15,14 +15,11 @@ class Review extends Model
     protected $fillable = [
         'rate',
         'review_content',
+        'display_order',
         'user_id',
     ];
-   /* public function user(){
-        return $this->belongsTo(Users::class);
-    }*/
 
-    public function language(): BelongsTo
-    {
-        return $this->belongsTo(Language::class);
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

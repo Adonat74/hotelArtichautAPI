@@ -6,7 +6,7 @@ use App\Models\Content;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Content>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<Content>
  */
 class ContentFactory extends Factory
 {
@@ -26,6 +26,7 @@ class ContentFactory extends Factory
             'description' => $this->faker->realText(1000, 2),
             'landing_page_display' => $this->faker->boolean(50),
             'navbar_display' => $this->faker->boolean(50),
+            'display_order' => $this->faker->numberBetween(1, 20),
         ];
     }
 }

@@ -2,10 +2,10 @@
 
 use App\Models\RoomsCategory;
 use Illuminate\Database\Migrations\Migration;
-    use Illuminate\Database\Schema\Blueprint;
-    use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-    class CreateRoomsTable extends Migration
+class CreateRoomsTable extends Migration
     {
         /**
          * Run the migrations.
@@ -16,10 +16,12 @@ use Illuminate\Database\Migrations\Migration;
         {
             Schema::create('rooms', function (Blueprint $table) {
                 $table->id();               // Définir la clé primaire
+                $table->string('name', length: 50);
                 $table->integer('number');
-                $table->string('name');
+                $table->string('room_name');
                 $table->string('description');
                 $table->foreignIdFor(RoomsCategory::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
+                $table->string('display_order');
                 $table->string('language_id');
                 $table->timestamps();                 // Colonnes created_at et updated_at
 

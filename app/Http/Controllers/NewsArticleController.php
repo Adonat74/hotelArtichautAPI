@@ -66,7 +66,7 @@ class NewsArticleController extends Controller
      *     @OA\Response(response=500, description="An error occured")
      * )
      */
-    public function getAllNewsArticles(int $lang): JsonResponse
+    public function getAllNewsArticlesByLang(int $lang): JsonResponse
     {
         try {
             $newsArticles = NewsArticle::where('language_id', $lang)->with(['images', 'language'])->get();
@@ -79,6 +79,27 @@ class NewsArticleController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/news",
+     *     summary="Get all news",
+     *     tags={"News"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
+    public function getAllNewsArticles(): JsonResponse
+    {
+        try {
+            $newsArticles = NewsArticle::with(['images', 'language'])->get();
+            return response()->json($newsArticles);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the news articles',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * @OA\Post(
@@ -90,7 +111,12 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "language_id"},
+     *                  required={"name", "title", "short_description", "description", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -105,6 +131,11 @@ class NewsArticleController extends Controller
      *                      property="description",
      *                      type="string",
      *                      description="Full description of the news article"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
      *                  ),
      *                  @OA\Property(
      *                      property="language_id",
@@ -132,18 +163,22 @@ class NewsArticleController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $newsArticle = new NewsArticle([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
             $newsArticle->save();
@@ -192,7 +227,12 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "language_id"},
+     *                  required={"name", "title", "short_description", "description", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -207,6 +247,11 @@ class NewsArticleController extends Controller
      *                      property="description",
      *                      type="string",
      *                      description="Full description of the news article"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
      *                  ),
      *                  @OA\Property(
      *                      property="language_id",
@@ -235,9 +280,11 @@ class NewsArticleController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -245,9 +292,11 @@ class NewsArticleController extends Controller
 
             $newsArticle = NewsArticle::findOrFail($id);
             $newsArticle->update([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
 

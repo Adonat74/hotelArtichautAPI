@@ -14,9 +14,11 @@
         {
             $category = RoomsCategory::inRandomOrder()->first();
             return [
+                'name' => $this->faker->company(),
                 'number' => $this->faker->numberBetween(101, 399),
-                'name' => $this->faker->lastName(),
+                'room_name' => $this->faker->lastName(),
                 'description' => $this->faker->sentence(10),
+                'display_order' => $this->faker->numberBetween(1, 20),
                 'rooms_category_id' => $category->id,
             ];
         }

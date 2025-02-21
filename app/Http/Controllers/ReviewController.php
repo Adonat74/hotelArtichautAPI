@@ -71,6 +71,8 @@ class ReviewController extends Controller
         }
     }
 
+
+
     /**
      * @OA\Post(
      *     path="/api/review",
@@ -79,9 +81,9 @@ class ReviewController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "user_id"},
+     *                  required={"rate", "review_content", "display_order", "user_id"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -90,7 +92,12 @@ class ReviewController extends Controller
      *                  @OA\Property(
      *                      property="review_content",
      *                      type="string",
-     *                      description="The content of the review"
+     *                      description="The Content_models of the review"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
      *                  ),
      *                  @OA\Property(
      *                      property="user_id",
@@ -111,6 +118,7 @@ class ReviewController extends Controller
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
+                'display_order' => 'bail|required|integer',
                 'user_id' => 'bail|required|numeric',
             ]);
             $review = new Review($validatedData);
@@ -147,9 +155,9 @@ class ReviewController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "user_id"},
+     *                  required={"rate", "review_content", "display_order", "user_id"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -158,8 +166,13 @@ class ReviewController extends Controller
      *                  @OA\Property(
      *                      property="review_content",
      *                      type="string",
-     *                      description="The content of the review"
+     *                      description="The Content_models of the review"
      *                  ),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *                  @OA\Property(
      *                      property="user_id",
      *                      type="integer",
@@ -180,6 +193,7 @@ class ReviewController extends Controller
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
+                'display_order' => 'bail|required|integer',
                 'user_id' => 'bail|required|numeric',
             ]);
             $review = Review::findOrFail($id);

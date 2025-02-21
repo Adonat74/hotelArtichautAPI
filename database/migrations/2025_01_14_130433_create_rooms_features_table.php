@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('rooms_features', function (Blueprint $table) {
             $table->id();
-            $table->String('name');
+            $table->string('name', length: 50);
+            $table->String('feature_name');
             $table->string('description')->nullable();
+            $table->string('display_order');
             $table->string('language_id');
             $table->timestamps();
 

@@ -21,9 +21,11 @@ class NewsArticleFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->company(),
             'title' => $this->faker->catchPhrase,
             'short_description' => $this->faker->realText(200, 2),
             'description' => $this->faker->realText(1000, 2),
+            'display_order' => $this->faker->numberBetween(1, 20),
         ];
     }
 }

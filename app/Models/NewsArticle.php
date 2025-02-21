@@ -13,9 +13,11 @@ class NewsArticle extends Model
 
 
     protected $fillable = [
+        'name',
         'title',
         'short_description',
         'description',
+        'display_order',
         'language_id',
     ];
 
