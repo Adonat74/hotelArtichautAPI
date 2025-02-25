@@ -119,7 +119,7 @@ class ReviewController extends Controller
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
                 'display_order' => 'bail|required|integer',
-                'user_id' => 'bail|required|numeric',
+                'user_id' => 'bail|required|numeric|exists:users,id',
             ]);
             $review = new Review($validatedData);
             $review->save();
@@ -194,7 +194,7 @@ class ReviewController extends Controller
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
                 'display_order' => 'bail|required|integer',
-                'user_id' => 'bail|required|numeric',
+                'user_id' => 'bail|required|numeric|exists:users,id',
             ]);
             $review = Review::findOrFail($id);
             $review->update($validatedData);

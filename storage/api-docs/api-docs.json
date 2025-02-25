@@ -1434,7 +1434,7 @@
                                         "type": "integer",
                                         "example": 2
                                     },
-                                    "rooms_features": {
+                                    "rooms_features[]": {
                                         "description": "An array of rooms_feature IDs",
                                         "type": "array",
                                         "items": {
@@ -1450,7 +1450,7 @@
                                         "description": "The ID of the language",
                                         "type": "integer"
                                     },
-                                    "images": {
+                                    "images[]": {
                                         "description": "An array of image files",
                                         "type": "array",
                                         "items": {
@@ -1598,7 +1598,7 @@
                                         "type": "integer",
                                         "example": 2
                                     },
-                                    "rooms_features": {
+                                    "rooms_features[]": {
                                         "description": "An array of rooms_feature IDs",
                                         "type": "array",
                                         "items": {
@@ -1614,7 +1614,7 @@
                                         "description": "The ID of the language",
                                         "type": "integer"
                                     },
-                                    "images": {
+                                    "images[]": {
                                         "description": "An array of image files",
                                         "type": "array",
                                         "items": {
@@ -1675,13 +1675,13 @@
                 "tags": [
                     "RoomsFeatures"
                 ],
-                "summary": "Update a rooms-feature article by id",
+                "summary": "Update a rooms-feature  by id",
                 "operationId": "5ba974e44b1ce9d4836547b1f1abfbce",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The ID of the rooms-feature article",
+                        "description": "The ID of the rooms-feature ",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1706,12 +1706,12 @@
                                         "type": "string"
                                     },
                                     "feature_name": {
-                                        "description": "The feature_name of the rooms-feature article",
+                                        "description": "The feature_name of the rooms-feature ",
                                         "type": "string",
                                         "example": "Ocean View"
                                     },
                                     "description": {
-                                        "description": "Description of the rooms-feature article",
+                                        "description": "Description of the rooms-feature ",
                                         "type": "string",
                                         "example": "A feature describing the ocean view from the room."
                                     },
@@ -1723,12 +1723,12 @@
                                         "description": "The ID of the language",
                                         "type": "integer"
                                     },
-                                    "rooms_categories": {
+                                    "rooms_categories[]": {
                                         "description": "An array of rooms_category IDs",
                                         "type": "array",
                                         "items": {
                                             "type": "integer",
-                                            "example": 5
+                                            "example": 2
                                         }
                                     }
                                 },
@@ -1756,13 +1756,13 @@
                 "tags": [
                     "RoomsFeatures"
                 ],
-                "summary": "Delete a rooms-feature article by id",
+                "summary": "Delete a rooms-feature  by id",
                 "operationId": "73440da4a32e04a5a5328df9d7f4d6ac",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The ID of the rooms-feature article",
+                        "description": "The ID of the rooms-feature ",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1830,7 +1830,7 @@
                 "tags": [
                     "RoomsFeatures"
                 ],
-                "summary": "Add a rooms-feature article",
+                "summary": "Add a rooms-feature",
                 "operationId": "895fccf3691291737683a535170862a4",
                 "requestBody": {
                     "required": true,
@@ -1850,12 +1850,12 @@
                                         "type": "string"
                                     },
                                     "feature_name": {
-                                        "description": "The feature_name of the rooms-feature article",
+                                        "description": "The feature_name of the rooms-feature ",
                                         "type": "string",
                                         "example": "Ocean View"
                                     },
                                     "description": {
-                                        "description": "Description of the rooms-feature article",
+                                        "description": "Description of the rooms-feature ",
                                         "type": "string",
                                         "example": "A feature describing the ocean view from the room."
                                     },
@@ -1867,12 +1867,12 @@
                                         "description": "The ID of the language",
                                         "type": "integer"
                                     },
-                                    "rooms_categories": {
+                                    "rooms_categories[]": {
                                         "description": "An array of rooms_category IDs",
                                         "type": "array",
                                         "items": {
                                             "type": "integer",
-                                            "example": 5
+                                            "example": 2
                                         }
                                     }
                                 },

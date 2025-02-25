@@ -178,7 +178,7 @@ class ContentController extends Controller
                 'landing_page_display' => 'bail|required|boolean',
                 'navbar_display' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -307,7 +307,7 @@ class ContentController extends Controller
                 'landing_page_display' => 'bail|required|boolean',
                 'navbar_display' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);

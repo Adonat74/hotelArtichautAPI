@@ -152,7 +152,7 @@ class RoomController extends Controller
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -253,7 +253,7 @@ class RoomController extends Controller
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);

@@ -192,7 +192,7 @@ class ServiceController extends Controller
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|nullable|boolean',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
             ]);
@@ -339,7 +339,7 @@ class ServiceController extends Controller
                 'duration_in_day' => 'bail|required|numeric|min:1',
                 'is_per_person' => 'bail|required|boolean',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);

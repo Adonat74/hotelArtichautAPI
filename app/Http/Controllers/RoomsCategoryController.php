@@ -147,7 +147,7 @@
          *                     example=2
          *                 ),
          *                 @OA\Property(
-         *                     property="rooms_features",
+         *                     property="rooms_features[]",
          *                     type="array",
          *                     description="An array of rooms_feature IDs",
          *                     @OA\Items(type="integer", example=3)
@@ -163,7 +163,7 @@
          *                     description="The ID of the language"
          *                 ),
          *                 @OA\Property(
-         *                     property="images",
+         *                     property="images[]",
          *                     type="array",
          *                     description="An array of image files",
          *                     @OA\Items(
@@ -190,7 +190,7 @@
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
                     'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric',
+                    'language_id' => 'bail|required|numeric|exists:languages,id',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',
@@ -287,7 +287,7 @@
          *                     example=2
          *                 ),
          *                 @OA\Property(
-         *                     property="rooms_features",
+         *                     property="rooms_features[]",
          *                     type="array",
          *                     description="An array of rooms_feature IDs",
          *                     @OA\Items(type="integer", example=3)
@@ -303,7 +303,7 @@
          *                     description="The ID of the language"
          *                 ),
          *                 @OA\Property(
-         *                     property="images",
+         *                     property="images[]",
          *                     type="array",
          *                     description="An array of image files",
          *                     @OA\Items(
@@ -331,7 +331,7 @@
                     'price_in_cent' => 'bail|required|integer',
                     'bed_size' => 'bail|required|integer',
                     'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric',
+                    'language_id' => 'bail|required|numeric|exists:languages,id',
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',

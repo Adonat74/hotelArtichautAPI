@@ -168,7 +168,7 @@ class NewsArticleController extends Controller
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
@@ -285,7 +285,7 @@ class NewsArticleController extends Controller
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
                 'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
                 'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);

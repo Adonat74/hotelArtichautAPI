@@ -104,7 +104,7 @@
         /**
          * @OA\Post(
          *     path="/api/rooms-feature",
-         *     summary="Add a rooms-feature article",
+         *     summary="Add a rooms-feature",
          *     tags={"RoomsFeatures"},
          *     @OA\RequestBody(
          *         required=true,
@@ -120,13 +120,13 @@
          *                 @OA\Property(
          *                     property="feature_name",
          *                     type="string",
-         *                     description="The feature_name of the rooms-feature article",
+         *                     description="The feature_name of the rooms-feature ",
          *                     example="Ocean View"
          *                 ),
          *                 @OA\Property(
          *                     property="description",
          *                     type="string",
-         *                     description="Description of the rooms-feature article",
+         *                     description="Description of the rooms-feature ",
          *                     example="A feature describing the ocean view from the room."
          *                 ),
          *                   @OA\Property(
@@ -140,10 +140,10 @@
          *                     description="The ID of the language"
          *                 ),
          *                 @OA\Property(
-         *                     property="rooms_categories",
+         *                     property="rooms_categories[]",
          *                     type="array",
          *                     description="An array of rooms_category IDs",
-         *                     @OA\Items(type="integer", example=5)
+         *                     @OA\Items(type="integer", example=2)
          *                 )
          *             )
          *         )
@@ -163,7 +163,7 @@
                     'feature_name' => 'bail|required|string|max:100',
                     'description' => 'bail|required|string|max:1000',
                     'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric',
+                    'language_id' => 'bail|required|numeric|exists:languages,id',
                     'rooms_categories' => 'nullable|array',  // Validation des catégories
                     'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
                 ]);
@@ -198,12 +198,12 @@
         /**
          * @OA\Post(
          *     path="/api/rooms-feature/{id}",
-         *     summary="Update a rooms-feature article by id",
+         *     summary="Update a rooms-feature  by id",
          *     tags={"RoomsFeatures"},
          *     @OA\Parameter(
          *         name="id",
          *         in="path",
-         *         description="The ID of the rooms-feature article",
+         *         description="The ID of the rooms-feature ",
          *         required=true,
          *         @OA\Schema(type="integer")
          *     ),
@@ -221,13 +221,13 @@
          *                 @OA\Property(
          *                     property="feature_name",
          *                     type="string",
-         *                     description="The feature_name of the rooms-feature article",
+         *                     description="The feature_name of the rooms-feature ",
          *                     example="Ocean View"
          *                 ),
          *                 @OA\Property(
          *                     property="description",
          *                     type="string",
-         *                     description="Description of the rooms-feature article",
+         *                     description="Description of the rooms-feature ",
          *                     example="A feature describing the ocean view from the room."
          *                 ),
          *                   @OA\Property(
@@ -241,10 +241,10 @@
          *                     description="The ID of the language"
          *                 ),
          *                 @OA\Property(
-         *                     property="rooms_categories",
+         *                     property="rooms_categories[]",
          *                     type="array",
          *                     description="An array of rooms_category IDs",
-         *                     @OA\Items(type="integer", example=5)
+         *                     @OA\Items(type="integer", example=2)
          *                 )
          *             )
          *         )
@@ -264,7 +264,7 @@
                     'feature_name' => 'required|string|max:100',
                     'description' => 'required|string|max:1000',
                     'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric',
+                    'language_id' => 'bail|required|numeric|exists:languages,id',
                     'rooms_categories' => 'nullable|array',  // Validation des catégories
                     'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
                 ]);
@@ -298,12 +298,12 @@
         /**
          * @OA\Delete(
          *     path="/api/rooms-feature/{id}",
-         *     summary="Delete a rooms-feature article by id",
+         *     summary="Delete a rooms-feature  by id",
          *     tags={"RoomsFeatures"},
          *      @OA\Parameter(
          *          name="id",
          *          in="path",
-         *          description="The ID of the rooms-feature article",
+         *          description="The ID of the rooms-feature ",
          *          required=true,
          *          @OA\Schema(type="integer")
          *      ),
