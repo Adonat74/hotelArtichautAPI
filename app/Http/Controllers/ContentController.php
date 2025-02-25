@@ -141,6 +141,11 @@ class ContentController extends Controller
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
+     *                      property="link",
+     *                      type="string",
+     *                      description="a button or link"
+     *                  ),
+     *                  @OA\Property(
      *                      property="display_order",
      *                      type="integer",
      *                      description="The desired disaly order the items should be"
@@ -177,10 +182,11 @@ class ContentController extends Controller
                 'description' => 'bail|required|string|max:1000',
                 'landing_page_display' => 'bail|required|boolean',
                 'navbar_display' => 'bail|required|boolean',
+                'link' => 'nullable|string',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $content = new Content([
@@ -190,6 +196,7 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'link' => $validatedData['link'],
                 'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);
@@ -269,6 +276,11 @@ class ContentController extends Controller
      *                      description="Navbar display option"
      *                  ),
      *                  @OA\Property(
+     *                      property="link",
+     *                      type="string",
+     *                      description="a button or link"
+     *                  ),
+     *                  @OA\Property(
      *                      property="display_order",
      *                      type="integer",
      *                      description="The desired disaly order the items should be"
@@ -306,10 +318,11 @@ class ContentController extends Controller
                 'description' => 'bail|required|string|max:1000',
                 'landing_page_display' => 'bail|required|boolean',
                 'navbar_display' => 'bail|required|boolean',
+                'link' => 'nullable|string',
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $content = Content::findOrFail($id);
@@ -320,6 +333,7 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'link' => $validatedData['link'],
                 'display_order' => $validatedData['display_order'],
                 'language_id' => $validatedData['language_id'],
             ]);

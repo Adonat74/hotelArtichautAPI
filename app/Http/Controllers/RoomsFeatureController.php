@@ -253,9 +253,8 @@
          *     @OA\Response(response=404, description="RoomsFeature not found"),
          *     @OA\Response(response=422, description="Validation failed"),
          *     @OA\Response(response=500, description="An error occurred")
-         * )
+         *)
          */
-
         public function updateFeature(Request $request, string $id): JsonResponse
         {
             try {

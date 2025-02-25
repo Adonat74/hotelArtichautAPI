@@ -170,7 +170,7 @@ class NewsArticleController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $newsArticle = new NewsArticle([
@@ -287,7 +287,7 @@ class NewsArticleController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $newsArticle = NewsArticle::findOrFail($id);

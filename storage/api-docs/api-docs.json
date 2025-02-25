@@ -258,6 +258,10 @@
                                         "description": "Navbar display option",
                                         "type": "integer"
                                     },
+                                    "link": {
+                                        "description": "a button or link",
+                                        "type": "string"
+                                    },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
                                         "type": "integer"
@@ -414,6 +418,10 @@
                                     "navbar_display": {
                                         "description": "Navbar display option",
                                         "type": "integer"
+                                    },
+                                    "link": {
+                                        "description": "a button or link",
+                                        "type": "string"
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",

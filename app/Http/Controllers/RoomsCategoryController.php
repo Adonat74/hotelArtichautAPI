@@ -194,7 +194,7 @@
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',
-                    'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+                    'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
                 ]);
                 $roomCategory = new RoomsCategory([
                     'name' => $validatedData['name'],
@@ -335,7 +335,7 @@
                     'rooms_features' => 'nullable|array', // Accepter un tableau de features
                     'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
                     'images' => 'nullable|array',
-                    'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+                    'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
                 ]);
                 $roomCategory = RoomsCategory::findOrFail($id);
                 $roomCategory->update([

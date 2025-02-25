@@ -194,7 +194,7 @@ class ServiceController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
 
             // n'enregistre que les fields de service
@@ -341,7 +341,7 @@ class ServiceController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
             $service = Service::findOrFail($id);
             $service->update([

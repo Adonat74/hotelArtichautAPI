@@ -154,7 +154,7 @@ class RoomController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
 
             // Création et sauvegarde de la nouvelle catégorie
@@ -255,7 +255,7 @@ class RoomController extends Controller
                 'display_order' => 'bail|required|integer',
                 'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
             $room = Room::findOrFail($id);
             $room->update([
