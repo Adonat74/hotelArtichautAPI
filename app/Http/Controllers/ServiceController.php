@@ -255,7 +255,7 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_decription", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                  required={"name", "title", "short_description", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
      *                    @OA\Property(
      *                        property="name",
      *                        type="string",

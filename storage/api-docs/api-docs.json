@@ -1957,7 +1957,7 @@
                                 "required": [
                                     "name",
                                     "title",
-                                    "short_decription",
+                                    "short_description",
                                     "description",
                                     "link",
                                     "price_in_cent",
