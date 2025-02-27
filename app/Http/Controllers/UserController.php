@@ -15,7 +15,7 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *     path="/api/user/{id}",
-     *     summary="Get one user by id",
+     *     summary="Get one user by id- need to be authentified and role = user",
      *     tags={"Users"},
      *      @OA\Parameter(
      *          name="id",
@@ -55,7 +55,7 @@ class UserController extends Controller
     /**
      * @OA\Post(
      *     path="/api/user/{id}",
-     *     summary="Update an existing user",
+     *     summary="Update an existing user- need to be authentified and role = user",
      *     tags={"Users"},
      *     @OA\Parameter(
      *         name="id",
@@ -131,7 +131,7 @@ class UserController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/user/{id}",
-     *     summary="Delete a user by id",
+     *     summary="Delete a user by id- need to be authentified and role = user",
      *     tags={"Users"},
      *      @OA\Parameter(
      *          name="id",

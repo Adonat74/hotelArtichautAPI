@@ -93,11 +93,11 @@ Route::prefix('review')->controller(ReviewController::class)->group(function () 
 
 // LANGUAGE ROUTES
 Route::prefix('language')->controller(LanguageController::class)->group(function () {
-    Route::get('/', 'getAllLanguages'); // get ALL languages
-    Route::get('/{id}', 'getSingleLanguage'); // get ONE languageController
-    Route::post('/', 'addLanguage'); // add ONE languageController
-    Route::post('/{id}', 'updateLanguage'); // modify ONE languageController (POST is used for updates as Laravel doesn't support file uploads via PUT)
-    Route::delete('/{id}', 'deleteLanguage'); // delete ONE languageController
+    Route::get('/', 'getAllLanguages');
+    Route::get('/{id}', 'getSingleLanguage');
+    Route::post('/', 'addLanguage')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::post('/{id}', 'updateLanguage')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::delete('/{id}', 'deleteLanguage')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
 });
 
 Route::prefix('rooms-category')->group(function () {

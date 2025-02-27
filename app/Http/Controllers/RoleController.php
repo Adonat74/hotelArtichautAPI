@@ -14,7 +14,7 @@ class RoleController extends Controller
     /**
      * @OA\Get(
      *     path="/api/role/{id}",
-     *     summary="Get one role by id",
+     *     summary="Get one role by id- need to be authentified and role = master",
      *     tags={"Roles"},
      *     @OA\Parameter(
      *         name="id",
@@ -50,7 +50,7 @@ class RoleController extends Controller
     /**
      * @OA\Get(
      *     path="/api/role",
-     *     summary="Get all roles",
+     *     summary="Get all roles- need to be authentified and role = master",
      *     tags={"Roles"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -74,7 +74,7 @@ class RoleController extends Controller
     /**
      * @OA\Post(
      *     path="/api/role",
-     *     summary="Add a role",
+     *     summary="Add a role- need to be authentified and role = master",
      *     tags={"Roles"},
      *     @OA\RequestBody(
      *          required=true,
@@ -129,7 +129,7 @@ class RoleController extends Controller
     /**
      * @OA\Post(
      *     path="/api/role/{id}",
-     *     summary="Update a role by id",
+     *     summary="Update a role by id- need to be authentified and role = master",
      *     tags={"Roles"},
      *     @OA\Parameter(
      *         name="id",
@@ -195,7 +195,7 @@ class RoleController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/role/{id}",
-     *     summary="Delete a role by id",
+     *     summary="Delete a role by id- need to be authentified and role = master",
      *     tags={"Roles"},
      *      @OA\Parameter(
      *          name="id",

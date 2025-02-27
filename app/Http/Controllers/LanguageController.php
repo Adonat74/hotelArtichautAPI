@@ -16,7 +16,7 @@ class LanguageController extends Controller
     /**
      * @OA\Get(
      *     path="/api/language/{id}",
-     *     summary="Get one language by id",
+     *     summary="Get one language by id- need to be authentified and role = master",
      *     tags={"Languages"},
      *      @OA\Parameter(
      *          name="id",
@@ -51,7 +51,7 @@ class LanguageController extends Controller
     /**
      * @OA\Get(
      *     path="/api/language",
-     *     summary="Get all languages",
+     *     summary="Get all languages- need to be authentified and role = master",
      *     tags={"Languages"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -73,7 +73,7 @@ class LanguageController extends Controller
     /**
      * @OA\Post(
      *     path="/api/language",
-     *     summary="Add language",
+     *     summary="Add language- need to be authentified and role = master",
      *     tags={"Languages"},
      *     @OA\RequestBody(
      *          required=true,
@@ -140,7 +140,7 @@ class LanguageController extends Controller
     /**
      * @OA\Post(
      *     path="/api/language/{id}",
-     *     summary="Update language by id",
+     *     summary="Update language by id- need to be authentified and role = master",
      *     tags={"Languages"},
      *     @OA\Parameter(
      *         name="id",
@@ -227,7 +227,7 @@ class LanguageController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/language/{id}",
-     *     summary="Delete language by id",
+     *     summary="Delete language by id- need to be authentified and role = master",
      *     tags={"Languages"},
      *      @OA\Parameter(
      *          name="id",

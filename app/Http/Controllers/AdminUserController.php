@@ -15,7 +15,7 @@ class AdminUserController extends Controller
     /**
      * @OA\Get(
      *     path="/api/admin/user",
-     *     summary="Get all users",
+     *     summary="Get all users- need to be authentified and role = employee",
      *     tags={"AdminUsers"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -38,7 +38,7 @@ class AdminUserController extends Controller
     /**
      * @OA\Get(
      *     path="/api/admin/user/{id}",
-     *     summary="Get one user by id",
+     *     summary="Get one user by id- need to be authentified and role = employee",
      *     tags={"AdminUsers"},
      *      @OA\Parameter(
      *          name="id",
@@ -76,7 +76,7 @@ class AdminUserController extends Controller
     /**
      * @OA\Post(
      *     path="/api/admin/user",
-     *     summary="add a new user",
+     *     summary="add a new user- need to be authentified and role = manager",
      *     tags={"AdminUsers"},
      *     @OA\RequestBody(
      *          required=true,
@@ -140,7 +140,7 @@ class AdminUserController extends Controller
     /**
      * @OA\Post(
      *     path="/api/admin/user/{id}",
-     *     summary="Update an existing user",
+     *     summary="Update an existing user- need to be authentified and role = manager",
      *     tags={"AdminUsers"},
      *     @OA\Parameter(
      *         name="id",
@@ -217,7 +217,7 @@ class AdminUserController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/admin/user/{id}",
-     *     summary="Delete a user by id",
+     *     summary="Delete a user by id- need to be authentified and role = manager",
      *     tags={"AdminUsers"},
      *      @OA\Parameter(
      *          name="id",
@@ -250,10 +250,4 @@ class AdminUserController extends Controller
             ], 500);
         }
     }
-
-
-
-
-
-
 }

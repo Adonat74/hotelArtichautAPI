@@ -140,7 +140,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/logout",
-     *     summary="Logout",
+     *     summary="Logout - need to be authentified and role = user",
      *     tags={"Auth"},
      *     @OA\Response(response=200, description="User successfully logout"),
      * )
@@ -159,7 +159,7 @@ class AuthController extends Controller
     /**
      * @OA\Get(
      *     path="/api/refresh",
-     *     summary="refresh the token",
+     *     summary="refresh the token- need to be authentified and role = user",
      *     tags={"Auth"},
      *     @OA\Response(response=200, description="User fetched"),
      * )

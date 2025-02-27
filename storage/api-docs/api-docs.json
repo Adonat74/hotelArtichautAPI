@@ -1213,8 +1213,7 @@
                                 "required": [
                                     "rate",
                                     "review_content",
-                                    "display_order",
-                                    "user_id"
+                                    "display_order"
                                 ],
                                 "properties": {
                                     "rate": {
@@ -1227,10 +1226,6 @@
                                     },
                                     "display_order": {
                                         "description": "The desired disaly order the items should be",
-                                        "type": "integer"
-                                    },
-                                    "user_id": {
-                                        "description": "The ID of the user who created the review",
                                         "type": "integer"
                                     }
                                 },
@@ -1314,8 +1309,7 @@
                                 "required": [
                                     "rate",
                                     "review_content",
-                                    "display_order",
-                                    "user_id"
+                                    "display_order"
                                 ],
                                 "properties": {
                                     "rate": {
@@ -1325,14 +1319,6 @@
                                     "review_content": {
                                         "description": "The Content_models of the review",
                                         "type": "string"
-                                    },
-                                    "display_order": {
-                                        "description": "The desired disaly order the items should be",
-                                        "type": "integer"
-                                    },
-                                    "user_id": {
-                                        "description": "The ID of the user who created the review",
-                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -1346,6 +1332,23 @@
                     },
                     "422": {
                         "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/review/user": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get all user reviews",
+                "operationId": "2c4ed66b124ddb8e91dc93267b664582",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     },
                     "500": {
                         "description": "An error occurred"

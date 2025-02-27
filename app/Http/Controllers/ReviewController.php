@@ -17,7 +17,7 @@ class ReviewController extends Controller
     /**
      * @OA\Get(
      *     path="/api/review/{id}",
-     *     summary="Get one review by id",
+     *     summary="Get one review by id - need to be authentified",
      *     tags={"Reviews"},
      *      @OA\Parameter(
      *          name="id",
@@ -78,7 +78,7 @@ class ReviewController extends Controller
     /**
      * @OA\Get(
      *     path="/api/review/user",
-     *     summary="Get all user reviews",
+     *     summary="Get all user reviews - need to be authentified",
      *     tags={"Reviews"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -105,14 +105,14 @@ class ReviewController extends Controller
     /**
      * @OA\Post(
      *     path="/api/review",
-     *     summary="Add a review",
+     *     summary="Add a review  - need to be authentified",
      *     tags={"Reviews"},
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
      *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "display_order", "user_id"},
+     *                  required={"rate", "review_content", "display_order"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -165,7 +165,7 @@ class ReviewController extends Controller
     /**
      * @OA\Post(
      *     path="/api/review/{id}",
-     *     summary="Update a review by id",
+     *     summary="Update a review by id - need to be authentified",
      *     tags={"Reviews"},
      *     @OA\Parameter(
      *         name="id",
@@ -179,7 +179,7 @@ class ReviewController extends Controller
      *          @OA\MediaType(
      *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "display_order", "user_id"},
+     *                  required={"rate", "review_content", "display_order"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -240,7 +240,7 @@ class ReviewController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/review/{id}",
-     *     summary="Delete a review by id",
+     *     summary="Delete a review by id - need to be authentified",
      *     tags={"Reviews"},
      *      @OA\Parameter(
      *          name="id",
