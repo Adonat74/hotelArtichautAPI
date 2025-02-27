@@ -100,30 +100,30 @@ Route::prefix('language')->controller(LanguageController::class)->group(function
     Route::delete('/{id}', 'deleteLanguage')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
 });
 
-Route::prefix('rooms-category')->group(function () {
-    Route::get('/lang-{lang}', [RoomsCategoryController::class, 'getAllCategoriesByLang']); // Liste toutes les catégories by language
-    Route::get('/', [RoomsCategoryController::class, 'getAllCategories']); // Liste toutes les catégories
-    Route::post('/', [RoomsCategoryController::class, 'addCategory']); // Crée une nouvelle catégorie
-    Route::get('/{id}', [RoomsCategoryController::class, 'getSingleCategory']); // Affiche une catégorie spécifique
-    Route::post('/{id}', [RoomsCategoryController::class, 'updateCategory']); // Met à jour une catégorie
-    Route::delete('/{id}', [RoomsCategoryController::class, 'deleteCategory']); // Supprime une catégorie
+Route::prefix('rooms-category')->controller(RoomsCategoryController::class)->group(function () {
+    Route::get('/lang-{lang}', 'getAllCategoriesByLang'); // Liste toutes les catégories by language
+    Route::get('/', 'getAllCategories'); // Liste toutes les catégories
+    Route::post('/', 'addCategory'); // Crée une nouvelle catégorie
+    Route::get('/{id}', 'getSingleCategory'); // Affiche une catégorie spécifique
+    Route::post('/{id}', 'updateCategory'); // Met à jour une catégorie
+    Route::delete('/{id}', 'deleteCategory'); // Supprime une catégorie
 });
 
-Route::prefix('room')->group(function () {
-    Route::get('/lang-{lang}', [RoomController::class, 'getAllRoomsByLang']);
-    Route::get('/', [RoomController::class, 'getAllRooms']);
-    Route::post('/', [RoomController::class, 'addRoom']);
-    Route::get('/{id}', [RoomController::class, 'getSingleRoom']);
-    Route::post('/{id}', [RoomController::class, 'updateRoom']);
-    Route::delete('/{id}', [RoomController::class, 'deleteRoom']);
+Route::prefix('room')->controller(RoomController::class)->group(function () {
+    Route::get('/lang-{lang}', 'getAllRoomsByLang');
+    Route::get('/', 'getAllRooms');
+    Route::post('/', 'addRoom');
+    Route::get('/{id}', 'getSingleRoom');
+    Route::post('/{id}', 'updateRoom');
+    Route::delete('/{id}', 'deleteRoom');
 });
 
-Route::prefix('rooms-feature')->group(function () {
-    Route::get('/lang-{lang}', [RoomsFeatureController::class, 'getAllFeaturesByLang']);
-    Route::get('/', [RoomsFeatureController::class, 'getAllFeatures']);
-    Route::post('/', [RoomsFeatureController::class, 'addFeature']);
-    Route::get('/{id}', [RoomsFeatureController::class, 'getSingleFeature']);
-    Route::post('/{id}', [RoomsFeatureController::class, 'updateFeature']);
-    Route::delete('/{id}', [RoomsFeatureController::class, 'deleteFeature']);
+Route::prefix('rooms-feature')->controller(RoomsFeatureController::class)->group(function () {
+    Route::get('/lang-{lang}', 'getAllFeaturesByLang');
+    Route::get('/', 'getAllFeatures');
+    Route::post('/', 'addFeature');
+    Route::get('/{id}', 'getSingleFeature');
+    Route::post('/{id}', 'updateFeature');
+    Route::delete('/{id}', 'deleteFeature');
 });
 

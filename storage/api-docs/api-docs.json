@@ -11,7 +11,7 @@
                 "tags": [
                     "AdminUsers"
                 ],
-                "summary": "Get all users",
+                "summary": "Get all users- need to be authentified and role = employee",
                 "operationId": "23b25d59267428953c5abfb5eb943cfe",
                 "responses": {
                     "200": {
@@ -26,7 +26,7 @@
                 "tags": [
                     "AdminUsers"
                 ],
-                "summary": "add a new user",
+                "summary": "add a new user- need to be authentified and role = manager",
                 "operationId": "53b318761451e4ed7912fafc7a6994d9",
                 "requestBody": {
                     "required": true,
@@ -120,7 +120,7 @@
                 "tags": [
                     "AdminUsers"
                 ],
-                "summary": "Get one user by id",
+                "summary": "Get one user by id- need to be authentified and role = employee",
                 "operationId": "da8a35cf9e338a35a7bc948a22a026bc",
                 "parameters": [
                     {
@@ -149,7 +149,7 @@
                 "tags": [
                     "AdminUsers"
                 ],
-                "summary": "Update an existing user",
+                "summary": "Update an existing user- need to be authentified and role = manager",
                 "operationId": "3449a798d901929069ac7b8cb79e33a9",
                 "parameters": [
                     {
@@ -255,7 +255,7 @@
                 "tags": [
                     "AdminUsers"
                 ],
-                "summary": "Delete a user by id",
+                "summary": "Delete a user by id- need to be authentified and role = manager",
                 "operationId": "5117178230ba4e8bc1cc2c813faf8679",
                 "parameters": [
                     {
@@ -412,7 +412,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Logout",
+                "summary": "Logout - need to be authentified and role = user",
                 "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
                 "responses": {
                     "200": {
@@ -426,7 +426,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "refresh the token",
+                "summary": "refresh the token- need to be authentified and role = user",
                 "operationId": "86e894df0ccad042116bf937e5593629",
                 "responses": {
                     "200": {
@@ -727,7 +727,7 @@
                 "tags": [
                     "Languages"
                 ],
-                "summary": "Get one language by id",
+                "summary": "Get one language by id- need to be authentified and role = master",
                 "operationId": "57328eab0f6e82e9d9e2e0c6ac55c236",
                 "parameters": [
                     {
@@ -756,7 +756,7 @@
                 "tags": [
                     "Languages"
                 ],
-                "summary": "Update language by id",
+                "summary": "Update language by id- need to be authentified and role = master",
                 "operationId": "2e802e7d00ea142543d31094ecf0025e",
                 "parameters": [
                     {
@@ -813,7 +813,7 @@
                 "tags": [
                     "Languages"
                 ],
-                "summary": "Delete language by id",
+                "summary": "Delete language by id- need to be authentified and role = master",
                 "operationId": "9c1a438d38968ea1ac5a73b3a433265f",
                 "parameters": [
                     {
@@ -844,7 +844,7 @@
                 "tags": [
                     "Languages"
                 ],
-                "summary": "Get all languages",
+                "summary": "Get all languages- need to be authentified and role = master",
                 "operationId": "f352021dcced56118ba9d00eeae36106",
                 "responses": {
                     "200": {
@@ -859,7 +859,7 @@
                 "tags": [
                     "Languages"
                 ],
-                "summary": "Add language",
+                "summary": "Add language- need to be authentified and role = master",
                 "operationId": "463a3756f7279e7e03368edb9bdb15cd",
                 "requestBody": {
                     "required": true,
@@ -1163,7 +1163,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Get one review by id",
+                "summary": "Get one review by id - need to be authentified",
                 "operationId": "4b15c1314bc7795d6da3ef2d37038efd",
                 "parameters": [
                     {
@@ -1192,7 +1192,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Update a review by id",
+                "summary": "Update a review by id - need to be authentified",
                 "operationId": "86f9451e0d0d19c31dcfde484162cfd5",
                 "parameters": [
                     {
@@ -1253,7 +1253,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Delete a review by id",
+                "summary": "Delete a review by id - need to be authentified",
                 "operationId": "6aaac2ed13af9f0c01c281d8232a88f8",
                 "parameters": [
                     {
@@ -1299,7 +1299,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Add a review",
+                "summary": "Add a review  - need to be authentified",
                 "operationId": "029fd4163616c636ab2d56b8951d780d",
                 "requestBody": {
                     "required": true,
@@ -1344,7 +1344,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Get all user reviews",
+                "summary": "Get all user reviews - need to be authentified",
                 "operationId": "2c4ed66b124ddb8e91dc93267b664582",
                 "responses": {
                     "200": {
@@ -1361,7 +1361,7 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Get one role by id",
+                "summary": "Get one role by id- need to be authentified and role = master",
                 "operationId": "1a0f3a8240a06e708a67f4632d117763",
                 "parameters": [
                     {
@@ -1390,7 +1390,7 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Update a role by id",
+                "summary": "Update a role by id- need to be authentified and role = master",
                 "operationId": "6608355fac6aa851c66497cbf399fdb5",
                 "parameters": [
                     {
@@ -1446,7 +1446,7 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Delete a role by id",
+                "summary": "Delete a role by id- need to be authentified and role = master",
                 "operationId": "8831e5a88fe3b386386a2c1655554cd3",
                 "parameters": [
                     {
@@ -1477,7 +1477,7 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Get all roles",
+                "summary": "Get all roles- need to be authentified and role = master",
                 "operationId": "2af279eaf0ce873819661a33ab4e0ba2",
                 "responses": {
                     "200": {
@@ -1492,7 +1492,7 @@
                 "tags": [
                     "Roles"
                 ],
-                "summary": "Add a role",
+                "summary": "Add a role- need to be authentified and role = master",
                 "operationId": "0fcc7d05d3dfa5f3d456cfceb98e3f9f",
                 "requestBody": {
                     "required": true,
@@ -2652,7 +2652,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Get one user by id",
+                "summary": "Get one user by id- need to be authentified and role = user",
                 "operationId": "872b763758398bc0a2492976972417aa",
                 "parameters": [
                     {
@@ -2681,7 +2681,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Update an existing user",
+                "summary": "Update an existing user- need to be authentified and role = user",
                 "operationId": "0c3a70ac5b05d1923ee03be654c0c639",
                 "parameters": [
                     {
@@ -2777,7 +2777,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Delete a user by id",
+                "summary": "Delete a user by id- need to be authentified and role = user",
                 "operationId": "159036e20e48c9b57b682ba5ba42a976",
                 "parameters": [
                     {
