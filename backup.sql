@@ -16,21 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cache`
---
-
-DROP TABLE IF EXISTS `cache`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cache` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `cache`
 --
 
@@ -38,21 +23,6 @@ LOCK TABLES `cache` WRITE;
 /*!40000 ALTER TABLE `cache` DISABLE KEYS */;
 /*!40000 ALTER TABLE `cache` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `cache_locks`
---
-
-DROP TABLE IF EXISTS `cache_locks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cache_locks` (
-  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` int NOT NULL,
-  PRIMARY KEY (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `cache_locks`
@@ -64,58 +34,14 @@ LOCK TABLES `cache_locks` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `contents`
---
-
-DROP TABLE IF EXISTS `contents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `contents` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `landing_page_display` tinyint(1) NOT NULL,
-  `navbar_display` tinyint(1) NOT NULL,
-  `link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `contents`
 --
 
 LOCK TABLES `contents` WRITE;
 /*!40000 ALTER TABLE `contents` DISABLE KEYS */;
-INSERT INTO `contents` VALUES (1,'room-content','Nos Chambres','Un raffinement jusque dans l\'oreiller','À l’Hôtel 5 étoiles Artichaut, chaque chambre est une promesse de luxe et de confort. De la chambre standard cosy à la suite présidentielle digne d’un chef d’État en vacances, nos espaces allient élégance et raffinement. Literie moelleuse, Wi-Fi ultra-rapide, salles de bain somptueuses et petites attentions délicates transforment chaque séjour en une parenthèse enchantée. Que vous veniez pour affaires ou pour le plaisir, préparez-vous à une expérience où chaque détail compte… même la douceur des oreillers !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:08:23'),(2,'content-room','Our Rooms','The better you sleep, the better we are','At the 5-star Artichaut Hotel, every room is a promise of luxury and comfort. From the cozy standard room to the presidential suite fit for a head of state on holiday, our spaces blend elegance and refinement. Plush bedding, ultra-fast Wi-Fi, sumptuous bathrooms, and thoughtful little touches turn every stay into an enchanting escape. Whether you\'re here for business or leisure, get ready for an experience where every detail matters… even the softness of the pillows!',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:45:43'),(4,'content-massage','Let\'s Massage !!','The best thai massage ever !!!','Our massages are an invitation to absolute relaxation. Whether it’s a soothing massage, a deep tissue treatment, or a hot stone therapy, every touch is designed to release your tension and immerse you in a sea of well-being. With expert hands and precious oils, your only challenge will be not to fall asleep too quickly… but we won’t hold it against you!',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:47:28'),(5,'massage-content','Massages','Relachez, vous êtes massé','Nos massages sont une invitation au lâcher-prise absolu. Qu’il s’agisse d’un modelage relaxant, d’un massage deep tissue ou d’un soin aux pierres chaudes, chaque pression est pensée pour dénouer vos tensions et vous plonger dans un océan de bien-être. Entre mains expertes et huiles précieuses, votre seul effort sera de ne pas vous endormir trop vite… mais on ne vous en voudra pas !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:13:49'),(6,'content-wine','Cheers !!!','You never taste it so French !!!','Our wine selection is a sensory journey through the finest terroirs. From bold reds to delicate whites, with a touch of festive bubbles, each bottle is carefully chosen to elevate your meals… or simply for pure enjoyment. Let our sommeliers guide you, and may your only dilemma be choosing between a grand cru and a love at first sip. Cheers! 🍷',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:48:54'),(7,'wine-content','Nos Vins','Une selection, des plus reconnues au monde','Notre sélection de vins est un voyage sensoriel à travers les plus beaux terroirs. Des rouges puissants aux blancs délicats, en passant par des bulles festives, chaque bouteille est choisie avec soin pour sublimer vos repas… ou simplement pour le plaisir. Laissez nos sommeliers vous guider, et que votre seul dilemme soit de choisir entre un grand cru et un coup de cœur. Santé ! 🍷',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:16:03'),(16,'banner-equipe','L\'Equipe','Pour votre service','L’équipe de l’Hôtel 5 étoiles Artichaut, c’est une symphonie de talents au service de votre bien-être. Chefs passionnés, sommeliers inspirés, thérapeutes aux mains de velours et concierges aux petits soins… chaque membre de notre maison met son expertise et son sourire au cœur de votre séjour. Forts d’années d’expérience dans les plus grandes maisons, ils anticipent vos envies et transforment chaque instant en un moment d’exception. Ici, l’excellence n’est pas un simple mot, c’est une promesse.',1,0,NULL,'1','1','2025-02-20 09:25:32','2025-02-24 10:04:04'),(17,'restaurant-banner','Restaurant','Savourez l\'excellence, où chaque moment devient une expérience','Bienvenue dans notre restaurant, où l’art culinaire rencontre l’audace végétale ! Ici, l’artichaut est roi et s’invite subtilement dans chaque menu, de l’entrée au dessert. Notre chef, véritable maestro des saveurs, revisite ce trésor gastronomique avec créativité et finesse, surprenant vos papilles à chaque bouchée. Une cuisine raffinée, inventive et résolument inoubliable… même pour ceux qui pensaient ne pas aimer l’artichaut !',0,0,NULL,'0','1','2025-02-24 11:57:45','2025-02-24 11:57:45'),(18,'restaurant-banner-en','Restaurant','Savor excellence, where every moment becomes an experience.','Welcome to our restaurant, where culinary artistry meets bold botanical flair! Here, the artichoke reigns supreme, making a subtle yet delightful appearance in every menu, from starter to dessert. Our chef, a true maestro of flavors, reinvents this culinary gem with creativity and finesse, surprising your taste buds at every bite. A refined, inventive, and truly unforgettable dining experience… even for those who thought they didn’t like artichokes!',0,0,NULL,'0','2','2025-02-24 11:59:38','2025-02-24 11:59:38'),(19,'equipe-banner-en','The Squad','At your sevice, Sir!!','The team at the 5-star Hôtel Artichaut is a symphony of talent dedicated to your well-being. Passionate chefs, inspired sommeliers, skilled therapists with a delicate touch, and attentive concierges—each member of our establishment brings expertise and a warm smile to make your stay unforgettable. With years of experience in the finest establishments, they anticipate your every need and turn each moment into an exceptional experience. Here, excellence is not just a word—it’s a promise.',0,0,NULL,'0','2','2025-02-24 12:03:25','2025-02-24 12:07:56'),(20,'spa-banner-fr','SPA','Évadez-vous dans un sanctuaire de sérénité et de bien-être absolu.','Offrez à vos pieds une expérience hors du commun avec notre parcours santé aquatique, où de gracieux saumons se chargent de les dorloter… à leur manière. Entre chatouilles délicates et micro-massages toniques, ces experts en nage synchronisée réveillent votre circulation tout en vous arrachant quelques fous rires. Un soin aussi insolite qu’efficace, qui prouve une fois de plus que le bien-être passe aussi par les orteils !',0,0,NULL,'0','1','2025-02-24 12:25:04','2025-02-24 12:30:04'),(21,'spa-banner-en','SPA','Escape to a sanctuary of serenity and absolute well-being.','Give your feet an extraordinary experience with our aquatic health trail, where graceful salmon take care of them… in their own special way. Between gentle tickles and invigorating micro-massages, these synchronized swimming experts boost your circulation while bringing a few bursts of laughter. A treatment as unusual as it is effective, proving once again that well-being starts from the toes up! 🐟💦',0,0,NULL,'0','2','2025-02-24 12:31:27','2025-02-24 12:31:27'),(22,'service-banner-fr','Services','Notre hôtel de luxe vous offre des services exclusifs tels que valet, pressing, voiturier et bien plus pour un séjour inoubliable','Profitez de nos services exclusifs conçus pour rendre votre séjour facile et agréable. De notre service de pack professionnel, où nous prenons soin de vos bagages comme si c’était les nôtres, à notre voiturier pour une arrivée sans tracas, nous avons pensé à tout. Besoin de rafraîchir vos vêtements ? Notre service de blanchisserie s’en charge avec soin. Et pour vos compagnons à quatre pattes, nous proposons un service de garde de chien, pour qu\'ils puissent aussi profiter de leurs vacances pendant que vous explorez. Chaque détail, grand ou petit, est pris en charge pour garantir votre confort total. 🐾✨',0,0,NULL,'0','1','2025-02-24 12:42:51','2025-02-24 12:42:51'),(23,'service-banner-en','Services','Our luxury hotel offers exclusive services such as valet, laundry, concierge, and much more to ensure an unforgettable stay.','Indulge in our exclusive services designed to make your stay effortless and enjoyable. From our professional pack service, where we take care of your luggage as if it were our own, to our valet parking for a seamless arrival, we\'ve thought of everything. Need your clothes refreshed? Our laundry service is here to handle it with care. And for your furry friends, we offer dog sitting services, so they can enjoy their own little vacation while you\'re out exploring. Every detail, big or small, is taken care of to ensure your utmost comfort. 🐾✨',0,0,NULL,'0','2','2025-02-24 12:43:27','2025-02-24 12:43:27'),(24,'restaurant-cards-room','Les ambiances','Plusieurs ambiances, pour toute l\'année','Plongez dans une ambiance élégante et raffinée, où chaque détail a été pensé pour éveiller vos sens. Lumières tamisées, tables soigneusement dressées et une atmosphère feutrée créent le décor idéal pour une expérience gastronomique inoubliable. Ici, chaque repas se savoure autant avec les yeux qu’avec le palais.',0,0,NULL,'0','1','2025-02-24 14:58:51','2025-02-24 14:58:51');
+INSERT INTO `contents` VALUES (1,'room-content','Nos Chambres','Un raffinement jusque dans l\'oreiller','À l’Hôtel 5 étoiles Artichaut, chaque chambre est une promesse de luxe et de confort. De la chambre standard cosy à la suite présidentielle digne d’un chef d’État en vacances, nos espaces allient élégance et raffinement. Literie moelleuse, Wi-Fi ultra-rapide, salles de bain somptueuses et petites attentions délicates transforment chaque séjour en une parenthèse enchantée. Que vous veniez pour affaires ou pour le plaisir, préparez-vous à une expérience où chaque détail compte… même la douceur des oreillers !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:08:23'),(2,'content-room','Our Rooms','The better you sleep, the better we are','At the 5-star Artichaut Hotel, every room is a promise of luxury and comfort. From the cozy standard room to the presidential suite fit for a head of state on holiday, our spaces blend elegance and refinement. Plush bedding, ultra-fast Wi-Fi, sumptuous bathrooms, and thoughtful little touches turn every stay into an enchanting escape. Whether you\'re here for business or leisure, get ready for an experience where every detail matters… even the softness of the pillows!',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:45:43'),(4,'content-massage','Let\'s Massage !!','The best thai massage ever !!!','Our massages are an invitation to absolute relaxation. Whether it’s a soothing massage, a deep tissue treatment, or a hot stone therapy, every touch is designed to release your tension and immerse you in a sea of well-being. With expert hands and precious oils, your only challenge will be not to fall asleep too quickly… but we won’t hold it against you!',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:47:28'),(5,'massage-content','Massages','Relachez, vous êtes massé','Nos massages sont une invitation au lâcher-prise absolu. Qu’il s’agisse d’un modelage relaxant, d’un massage deep tissue ou d’un soin aux pierres chaudes, chaque pression est pensée pour dénouer vos tensions et vous plonger dans un océan de bien-être. Entre mains expertes et huiles précieuses, votre seul effort sera de ne pas vous endormir trop vite… mais on ne vous en voudra pas !',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:13:49'),(6,'content-wine','Cheers !!!','You never taste it so French !!!','Our wine selection is a sensory journey through the finest terroirs. From bold reds to delicate whites, with a touch of festive bubbles, each bottle is carefully chosen to elevate your meals… or simply for pure enjoyment. Let our sommeliers guide you, and may your only dilemma be choosing between a grand cru and a love at first sip. Cheers! 🍷',1,0,NULL,'1','2','2025-02-19 13:18:30','2025-02-24 09:48:54'),(7,'wine-content','Nos Vins','Une selection, des plus reconnues au monde','Notre sélection de vins est un voyage sensoriel à travers les plus beaux terroirs. Des rouges puissants aux blancs délicats, en passant par des bulles festives, chaque bouteille est choisie avec soin pour sublimer vos repas… ou simplement pour le plaisir. Laissez nos sommeliers vous guider, et que votre seul dilemme soit de choisir entre un grand cru et un coup de cœur. Santé ! 🍷',1,1,NULL,'1','1','2025-02-19 13:18:30','2025-02-21 07:16:03'),(16,'banner-equipe','L\'Equipe','Pour votre service','L’équipe de l’Hôtel 5 étoiles Artichaut, c’est une symphonie de talents au service de votre bien-être. Chefs passionnés, sommeliers inspirés, thérapeutes aux mains de velours et concierges aux petits soins… chaque membre de notre maison met son expertise et son sourire au cœur de votre séjour. Forts d’années d’expérience dans les plus grandes maisons, ils anticipent vos envies et transforment chaque instant en un moment d’exception. Ici, l’excellence n’est pas un simple mot, c’est une promesse.',1,0,NULL,'1','1','2025-02-20 09:25:32','2025-02-24 10:04:04'),(17,'restaurant-banner','Restaurant','Savourez l\'excellence, où chaque moment devient une expérience','Bienvenue dans notre restaurant, où l’art culinaire rencontre l’audace végétale ! Ici, l’artichaut est roi et s’invite subtilement dans chaque menu, de l’entrée au dessert. Notre chef, véritable maestro des saveurs, revisite ce trésor gastronomique avec créativité et finesse, surprenant vos papilles à chaque bouchée. Une cuisine raffinée, inventive et résolument inoubliable… même pour ceux qui pensaient ne pas aimer l’artichaut !',0,0,NULL,'0','1','2025-02-24 11:57:45','2025-02-24 11:57:45'),(18,'restaurant-banner-en','Restaurant','Savor excellence, where every moment becomes an experience.','Welcome to our restaurant, where culinary artistry meets bold botanical flair! Here, the artichoke reigns supreme, making a subtle yet delightful appearance in every menu, from starter to dessert. Our chef, a true maestro of flavors, reinvents this culinary gem with creativity and finesse, surprising your taste buds at every bite. A refined, inventive, and truly unforgettable dining experience… even for those who thought they didn’t like artichokes!',0,0,NULL,'0','2','2025-02-24 11:59:38','2025-02-24 11:59:38'),(19,'equipe-banner-en','The Squad','At your sevice, Sir!!','The team at the 5-star Hôtel Artichaut is a symphony of talent dedicated to your well-being. Passionate chefs, inspired sommeliers, skilled therapists with a delicate touch, and attentive concierges—each member of our establishment brings expertise and a warm smile to make your stay unforgettable. With years of experience in the finest establishments, they anticipate your every need and turn each moment into an exceptional experience. Here, excellence is not just a word—it’s a promise.',0,0,NULL,'0','2','2025-02-24 12:03:25','2025-02-24 12:07:56'),(20,'spa-banner-fr','SPA','Évadez-vous dans un sanctuaire de sérénité et de bien-être absolu.','Offrez à vos pieds une expérience hors du commun avec notre parcours santé aquatique, où de gracieux saumons se chargent de les dorloter… à leur manière. Entre chatouilles délicates et micro-massages toniques, ces experts en nage synchronisée réveillent votre circulation tout en vous arrachant quelques fous rires. Un soin aussi insolite qu’efficace, qui prouve une fois de plus que le bien-être passe aussi par les orteils !',0,0,'spa','0','1','2025-02-24 12:25:04','2025-02-25 12:34:13'),(21,'spa-banner-en','SPA','Escape to a sanctuary of serenity and absolute well-being.','Give your feet an extraordinary experience with our aquatic health trail, where graceful salmon take care of them… in their own special way. Between gentle tickles and invigorating micro-massages, these synchronized swimming experts boost your circulation while bringing a few bursts of laughter. A treatment as unusual as it is effective, proving once again that well-being starts from the toes up! 🐟💦',0,0,'spa','0','2','2025-02-24 12:31:27','2025-02-25 12:35:52'),(22,'service-banner-fr','Services','Notre hôtel de luxe vous offre des services exclusifs tels que valet, pressing, voiturier et bien plus pour un séjour inoubliable','Profitez de nos services exclusifs conçus pour rendre votre séjour facile et agréable. De notre service de pack professionnel, où nous prenons soin de vos bagages comme si c’était les nôtres, à notre voiturier pour une arrivée sans tracas, nous avons pensé à tout. Besoin de rafraîchir vos vêtements ? Notre service de blanchisserie s’en charge avec soin. Et pour vos compagnons à quatre pattes, nous proposons un service de garde de chien, pour qu\'ils puissent aussi profiter de leurs vacances pendant que vous explorez. Chaque détail, grand ou petit, est pris en charge pour garantir votre confort total. 🐾✨',0,0,NULL,'0','1','2025-02-24 12:42:51','2025-02-24 12:42:51'),(23,'service-banner-en','Services','Our luxury hotel offers exclusive services such as valet, laundry, concierge, and much more to ensure an unforgettable stay.','Indulge in our exclusive services designed to make your stay effortless and enjoyable. From our professional pack service, where we take care of your luggage as if it were our own, to our valet parking for a seamless arrival, we\'ve thought of everything. Need your clothes refreshed? Our laundry service is here to handle it with care. And for your furry friends, we offer dog sitting services, so they can enjoy their own little vacation while you\'re out exploring. Every detail, big or small, is taken care of to ensure your utmost comfort. 🐾✨',0,0,NULL,'0','2','2025-02-24 12:43:27','2025-02-24 12:43:27'),(24,'restaurant-cards-room','Les ambiances','Plusieurs ambiances, pour toute l\'année','Plongez dans une ambiance élégante et raffinée, où chaque détail a été pensé pour éveiller vos sens. Lumières tamisées, tables soigneusement dressées et une atmosphère feutrée créent le décor idéal pour une expérience gastronomique inoubliable. Ici, chaque repas se savoure autant avec les yeux qu’avec le palais.',0,0,NULL,'0','1','2025-02-24 14:58:51','2025-02-24 14:58:51'),(26,'banner-artichaut-fr','L\'Artichaut','Passez un séjour unique dans un hotel intimiste et chaleureux','À l’Hôtel 5 étoiles Artichaut, chaque chambre est une promesse de luxe et de confort. De la chambre standard cosy à la suite présidentielle digne d’un chef d’État en vacances, nos espaces allient élégance et raffinement. Literie moelleuse, Wi-Fi ultra-rapide, salles de bain somptueuses et petites attentions délicates transforment chaque séjour en une parenthèse enchantée. Que vous veniez pour affaires ou pour le plaisir, préparez-vous à une expérience où chaque détail compte… même la douceur des oreillers !',0,0,'booking','0','1','2025-02-25 08:56:34','2025-02-25 08:56:34'),(27,'banner-artichaut-en','L\'Artichaut','Enjoy a unique stay in an intimate and welcoming hotel.','At the 5-star Hôtel Artichaut, every room is a promise of luxury and comfort. From the cozy standard room to the presidential suite fit for a head of state on vacation, our spaces combine elegance and refinement. Plush bedding, ultra-fast Wi-Fi, sumptuous bathrooms, and thoughtful little touches turn every stay into an enchanting escape. Whether you\'re here for business or leisure, get ready for an experience where every detail matters… even the softness of the pillows!',0,0,'booking','0','2','2025-02-25 09:03:38','2025-02-25 09:03:38'),(28,'banner-room-fr','Nos Chambres','Vivez l\'exception, séjournez dans l\'élégance absolue','Confortable, moderne et sans chichis (mais avec tout ce qu’il faut !), cette chambre vous offre un lit douillet digne d’un câlin géant, une télévision à écran plat pour vos soirées détente, et une connexion Wi-Fi ultra-rapide pour scroller sans limite. Une salle de bain privative avec douche ou baignoire vous attend pour des instants de pure relaxation. Le tout dans une décoration chic et apaisante, idéale pour un séjour pro ou une escapade touristique.',0,0,'booking','0','1','2025-02-25 09:05:54','2025-02-25 09:05:54'),(29,'banner-room-en','Rooms','Experience the extraordinary, stay in absolute elegance.','Our rooms offer the perfect blend of luxury and comfort. Elegant decor, plush bedding, and modern amenities ensure a restful and refined stay. Whether you choose a cozy room or a grand suite, every detail is designed for your ultimate relaxation.',0,0,'booking','0','2','2025-02-25 09:09:44','2025-02-25 09:09:44'),(30,'restaurant-cards-plate-fr','Nos plats','L\'artichaut dans tous ses états.','Derrière chaque assiette, un maestro : notre chef. Véritable artiste du goût, il sublime les produits d’exception avec créativité et audace. Des saveurs surprenantes, des associations inédites et une maîtrise parfaite des techniques font de chaque plat une œuvre culinaire. Préparez-vous à une explosion de saveurs… et à l’irrésistible envie de revenir !',0,0,'string','0','1','2025-02-25 12:09:14','2025-02-25 12:09:14'),(31,'restaurant-cards-plate-en','Our Dishes','Artichoke, as a statement.','Behind every dish, a maestro: our chef. A true artist of flavor, he elevates exceptional ingredients with creativity and boldness. Surprising tastes, unique pairings, and masterful techniques turn each plate into a culinary masterpiece. Get ready for an explosion of flavors… and an irresistible desire to come back!',0,0,'string','0','2','2025-02-25 12:10:11','2025-02-25 12:10:11'),(32,'restaurant-cards-room-en','Ambiante around the table','Many ambiances, all along the year.','Step into an elegant and refined atmosphere, where every detail is designed to awaken your senses. Soft lighting, impeccably set tables, and a hushed ambiance create the perfect setting for an unforgettable dining experience. Here, every meal is a feast for the eyes as much as for the palate.',0,0,'string','0','2','2025-02-25 12:11:53','2025-02-25 12:11:53'),(34,'restaurant-cards-serveur-fr','Un service d\'exception','Tant de savoir faire, pour votre service.','Sourire impeccable, geste précis et attention de chaque instant : nos serveurs sont les véritables chefs d’orchestre de votre expérience culinaire. Toujours à l’écoute, ils anticipent vos envies et transforment chaque service en un moment de pur plaisir. Discrets mais présents, leur mission est simple : faire de votre repas une perfection absolue.',0,0,'string','0','1','2025-02-25 12:16:57','2025-02-25 12:16:57'),(35,'restaurant-cards-serveur-en','Waiters of exception','So many soft-skills, only for your service.','Flawless smiles, precise gestures, and constant attention: our servers are the true conductors of your dining experience. Always attentive, they anticipate your desires and turn each service into a moment of pure delight. Discreet yet present, their mission is simple: to make your meal an experience of absolute perfection.',0,0,'string','0','2','2025-02-25 12:17:34','2025-02-25 12:17:34'),(39,'spa-cards-couple-fr','Moment de détente avec votre moitié.','Parcours sensoriel de couple','Offrez à vos pieds une expérience hors du commun avec notre parcours santé aquatique, où de gracieux saumons se chargent de les dorloter… à leur manière. Entre chatouilles délicates et micro-massages toniques, ces experts en nage synchronisée réveillent votre circulation tout en vous arrachant quelques fous rires. Un soin aussi insolite qu’efficace, qui prouve une fois de plus que le bien-être passe aussi par les orteils ! 🐟💦',0,0,'string','0','1','2025-02-25 12:49:29','2025-02-25 12:49:29'),(40,'spa-cards-couple-fr','Jacuzzy and Sauna','Lazy moments with your love.','Give your feet an extraordinary experience with our aquatic health trail, where graceful salmon take care of them… in their own special way. Between gentle tickles and invigorating micro-massages, these synchronized swimming experts boost your circulation while bringing a few bursts of laughter. A treatment as unusual as it is effective, proving once again that well-being starts from the toes up! 🐟💦',0,0,'string','0','2','2025-02-25 12:50:38','2025-02-25 12:50:38'),(41,'spa-cards-swimming-fr','Piscine et bassins','Si t\'aime les longueurs','Notre piscine vous invite à une parenthèse de bien-être, entre eau cristalline et cadre raffiné. Que ce soit pour quelques brasses revigorantes ou un moment de pure relaxation sur nos transats confortables, laissez-vous porter par la sérénité des lieux.',0,0,'string','0','1','2025-02-25 12:57:09','2025-02-25 12:57:09'),(42,'spa-cards-swimming-en','Swimming pool and Bassine','When you like it long','Our pool offers a haven of tranquility, with crystal-clear water and a refined setting. Whether you\'re looking for an energizing swim or a peaceful moment on our comfortable loungers, let yourself be carried away by the serenity of the place.',0,0,'string','0','2','2025-02-25 12:57:53','2025-02-25 12:57:53'),(43,'spa-cards-hammam-fr','Sauna et Hammam','Si t\'aimes quand c\'est chaud','Offrez-vous un voyage sensoriel au cœur de notre hammam, où vapeur bienfaisante et senteurs envoûtantes vous plongent dans une bulle de relaxation. Un rituel ancestral pour purifier votre peau, libérer les tensions et repartir ressourcé.',0,0,'string','0','1','2025-02-25 12:59:01','2025-02-25 12:59:01'),(44,'spa-cards-hammam-en','Sauna et Hammam','If you like it HOT !!','Indulge in a sensory journey in our hammam, where healing steam and captivating scents envelop you in a cocoon of relaxation. An ancient ritual to purify your skin, release tension, and leave you feeling completely revitalized.',0,0,'string','0','2','2025-02-25 12:59:36','2025-02-25 12:59:36'),(47,'fbrg','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 13:29:55','2025-02-25 13:29:55'),(48,'banner-hotel-fr','Notre hotel','Depuis tant d\'années ...','Depuis tant d’années, l’Hôtel 5 étoiles Artichaut incarne le raffinement et l’authenticité. Mais pourquoi l’artichaut ? Parce qu’ici, au cœur d’une région où ce légume est roi, tout a commencé avec l’agro-tourisme. À l’origine, une maison d’hôtes accueillait les passionnés de gastronomie et de nature, venus découvrir les champs d’artichauts et les trésors du terroir. Au fil du temps, l’excellence de l’accueil et la richesse de l’expérience ont transformé cette adresse en un établissement de luxe, où le confort et l’élégance rendent hommage à ces racines authentiques. Aujourd’hui, l’Hôtel Artichaut perpétue cette histoire, entre tradition et modernité, pour offrir un séjour inoubliable à ses hôtes.',0,0,'string','0','1','2025-02-25 13:59:36','2025-02-25 13:59:36'),(49,'banner-hotel-en','Our Hotel, Our Story','Till so many years ...','For many years, the 5-star Artichaut Hotel has been a symbol of refinement and authenticity. But why the artichoke? Because here, in a region where this vegetable reigns supreme, it all began with agrotourism. Originally, a charming guesthouse welcomed food and nature lovers eager to explore artichoke fields and local delicacies. Over time, the exceptional hospitality and unique experience transformed this place into a luxury establishment, where comfort and elegance pay tribute to its authentic roots. Today, the Artichaut Hotel continues this legacy, blending tradition and modernity to offer guests an unforgettable stay.',0,0,'string','0','2','2025-02-25 14:01:26','2025-02-25 14:01:26'),(50,'hotel-cards-fr','Un édifice mémorable','Un bâtiment, une histoire.','Un Havre de Luxe et de Sérénité Bienvenue dans notre écrin de luxe, où chaque détail est pensé pour éveiller vos sens. Architecture et Design Un subtil mélange entre tradition et modernité, l’hôtel est niché dans un cadre naturel exceptionnel. L’architecture conjugue matériaux nobles, grands espaces, et lumière naturelle, créant une atmosphère à la fois chaleureuse et élégante.',0,0,NULL,'0','1','2025-02-25 14:05:51','2025-02-25 14:11:41'),(51,'hotel-cards-en','A wonderful building ...','Where it all begans ...','A Haven of Luxury and Serenity Welcome to our haven of luxury, where every detail is designed to awaken your senses.  Architecture & Design A subtle blend of tradition and modernity, the hotel is nestled in an exceptional natural setting. The architecture combines noble materials, open spaces, and natural light, creating an atmosphere that is both warm and elegant.',0,0,NULL,'0','2','2025-02-25 14:07:12','2025-02-25 14:07:12'),(52,'fbrgttttt','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 14:24:04','2025-02-25 14:24:04'),(53,'rrrrrrrrrrrrrrrrrrr','ttttttttttttttttttttttttttttt','eéggggggggggggggggggggggggggggggggggggggggggggggg','t\"bggggggggggggggge\"ezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',0,0,'vfvbtrte','1','1','2025-02-25 14:24:54','2025-02-25 14:24:54'),(54,'fbrg','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 14:28:23','2025-02-25 14:28:23'),(55,'fbrgyttgkjgklgkgjj','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 14:28:50','2025-02-25 14:28:50'),(56,'terzzzzzzzzzzzz','ethrzzzzzzzzzzzzze','rhetttttttttttttttt','erhttttttttttttttt',0,0,'rhteerrn','1','1','2025-02-25 14:29:35','2025-02-25 14:29:35'),(57,'fbrg000000000000007777777777777777777','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 14:36:13','2025-02-25 14:36:13'),(58,'fbrgtttttttttttttttttttttttttttttttttt','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 14:54:18','2025-02-25 14:54:18'),(59,'fbrg00000000000000000000','grgz','gzregz','grgr',0,0,'gzrzgzr','0','1','2025-02-25 15:00:43','2025-02-25 15:00:43'),(63,'jikgkbkj','tttthhjvj;v;j','dec ffvf','fefv fvfz',0,0,'cdevffv','1','1','2025-02-26 09:15:27','2025-02-26 09:15:27'),(64,'jikgkbkj','tttthhjvj;v;j','dec ffvf','fefv fvfz',0,0,'cdevffv','1','1','2025-02-26 09:21:45','2025-02-26 09:21:45'),(65,'jikgkbkj','tttthhjvj;v;j','dec ffvf','fefv fvfz',0,0,'cdevffv','1','1','2025-02-26 09:22:16','2025-02-26 09:22:16'),(66,'jikgkbkj12','tttthhjvj;v;j','dec ffvf','fefv fvfz',0,0,'cdevffv','1','1','2025-02-26 09:57:25','2025-02-26 09:57:25');
 /*!40000 ALTER TABLE `contents` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `failed_jobs`
---
-
-DROP TABLE IF EXISTS `failed_jobs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `failed_jobs` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `failed_jobs`
@@ -127,58 +53,14 @@ LOCK TABLES `failed_jobs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `images`
---
-
-DROP TABLE IF EXISTS `images`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `images` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content_id` bigint unsigned DEFAULT NULL,
-  `news_article_id` bigint unsigned DEFAULT NULL,
-  `service_id` bigint unsigned DEFAULT NULL,
-  `rooms_category_id` bigint unsigned DEFAULT NULL,
-  `room_id` bigint unsigned DEFAULT NULL,
-  `language_id` bigint unsigned DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `images`
 --
 
 LOCK TABLES `images` WRITE;
 /*!40000 ALTER TABLE `images` DISABLE KEYS */;
-INSERT INTO `images` VALUES (7,'http://192.168.1.245:8000/storage/images/sLsJGqoiD6j0x23uQNnL4ZlsqtoMeAqVvguxvItF.png',1,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:08:23','2025-02-21 07:08:23'),(9,'http://192.168.1.245:8000/storage/images/AFAZheXojlD1N7v6dsydrrIx6fBB5NilBBqfKUWH.png',5,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:13:49','2025-02-21 07:13:49'),(10,'http://192.168.1.245:8000/storage/images/UQexHiF5vPet0f41mS0kzCqv8D7kw1O9RcuDcuNk.png',7,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:16:03','2025-02-21 07:16:03'),(13,'http://192.168.1.245:8000/storage/images/ftAdCfa0bpxV0uJgKjocRJKSZKjv4HhnF8DdzkRQ.png',NULL,NULL,NULL,NULL,NULL,1,'2025-02-21 07:41:07','2025-02-21 07:41:07'),(14,'http://192.168.1.245:8000/storage/images/n19Z6djCxgo2vCymXuizGoTt1FqJL1DEobsRIvRP.png',NULL,NULL,NULL,NULL,NULL,2,'2025-02-21 07:41:20','2025-02-21 07:41:20'),(16,'http://192.168.1.245:8000/storage/images/EUoDF2mNhuSc85liAFGagNflRNz6ap9cOhd8tuBr.png',2,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:45:43','2025-02-24 09:45:43'),(17,'http://192.168.1.245:8000/storage/images/tkfivasZIg8mVcRITPp3NW8cinPkBv8DoRo5dX0x.png',4,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:47:28','2025-02-24 09:47:28'),(18,'http://192.168.1.245:8000/storage/images/UjKsR7JcXJRq4y437Eg2YPyxhxOQCLvW4v8qDpno.png',6,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:48:54','2025-02-24 09:48:54'),(19,'http://192.168.1.245:8000/storage/images/IjPUPDeonYbGAbGdtbrPHextLQp84s8MktNLpUGE.jpg',16,NULL,NULL,NULL,NULL,NULL,'2025-02-24 10:04:04','2025-02-24 10:04:04'),(20,'http://192.168.1.245:8000/storage/images/csE1BawJtnLIcXuZhiSrZ7kgTBor6fqW3lMzEWOZ.png',17,NULL,NULL,NULL,NULL,NULL,'2025-02-24 11:57:45','2025-02-24 11:57:45'),(21,'http://192.168.1.245:8000/storage/images/ivCTTUWjQQpQE1VWsGFvpq9zlGFvQMBQLIn19b20.png',18,NULL,NULL,NULL,NULL,NULL,'2025-02-24 11:59:38','2025-02-24 11:59:38'),(23,'http://192.168.1.245:8000/storage/images/CffElsls6gInOZr05nBGuPbc4BVcI7RlH9SwCmBb.jpg',19,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:07:56','2025-02-24 12:07:56'),(25,'http://192.168.1.245:8000/storage/images/OpIJJLt1iLQtAq4vJsUj8qiM65jMdjSvASToIDjQ.png',20,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:30:04','2025-02-24 12:30:04'),(26,'http://192.168.1.245:8000/storage/images/zE8cgxAvNpwZKF9oYBNP0uzflsca8lxcmbRb9aXM.png',21,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:31:27','2025-02-24 12:31:27'),(27,'http://192.168.1.245:8000/storage/images/NqivZomknGIcpfdKo20FwhSkATK2cKdcIFujvmPP.png',22,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:42:51','2025-02-24 12:42:51'),(28,'http://192.168.1.245:8000/storage/images/ipCgBza9oJIzF0kNvO3CeXig8fRxYWlTRAvnIUWN.png',23,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:43:27','2025-02-24 12:43:27'),(29,'http://192.168.1.245:8000/storage/images/cFr4L2aRkdS1u4aAjpBzi9uU550PIQKM3U4Pm67V.png',24,NULL,NULL,NULL,NULL,NULL,'2025-02-24 14:58:51','2025-02-24 14:58:51');
+INSERT INTO `images` VALUES (7,'http://192.168.1.245:8000/storage/images/sLsJGqoiD6j0x23uQNnL4ZlsqtoMeAqVvguxvItF.png',1,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:08:23','2025-02-21 07:08:23'),(9,'http://192.168.1.245:8000/storage/images/AFAZheXojlD1N7v6dsydrrIx6fBB5NilBBqfKUWH.png',5,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:13:49','2025-02-21 07:13:49'),(10,'http://192.168.1.245:8000/storage/images/UQexHiF5vPet0f41mS0kzCqv8D7kw1O9RcuDcuNk.png',7,NULL,NULL,NULL,NULL,NULL,'2025-02-21 07:16:03','2025-02-21 07:16:03'),(13,'http://192.168.1.245:8000/storage/images/ftAdCfa0bpxV0uJgKjocRJKSZKjv4HhnF8DdzkRQ.png',NULL,NULL,NULL,NULL,NULL,1,'2025-02-21 07:41:07','2025-02-21 07:41:07'),(14,'http://192.168.1.245:8000/storage/images/n19Z6djCxgo2vCymXuizGoTt1FqJL1DEobsRIvRP.png',NULL,NULL,NULL,NULL,NULL,2,'2025-02-21 07:41:20','2025-02-21 07:41:20'),(16,'http://192.168.1.245:8000/storage/images/EUoDF2mNhuSc85liAFGagNflRNz6ap9cOhd8tuBr.png',2,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:45:43','2025-02-24 09:45:43'),(17,'http://192.168.1.245:8000/storage/images/tkfivasZIg8mVcRITPp3NW8cinPkBv8DoRo5dX0x.png',4,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:47:28','2025-02-24 09:47:28'),(18,'http://192.168.1.245:8000/storage/images/UjKsR7JcXJRq4y437Eg2YPyxhxOQCLvW4v8qDpno.png',6,NULL,NULL,NULL,NULL,NULL,'2025-02-24 09:48:54','2025-02-24 09:48:54'),(19,'http://192.168.1.245:8000/storage/images/IjPUPDeonYbGAbGdtbrPHextLQp84s8MktNLpUGE.jpg',16,NULL,NULL,NULL,NULL,NULL,'2025-02-24 10:04:04','2025-02-24 10:04:04'),(20,'http://192.168.1.245:8000/storage/images/csE1BawJtnLIcXuZhiSrZ7kgTBor6fqW3lMzEWOZ.png',17,NULL,NULL,NULL,NULL,NULL,'2025-02-24 11:57:45','2025-02-24 11:57:45'),(21,'http://192.168.1.245:8000/storage/images/ivCTTUWjQQpQE1VWsGFvpq9zlGFvQMBQLIn19b20.png',18,NULL,NULL,NULL,NULL,NULL,'2025-02-24 11:59:38','2025-02-24 11:59:38'),(23,'http://192.168.1.245:8000/storage/images/CffElsls6gInOZr05nBGuPbc4BVcI7RlH9SwCmBb.jpg',19,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:07:56','2025-02-24 12:07:56'),(27,'http://192.168.1.245:8000/storage/images/NqivZomknGIcpfdKo20FwhSkATK2cKdcIFujvmPP.png',22,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:42:51','2025-02-24 12:42:51'),(28,'http://192.168.1.245:8000/storage/images/ipCgBza9oJIzF0kNvO3CeXig8fRxYWlTRAvnIUWN.png',23,NULL,NULL,NULL,NULL,NULL,'2025-02-24 12:43:27','2025-02-24 12:43:27'),(29,'http://192.168.1.245:8000/storage/images/cFr4L2aRkdS1u4aAjpBzi9uU550PIQKM3U4Pm67V.png',24,NULL,NULL,NULL,NULL,NULL,'2025-02-24 14:58:51','2025-02-24 14:58:51'),(31,'http://192.168.1.245:8000/storage/images/mysex2rMJB3ZEMkewExNXoxL7Kb8icyaXbJcEJNe.mp4',26,NULL,NULL,NULL,NULL,NULL,'2025-02-25 08:56:34','2025-02-25 08:56:34'),(32,'http://192.168.1.245:8000/storage/images/odYxGrGpX1ecznc4CNULCEz1IpMEdwbIMEpVqrJr.mp4',27,NULL,NULL,NULL,NULL,NULL,'2025-02-25 09:03:38','2025-02-25 09:03:38'),(34,'http://192.168.1.245:8000/storage/images/VVG1ZR9NCRAQezp8pYzlEZht5whae74GPRrlVBx4.mp4',29,NULL,NULL,NULL,NULL,NULL,'2025-02-25 09:09:44','2025-02-25 09:09:44'),(35,'http://192.168.1.245:8000/storage/images/t3D5bBVdUvSrI0PpoYey71g6XsveRoA2wTbT7xCE.mp4',28,NULL,NULL,NULL,NULL,NULL,'2025-02-25 09:11:53','2025-02-25 09:11:53'),(36,'http://192.168.1.245:8000/storage/images/G07KzoYlOTVMeUSLGahS8ANcBKenRqMMP41Zw65e.png',NULL,NULL,11,NULL,NULL,NULL,'2025-02-25 10:27:52','2025-02-25 10:27:52'),(37,'http://192.168.1.245:8000/storage/images/IFLI0DcA1KsWTZQlzVpo5WiclehHqf0bVPEv1hlJ.png',NULL,NULL,13,NULL,NULL,NULL,'2025-02-25 11:22:27','2025-02-25 11:22:27'),(38,'http://192.168.1.245:8000/storage/images/kO179j1nowpj4yNvxZfZItPutBjxFKbd8zxSmkMl.png',NULL,NULL,14,NULL,NULL,NULL,'2025-02-25 11:23:48','2025-02-25 11:23:48'),(39,'http://192.168.1.245:8000/storage/images/ytruMSaTNUxM2YrvKEAlqNvLavFcYJVNdELzepkh.png',NULL,NULL,15,NULL,NULL,NULL,'2025-02-25 11:24:33','2025-02-25 11:24:33'),(40,'http://192.168.1.245:8000/storage/images/IzDqD0eyqvmSZVOyaGFOqd1YRUTuQpOFimipTzzJ.png',NULL,NULL,16,NULL,NULL,NULL,'2025-02-25 11:25:44','2025-02-25 11:25:44'),(41,'http://192.168.1.245:8000/storage/images/U1dFO8TmZGU9TBSRiFKaYYG1xs4holwn8wk9fGEe.png',NULL,NULL,17,NULL,NULL,NULL,'2025-02-25 11:26:27','2025-02-25 11:26:27'),(43,'http://192.168.1.245:8000/storage/images/yvQQwQuyLc48Oitz2kIZe9sFRUwma0wlDAbiWXhm.png',30,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:09:14','2025-02-25 12:09:14'),(44,'http://192.168.1.245:8000/storage/images/IeuwGk9x6mcSyzrX45O2dtucQ8lK3Xq5xy8HaT8h.png',31,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:10:11','2025-02-25 12:10:11'),(45,'http://192.168.1.245:8000/storage/images/STM8pAVlvR1v1lhB4SipfAnDDwElxhWEZ5DbWZw0.png',32,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:11:53','2025-02-25 12:11:53'),(46,'http://192.168.1.245:8000/storage/images/3Epsk6OmnRagm7BhpIIvyyBHNHvI6TJvIGelH3ji.png',34,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:16:57','2025-02-25 12:16:57'),(47,'http://192.168.1.245:8000/storage/images/4WcZd7KrbCPJEWKrlYdC6uTOEPB4WSqouXcuSI4A.png',35,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:17:34','2025-02-25 12:17:34'),(48,'http://192.168.1.245:8000/storage/images/WGgTb5h6uT6Tn00aYQsKmnQTNMaKDP25RY3eTCAq.jpg',20,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:34:13','2025-02-25 12:34:13'),(49,'http://192.168.1.245:8000/storage/images/7ThgaUzlhDcnJTuO2hdGcWhhnxddrES8GyXDraII.jpg',21,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:35:52','2025-02-25 12:35:52'),(50,'http://192.168.1.245:8000/storage/images/O7KBIDMwthvuH363G6hytEDDgWTBsOAg0RZmQKJg.png',39,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:49:29','2025-02-25 12:49:29'),(51,'http://192.168.1.245:8000/storage/images/joRFqx322lVPWNku0qPr60iE51uVkjy0W3nGrjkQ.png',40,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:50:38','2025-02-25 12:50:38'),(52,'http://192.168.1.245:8000/storage/images/t0tASm6nmVMsDfUElvtCKDdnF3txlCT4Umt2hCag.png',41,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:57:10','2025-02-25 12:57:10'),(53,'http://192.168.1.245:8000/storage/images/Jacg6GuKVRamcO8Gv0F8Y4wwLbsAqxYvshh8yCOf.png',42,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:57:53','2025-02-25 12:57:53'),(54,'http://192.168.1.245:8000/storage/images/IgHHYOTs6Gh0eMhwTSBqvErZUYjtlMHWP9G2iRZk.png',43,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:59:01','2025-02-25 12:59:01'),(55,'http://192.168.1.245:8000/storage/images/P51qp0QcqQnxYPqG6EKP0PIYVz9fSWvaghaAVyzc.png',44,NULL,NULL,NULL,NULL,NULL,'2025-02-25 12:59:36','2025-02-25 12:59:36'),(56,'http://192.168.1.245:8000/storage/images/cFkHoK2hwdFYzPATqavKYx36kRKoVNrtQXGkjE9g.png',48,NULL,NULL,NULL,NULL,NULL,'2025-02-25 13:59:36','2025-02-25 13:59:36'),(58,'http://192.168.1.245:8000/storage/images/qTih2fxH9mPId2PurRjjFL0dFqaZfnUJIvc6Rfe2.png',49,NULL,NULL,NULL,NULL,NULL,'2025-02-25 14:01:26','2025-02-25 14:01:26'),(60,'http://192.168.1.245:8000/storage/images/xaKld4cMdWxkfTAYcFCA7UjKXxwGHH6uBScZWDrU.png',51,NULL,NULL,NULL,NULL,NULL,'2025-02-25 14:07:12','2025-02-25 14:07:12'),(61,'http://192.168.1.245:8000/storage/images/M6mxNknkH7ZOYDvx4VPDPBjpaDfYS8wuZDwq8fd4.png',50,NULL,NULL,NULL,NULL,NULL,'2025-02-25 14:11:41','2025-02-25 14:11:41'),(62,'http://192.168.1.245:8000/storage/images/nf1gpTnVVcO7iPrESlQucFnN8aaxgJgnwJfOoIlK.png',NULL,NULL,NULL,2,NULL,NULL,'2025-02-25 14:15:22','2025-02-25 14:15:22'),(67,'http://192.168.1.245:8000/storage/images/vEYvqp1lBo3sTY4jyzeOb3bUOMNTb1OHswcxbvew.png',NULL,NULL,NULL,3,NULL,NULL,'2025-02-25 14:18:58','2025-02-25 14:18:58'),(68,'http://192.168.1.245:8000/storage/images/Au85CnGNr45cFdLpClJz1zR7cANrxmAuduAubpGO.png',NULL,NULL,NULL,3,NULL,NULL,'2025-02-25 14:18:58','2025-02-25 14:18:58'),(70,'http://192.168.1.245:8000/storage/images/yq3aQSBWGSBFOixd0qbM1yyPh1mEkNpC2P0S2yrO.png',NULL,NULL,NULL,1,NULL,NULL,'2025-02-25 14:37:23','2025-02-25 14:37:23'),(71,'http://192.168.1.245:8000/storage/images/lUr5YMTTx4p0aYG7qLtAhOMkCVNQsr1O1dL3mOTk.png',NULL,NULL,NULL,1,NULL,NULL,'2025-02-25 14:37:23','2025-02-25 14:37:23');
 /*!40000 ALTER TABLE `images` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `job_batches`
---
-
-DROP TABLE IF EXISTS `job_batches`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `job_batches` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `total_jobs` int NOT NULL,
-  `pending_jobs` int NOT NULL,
-  `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `cancelled_at` int DEFAULT NULL,
-  `created_at` int NOT NULL,
-  `finished_at` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `job_batches`
@@ -190,26 +72,6 @@ LOCK TABLES `job_batches` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `jobs`
---
-
-DROP TABLE IF EXISTS `jobs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `jobs` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `attempts` tinyint unsigned NOT NULL,
-  `reserved_at` int unsigned DEFAULT NULL,
-  `available_at` int unsigned NOT NULL,
-  `created_at` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `jobs_queue_index` (`queue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `jobs`
 --
 
@@ -217,22 +79,6 @@ LOCK TABLES `jobs` WRITE;
 /*!40000 ALTER TABLE `jobs` DISABLE KEYS */;
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `languages`
---
-
-DROP TABLE IF EXISTS `languages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `languages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `lang` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `languages`
@@ -245,21 +91,6 @@ INSERT INTO `languages` VALUES (1,'fr',NULL,'2025-02-21 07:41:07'),(2,'en',NULL,
 UNLOCK TABLES;
 
 --
--- Table structure for table `migrations`
---
-
-DROP TABLE IF EXISTS `migrations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `migrations` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `migrations`
 --
 
@@ -268,27 +99,6 @@ LOCK TABLES `migrations` WRITE;
 INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2025_01_13_123504_create_personal_access_tokens_table',1),(5,'2025_01_13_135459_create_contents_table',1),(6,'2025_01_14_083751_create_rooms_categories_table',1),(7,'2025_01_14_101236_create_news_articles_table',1),(8,'2025_01_14_103358_create_rooms_table',1),(9,'2025_01_14_110303_create_services_table',1),(10,'2025_01_14_130433_create_rooms_features_table',1),(11,'2025_01_14_134731_create_images_table',1),(12,'2025_01_15_101407_create_reviews_table',1),(13,'2025_01_20_112152_create_room_category_feature_table',1),(14,'2025_02_17_125019_create_languages_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `news_articles`
---
-
-DROP TABLE IF EXISTS `news_articles`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `news_articles` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `news_articles`
@@ -301,21 +111,6 @@ INSERT INTO `news_articles` VALUES (1,'Labadie-Nitzsche','Multi-layered real-tim
 UNLOCK TABLES;
 
 --
--- Table structure for table `password_reset_tokens`
---
-
-DROP TABLE IF EXISTS `password_reset_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `password_reset_tokens`
 --
 
@@ -325,30 +120,6 @@ LOCK TABLES `password_reset_tokens` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `personal_access_tokens`
---
-
-DROP TABLE IF EXISTS `personal_access_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personal_access_tokens` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `last_used_at` timestamp NULL DEFAULT NULL,
-  `expires_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
-  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `personal_access_tokens`
 --
 
@@ -356,25 +127,6 @@ LOCK TABLES `personal_access_tokens` WRITE;
 /*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
 /*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `reviews`
---
-
-DROP TABLE IF EXISTS `reviews`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reviews` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `rate` int NOT NULL,
-  `review_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `reviews`
@@ -387,57 +139,14 @@ INSERT INTO `reviews` VALUES (1,4,'Fugiat quibusdam dicta ipsa provident est bea
 UNLOCK TABLES;
 
 --
--- Table structure for table `room_category_feature`
---
-
-DROP TABLE IF EXISTS `room_category_feature`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `room_category_feature` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `rooms_categories_id` bigint unsigned NOT NULL,
-  `rooms_features_id` bigint unsigned NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `room_category_feature_rooms_categories_id_foreign` (`rooms_categories_id`),
-  KEY `room_category_feature_rooms_features_id_foreign` (`rooms_features_id`),
-  CONSTRAINT `room_category_feature_rooms_categories_id_foreign` FOREIGN KEY (`rooms_categories_id`) REFERENCES `rooms_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `room_category_feature_rooms_features_id_foreign` FOREIGN KEY (`rooms_features_id`) REFERENCES `rooms_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `room_category_feature`
 --
 
 LOCK TABLES `room_category_feature` WRITE;
 /*!40000 ALTER TABLE `room_category_feature` DISABLE KEYS */;
-INSERT INTO `room_category_feature` VALUES (1,1,3,NULL,NULL),(2,2,2,NULL,NULL),(3,3,2,NULL,NULL),(4,2,4,NULL,NULL),(5,2,5,NULL,NULL);
+INSERT INTO `room_category_feature` VALUES (1,1,3,NULL,NULL),(6,2,3,NULL,NULL),(7,3,3,NULL,NULL);
 /*!40000 ALTER TABLE `room_category_feature` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `rooms`
---
-
-DROP TABLE IF EXISTS `rooms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `rooms` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `number` int NOT NULL,
-  `room_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rooms_category_id` bigint unsigned DEFAULT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `rooms`
@@ -450,56 +159,14 @@ INSERT INTO `rooms` VALUES (1,'Nikolaus, Pagac and Schulist',106,'Gusikowski','O
 UNLOCK TABLES;
 
 --
--- Table structure for table `rooms_categories`
---
-
-DROP TABLE IF EXISTS `rooms_categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `rooms_categories` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price_in_cent` int unsigned NOT NULL,
-  `bed_size` int NOT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `rooms_categories`
 --
 
 LOCK TABLES `rooms_categories` WRITE;
 /*!40000 ALTER TABLE `rooms_categories` DISABLE KEYS */;
-INSERT INTO `rooms_categories` VALUES (1,'standrard_fr','StandardRooms','Spacious room with a great view.',100000,70,'1','1','2025-02-19 13:18:31','2025-02-19 13:18:31'),(2,'luxe_fr','DeluxeRooms','Luxurious room with premium amenities.',200000,100,'2','1','2025-02-19 13:18:31','2025-02-19 13:18:31'),(3,'suite_fr','SuiteRooms','A suite with a living area and bedroom.',300000,120,'3','1','2025-02-19 13:18:31','2025-02-19 13:18:31');
+INSERT INTO `rooms_categories` VALUES (1,'standard_fr','Standard rooms','Nos chambres standard sont toutes doté d\'équipement haut de gamme',500,2,'0','1','2025-02-19 13:18:31','2025-02-25 14:21:26'),(2,'luxe_fr','Luxury rooms','A suite with a great view .',1000,2,'0','1','2025-02-19 13:18:31','2025-02-25 14:15:22'),(3,'suite_fr','Suits','Une de nos suite avec les meilleurs vue de la ville',10000,2,'0','1','2025-02-19 13:18:31','2025-02-25 14:18:58');
 /*!40000 ALTER TABLE `rooms_categories` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `rooms_features`
---
-
-DROP TABLE IF EXISTS `rooms_features`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `rooms_features` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `feature_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `rooms_features`
@@ -512,59 +179,14 @@ INSERT INTO `rooms_features` VALUES (1,'tv_fr','Tv','Une télévision à écran 
 UNLOCK TABLES;
 
 --
--- Table structure for table `services`
---
-
-DROP TABLE IF EXISTS `services`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `services` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `short_description` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `link` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price_in_cent` int NOT NULL,
-  `duration_in_day` int NOT NULL,
-  `is_per_person` tinyint(1) NOT NULL,
-  `display_order` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `services`
 --
 
 LOCK TABLES `services` WRITE;
 /*!40000 ALTER TABLE `services` DISABLE KEYS */;
-INSERT INTO `services` VALUES (1,'Breitenberg, Gleichner and Hills','Koss Ltd','Alice, quite forgetting that she looked up and repeat something now. Tell her to carry it further. So she set to work, and very soon found out a.','Alice knew it was sneezing and howling alternately without a cat! It\'s the most curious thing I ever saw in another moment it was just saying to her that she was considering in her face, with such a noise inside, no one to listen to her. \'I can see you\'re trying to invent something!\' \'I--I\'m a little sharp bark just over her head to feel which way it was very deep, or she should chance to be almost out of the others all joined in chorus, \'Yes, please do!\' pleaded Alice. \'And ever since that,\' the Hatter began, in a twinkling! Half-past one, time for dinner!\' (\'I only wish they WOULD not remember the simple rules their friends had taught them: such as, \'Sure, I don\'t like them raw.\' \'Well, be off, then!\' said the Duchess. An invitation for the hedgehogs; and in another moment, splash! she was now the right house, because the Duchess was sitting on the English coast you find a number of changes she had someone to listen to her. \'I wish I hadn\'t quite finished my tea when I breathe\"!\'.','Koch-Hintz',4933,5,1,'18','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(2,'Daugherty-Auer','Turcotte, Lesch and Ryan','I\'ve had such a thing before, but she saw them, they set to work very carefully, remarking, \'I really must be Mabel after all, and I never.','But here, to Alice\'s great surprise, the Duchess\'s voice died away, even in the world she was a little of it?\' said the Cat, and vanished again. Alice waited patiently until it chose to speak again. The rabbit-hole went straight on like a tunnel for some minutes. Alice thought this must ever be A secret, kept from all the unjust things--\' when his eye chanced to fall a long tail, certainly,\' said Alice, who felt ready to talk nonsense. The Queen\'s argument was, that she was now the right thing to get in?\' asked Alice again, in a tone of great surprise. \'Of course not,\' Alice replied in a languid, sleepy voice. \'Who are YOU?\' Which brought them back again to the jury, of course--\"I GAVE HER ONE, THEY GAVE HIM TWO--\" why, that must be the right size to do with you. Mind now!\' The poor little thing was snorting like a Jack-in-the-box, and up the fan and gloves, and, as she could. \'The Dormouse is asleep again,\' said the Caterpillar. \'I\'m afraid I can\'t put it right; \'not that it was.','Zieme-Rosenbaum',60027,2,1,'13','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(3,'Huels, Shanahan and Kiehn','Bogan, Luettgen and Cummings','Queen. \'Sentence first--verdict afterwards.\' \'Stuff and nonsense!\' said Alice indignantly. \'Ah! then yours wasn\'t a really good school,\' said the.','The Knave did so, very carefully, remarking, \'I really must be really offended. \'We won\'t talk about her and to her head, she tried to get in?\' she repeated, aloud. \'I must be a very poor speaker,\' said the Dormouse, not choosing to notice this question, but hurriedly went on, \'you throw the--\' \'The lobsters!\' shouted the Queen. \'Sentence first--verdict afterwards.\' \'Stuff and nonsense!\' said Alice very humbly: \'you had got so much into the air off all its feet at the corners: next the ten courtiers; these were ornamented all over their heads. She felt very lonely and low-spirited. In a minute or two, it was growing, and growing, and growing, and growing, and she walked off, leaving Alice alone with the clock. For instance, if you drink much from a bottle marked \'poison,\' so Alice went on for some way of expecting nothing but out-of-the-way things had happened lately, that Alice could speak again. The Mock Turtle recovered his voice, and, with tears running down his brush, and had to.','D\'Amore-Hane',35308,2,0,'19','1','2025-02-19 13:18:30','2025-02-19 13:18:30'),(4,'Fadel Group','Carroll, Simonis and Lowe','He got behind Alice as he spoke, \'we were trying--\' \'I see!\' said the Mock Turtle. \'Seals, turtles, salmon, and so on.\' \'What a funny watch!\' she.','I vote the young man said, \'And your hair has become very white; And yet I wish you wouldn\'t mind,\' said Alice: \'three inches is such a long way back, and see how he can EVEN finish, if he would deny it too: but the Hatter replied. \'Of course it was,\' he said. (Which he certainly did NOT, being made entirely of cardboard.) \'All right, so far,\' said the King. \'Nothing whatever,\' said Alice. \'It goes on, you know,\' said Alice, a little wider. \'Come, it\'s pleased so far,\' thought Alice, \'to pretend to be two people! Why, there\'s hardly enough of me left to make the arches. The chief difficulty Alice found at first she thought of herself, \'I wonder what CAN have happened to you? Tell us all about it!\' and he poured a little bit of the house if it began ordering people about like mad things all this grand procession, came THE KING AND QUEEN OF HEARTS. Alice was very hot, she kept on puzzling about it while the Mock Turtle in the world! Oh, my dear paws! Oh my dear Dinah! I wonder what I.','Becker, Weissnat and Tillman',62149,5,1,'12','2','2025-02-19 13:18:30','2025-02-19 13:18:30'),(5,'Dach-Beatty','Cremin Group','Alice said; but was dreadfully puzzled by the hedge!\' then silence, and then at the flowers and those cool fountains, but she did it at all,\' said.','Mock Turtle: \'nine the next, and so on; then, when you\'ve cleared all the jurymen are back in a tone of great surprise. \'Of course it was,\' he said. \'Fifteenth,\' said the Rabbit\'s voice; and Alice looked round, eager to see it trying in a shrill, loud voice, and see what was on the floor: in another moment it was perfectly round, she came upon a little scream of laughter. \'Oh, hush!\' the Rabbit coming to look through into the air, I\'m afraid, sir\' said Alice, who had not attended to this last remark, \'it\'s a vegetable. It doesn\'t look like one, but the Dodo said, \'EVERYBODY has won, and all must have been was not an encouraging tone. Alice looked all round her once more, while the rest of the jurymen. \'It isn\'t mine,\' said the Gryphon. \'How the creatures argue. It\'s enough to drive one crazy!\' The Footman seemed to be sure; but I hadn\'t mentioned Dinah!\' she said to one of the garden, called out to sea. So they had been for some way, and nothing seems to suit them!\' \'I haven\'t the.','Heidenreich PLC',95275,2,1,'5','1','2025-02-19 13:18:31','2025-02-19 13:18:31'),(6,'Kuhic Group','Walsh LLC','The Dormouse slowly opened his eyes were getting so far off). \'Oh, my poor hands, how is it I can\'t quite follow it as to bring tears into her eyes.','WAS a narrow escape!\' said Alice, \'a great girl like you,\' (she might well say that \"I see what was the Cat went on, \'--likely to win, that it\'s hardly worth while finishing the game.\' The Queen turned crimson with fury, and, after glaring at her with large round eyes, and half believed herself in a frightened tone. \'The Queen will hear you! You see, she came upon a little glass table. \'Now, I\'ll manage better this time,\' she said, without even looking round. \'I\'ll fetch the executioner myself,\' said the Duck. \'Found IT,\' the Mouse was bristling all over, and both footmen, Alice noticed, had powdered hair that curled all over with diamonds, and walked two and two, as the question was evidently meant for her. \'Yes!\' shouted Alice. \'Come on, then!\' roared the Queen, \'and he shall tell you just now what the moral of that is--\"The more there is of yours.\"\' \'Oh, I beg your pardon!\' cried Alice in a low voice. \'Not at first, perhaps,\' said the Caterpillar. Here was another puzzling.','Rodriguez-Gerlach',75301,2,1,'3','2','2025-02-19 13:18:31','2025-02-19 13:18:31'),(7,'Lueilwitz-McDermott','Davis Ltd','I\'ve got to come out among the trees upon her knee, and the others all joined in chorus, \'Yes, please do!\' but the tops of the garden, and I never.','Dinah stop in the distance. \'And yet what a delightful thing a bit!\' said the Mock Turtle: \'crumbs would all come wrong, and she told her sister, as well wait, as she stood looking at the moment, \'My dear! I shall see it trot away quietly into the wood to listen. The Fish-Footman began by taking the little thing sobbed again (or grunted, it was only a pack of cards!\' At this moment Five, who had not attended to this last word with such a new idea to Alice, and she sat on, with closed eyes, and feebly stretching out one paw, trying to invent something!\' \'I--I\'m a little worried. \'Just about as she listened, or seemed to be a queer thing, to be no doubt that it had come back with the distant green leaves. As there seemed to have lessons to learn! Oh, I shouldn\'t want YOURS: I don\'t understand. Where did they live on?\' said Alice, very loudly and decidedly, and the cool fountains. CHAPTER VIII. The Queen\'s Croquet-Ground A large rose-tree stood near the door and went down to her feet in.','Davis, Stoltenberg and Funk',3082,5,1,'16','1','2025-02-19 13:18:31','2025-02-19 13:18:31'),(8,'Lowe, Gutmann and Effertz','Hirthe, Dickens and Romaguera','Mock Turtle. \'No, no! The adventures first,\' said the Mock Turtle said: \'advance twice, set to work at once without waiting for the hot day made her.','The Duchess took her choice, and was going on, as she spoke; \'either you or your head must be what he did it,) he did it,) he did it,) he did with the end of his Normans--\" How are you getting on?\' said Alice, who always took a great hurry; \'this paper has just been reading about; and when she had expected: before she found herself falling down a large flower-pot that stood near. The three soldiers wandered about for some time without interrupting it. \'They were learning to draw, you know--\' (pointing with his knuckles. It was the cat.) \'I hope they\'ll remember her saucer of milk at tea-time. Dinah my dear! I wish you would have this cat removed!\' The Queen smiled and passed on. \'Who ARE you talking to?\' said one of these cakes,\' she thought, \'and hand round the table, but it puzzled her a good deal on where you want to be?\' it asked. \'Oh, I\'m not used to it as to bring tears into her eyes; and once again the tiny hands were clasped upon her face. \'Very,\' said Alice: \'allow me to.','Mohr and Sons',82012,6,1,'14','2','2025-02-19 13:18:31','2025-02-19 13:18:31'),(9,'Rohan Group','Sauer, Mueller and Schmeler','Hatter grumbled: \'you shouldn\'t have put it in asking riddles that have no sort of lullaby to it in her hand, watching the setting sun, and thinking.','Alice: \'she\'s so extremely--\' Just then she remembered having seen in her brother\'s Latin Grammar, \'A mouse--of a mouse--to a mouse--a mouse--O mouse!\') The Mouse did not get hold of its voice. \'Back to land again, and the moon, and memory, and muchness--you know you say things are \"much of a good many voices all talking together: she made out the Fish-Footman was gone, and the moment she appeared; but she did not like to see it trying in a very melancholy voice. \'Repeat, \"YOU ARE OLD, FATHER WILLIAM,\' to the Mock Turtle in a sorrowful tone; \'at least there\'s no use in knocking,\' said the Cat, \'or you wouldn\'t keep appearing and vanishing so suddenly: you make one quite giddy.\' \'All right,\' said the last concert!\' on which the cook was leaning over the list, feeling very glad to find that she had plenty of time as she did not appear, and after a minute or two, they began solemnly dancing round and get in at the Caterpillar\'s making such VERY short remarks, and she could do, lying.','Herzog, Ritchie and Jakubowski',21612,6,1,'8','1','2025-02-19 13:18:31','2025-02-19 13:18:31'),(10,'Veum and Sons','Reichert-Zboncak','English,\' thought Alice; \'I daresay it\'s a French mouse, come over with William the Conqueror.\' (For, with all her fancy, that: he hasn\'t got no.','CHAPTER VI. Pig and Pepper For a minute or two, they began solemnly dancing round and look up in great disgust, and walked off; the Dormouse indignantly. However, he consented to go on crying in this way! Stop this moment, I tell you!\' said Alice. \'Nothing WHATEVER?\' persisted the King. \'Nothing whatever,\' said Alice. \'Of course they were\', said the Gryphon, half to herself, rather sharply; \'I advise you to set about it; if I\'m not the smallest notice of them attempted to explain it as far down the hall. After a minute or two sobs choked his voice. \'Same as if it makes rather a hard word, I will just explain to you to leave the court; but on the ground as she did not much larger than a pig, and she thought it over afterwards, it occurred to her chin upon Alice\'s shoulder, and it set to work shaking him and punching him in the kitchen that did not wish to offend the Dormouse crossed the court, she said to herself, for this time with one finger pressed upon its nose. The Dormouse again.','Gorczany LLC',65114,4,0,'5','2','2025-02-19 13:18:31','2025-02-19 13:18:31');
+INSERT INTO `services` VALUES (11,'content-valet-fr','Voiturier','Confiez-nous votre véhicule et laissez-nous nous occuper du reste. Notre service voiturier garantit une arrivée et un départ en toute sérénité.','Notre service voiturier vous offre une arrivée et un départ sans souci. Dès votre arrivée, notre équipe prend en charge votre véhicule avec soin et professionnalisme, vous permettant de profiter pleinement de votre séjour dès la première minute.','voiturier',10000,1,1,'0','1','2025-02-25 10:27:52','2025-02-25 10:27:52'),(13,'content-valet-en','Car Valet','Leave your car in our hands and let us handle the rest. Our valet service ensures a smooth arrival and departure.','Our valet service provides a stress-free arrival and departure. From the moment you arrive, our team takes care of your vehicle with care and professionalism, allowing you to enjoy your stay from the very first moment.','voiturier',10000,1,1,'0','2','2025-02-25 11:22:27','2025-02-25 11:22:27'),(14,'content-laundry-fr','Pressing','Un service rapide et soigné pour des vêtements toujours impeccables.','Notre service de blanchisserie prend soin de votre linge avec la plus grande attention. Pressing, nettoyage et repassage : nous veillons à ce que vos vêtements restent impeccables tout au long de votre séjour.','laundry',80000,1,1,'0','1','2025-02-25 11:23:48','2025-02-25 11:23:48'),(15,'content-laundry-en','Laundry','Fast and meticulous service to keep your clothes impeccable.','Our laundry service takes care of your clothing with the utmost attention. Dry cleaning, washing, and ironing—your wardrobe stays flawless throughout your stay.','laundry',80000,1,1,'0','2','2025-02-25 11:24:33','2025-02-25 11:24:33'),(16,'content-working-fr','Pack Pro','Travaillez en toute sérénité avec notre pack-working : PC, Wi-Fi haut débit et outils numériques à disposition.','Que vous soyez en déplacement professionnel ou en télétravail, notre pack-working vous offre tout le nécessaire pour une productivité optimale : un PC performant, une connexion Wi-Fi ultra-rapide et des outils numériques adaptés. Concentrez-vous sur l’essentiel, nous nous occupons du reste.','working',90000,1,1,'0','1','2025-02-25 11:25:44','2025-02-25 11:25:44'),(17,'content-working-en','Working Pack','Work with ease thanks to our pack-working: laptop, high-speed Wi-Fi, and digital tools at your disposal.','Whether you\'re on a business trip or working remotely, our pack-working provides everything you need for maximum productivity: a high-performance laptop, ultra-fast Wi-Fi, and essential digital tools. Focus on what matters, we’ll take care of the rest.','working',90000,1,1,'0','2','2025-02-25 11:26:27','2025-02-25 11:26:27');
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `sessions`
---
-
-DROP TABLE IF EXISTS `sessions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sessions` (
-  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_activity` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sessions_user_id_index` (`user_id`),
-  KEY `sessions_last_activity_index` (`last_activity`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `sessions`
@@ -576,41 +198,12 @@ LOCK TABLES `sessions` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `firstname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `lastname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `postal_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `isVIP` tinyint(1) NOT NULL DEFAULT '0',
-  `email_verified_at` timestamp NULL DEFAULT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `users`
 --
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (21,'admin@admin.com','$2y$12$lx7EzLDaNIy97/KBAZuo9e2Tk9Kyy45cc6Y/fmuEVwAYrcNwE4nMm','string','string','string','string','string','0659225358','user','standard',1,NULL,NULL,'2025-02-21 14:14:07','2025-02-21 14:14:07');
+INSERT INTO `users` VALUES (21,'admin@admin.com','$2y$12$lx7EzLDaNIy97/KBAZuo9e2Tk9Kyy45cc6Y/fmuEVwAYrcNwE4nMm','string','string','string','string','string','0659225358','user','standard',1,NULL,18,NULL,'2025-02-21 14:14:07','2025-02-26 09:44:39');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -623,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-25  9:28:04
+-- Dump completed on 2025-02-26 12:27:04

@@ -1,32 +1,51 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NewsArticleController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomsCategoryController;
 use App\Http\Controllers\RoomsFeatureController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CheckRole;
+use App\Http\Middleware\CheckTokenVersion;
 use Illuminate\Support\Facades\Route;
 
 
 // AUTH ROUTES
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+Route::get('/refresh', [AuthController::class, 'refresh'])->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/refresh', [AuthController::class, 'getAuthUser']);
-    // USER ROUTES
-    Route::prefix('user')->controller(UserController::class)->group(function () {
-        Route::get('/', 'getAllUsers'); // get ALL contents
-        Route::get('/{id}', 'getSingleUser'); // get ONE User_models
-        Route::post('/{id}', 'updateUser'); // modify ONE User_models (POST is used for updates as Laravel doesn't support file uploads via PUT)
-        Route::delete('/{id}', 'deleteUser'); // delete ONE User_models
-    });
+// USER ROUTES
+Route::prefix('user')->controller(UserController::class)->group(function () {
+    Route::get('/{id}', 'getSingleUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/{id}', 'updateUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::delete('/{id}', 'deleteUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+});
+
+// ADMIN USER ROUTES
+Route::prefix('admin/user')->controller(AdminUserController::class)->group(function () {
+    Route::get('/', 'getAllUsers')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
+    Route::get('/{id}', 'getSingleUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
+    Route::post('/', 'addUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::post('/{id}', 'updateUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::delete('/{id}', 'deleteUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+});
+
+// ROLE ROUTES
+Route::prefix('role')->controller(RoleController::class)->group(function () {
+    Route::get('/', 'getAllRoles')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::get('/{id}', 'getSingleRole')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::post('/', 'addRole')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::post('/{id}', 'updateRole')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::delete('/{id}', 'deleteRole')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
 });
 
 
@@ -35,10 +54,11 @@ Route::middleware('auth:api')->group(function () {
 Route::prefix('content')->controller(ContentController::class)->group(function () {
     Route::get('/lang-{lang}', 'getAllContentsByLang'); // get ALL contents by language
     Route::get('/', 'getAllContents'); // get ALL contents
-    Route::get('/{id}', 'getSingleContent'); // get ONE Content_models
-    Route::post('/', 'addContent'); // add ONE Content_models
-    Route::post('/{id}', 'updateContent'); // modify ONE Content_models (POST is used for updates as Laravel doesn't support file uploads via PUT)
-    Route::delete('/{id}', 'deleteContent'); // delete ONE Content_models
+    Route::get('/{id}', 'getSingleContent'); // get ONE Content
+
+    Route::post('/', 'addContent'); // add ONE Content
+    Route::post('/{id}', 'updateContent'); // modify ONE Content (POST is used for updates as Laravel doesn't support file uploads via PUT)
+    Route::delete('/{id}', 'deleteContent'); // delete ONE Content
 });
 
 // NEWS ARTICLES ROUTES

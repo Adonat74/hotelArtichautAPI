@@ -6,6 +6,281 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/admin/user": {
+            "get": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Get all users",
+                "operationId": "23b25d59267428953c5abfb5eb943cfe",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "add a new user",
+                "operationId": "53b318761451e4ed7912fafc7a6994d9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role_id",
+                                    "is_pro",
+                                    "is_vip"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "User's role",
+                                        "type": "integer"
+                                    },
+                                    "is_pro": {
+                                        "description": "User's status (optional)",
+                                        "type": "boolean"
+                                    },
+                                    "is_vip": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/admin/user/{id}": {
+            "get": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Get one user by id",
+                "operationId": "da8a35cf9e338a35a7bc948a22a026bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Update an existing user",
+                "operationId": "3449a798d901929069ac7b8cb79e33a9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role_id",
+                                    "is_pro",
+                                    "is_vip"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "User's role",
+                                        "type": "integer"
+                                    },
+                                    "is_pro": {
+                                        "description": "User's status (optional)",
+                                        "type": "boolean"
+                                    },
+                                    "is_vip": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Delete a user by id",
+                "operationId": "5117178230ba4e8bc1cc2c813faf8679",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -69,7 +344,6 @@
                                     "city",
                                     "postal_code",
                                     "phone",
-                                    "role",
                                     "isVIP"
                                 ],
                                 "properties": {
@@ -110,18 +384,8 @@
                                         "description": "User's phone number (10 digits)",
                                         "type": "string"
                                     },
-                                    "role": {
-                                        "description": "User's role",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "status": {
+                                    "is_pro": {
                                         "description": "User's status (optional)",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "isVIP": {
-                                        "description": "Indicates if the user is VIP",
                                         "type": "boolean"
                                     }
                                 },
@@ -1068,6 +1332,181 @@
                                     },
                                     "user_id": {
                                         "description": "The ID of the user who created the review",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/role/{id}": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get one role by id",
+                "operationId": "1a0f3a8240a06e708a67f4632d117763",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Update a role by id",
+                "operationId": "6608355fac6aa851c66497cbf399fdb5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "role_name",
+                                    "priority"
+                                ],
+                                "properties": {
+                                    "role_name": {
+                                        "description": "The name of the role",
+                                        "type": "string"
+                                    },
+                                    "priority": {
+                                        "description": "The Content_models of the role",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Delete a role by id",
+                "operationId": "8831e5a88fe3b386386a2c1655554cd3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/role": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get all roles",
+                "operationId": "2af279eaf0ce873819661a33ab4e0ba2",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Add a role",
+                "operationId": "0fcc7d05d3dfa5f3d456cfceb98e3f9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "role_name",
+                                    "priority"
+                                ],
+                                "properties": {
+                                    "role_name": {
+                                        "description": "The name of the role",
+                                        "type": "string"
+                                    },
+                                    "priority": {
+                                        "description": "The Content_models of the role",
                                         "type": "integer"
                                     }
                                 },
@@ -2266,8 +2705,7 @@
                                     "city",
                                     "postal_code",
                                     "phone",
-                                    "role",
-                                    "isVIP"
+                                    "is_pro"
                                 ],
                                 "properties": {
                                     "email": {
@@ -2307,18 +2745,8 @@
                                         "description": "User's phone number (10 digits)",
                                         "type": "string"
                                     },
-                                    "role": {
-                                        "description": "User's role",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "status": {
-                                        "description": "User's status (optional)",
-                                        "type": "string",
-                                        "maxLength": 20
-                                    },
-                                    "isVIP": {
-                                        "description": "Indicates if the user is VIP",
+                                    "is_pro": {
+                                        "description": "Indicates te user status of pro or not",
                                         "type": "boolean"
                                     }
                                 },
@@ -2371,26 +2799,13 @@
                     }
                 }
             }
-        },
-        "/api/user": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Get all users",
-                "operationId": "f7ed34533b03a76b646c6c92b3e80a0c",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "An error occurred"
-                    }
-                }
-            }
         }
     },
     "tags": [
+        {
+            "name": "AdminUsers",
+            "description": "AdminUsers"
+        },
         {
             "name": "Auth",
             "description": "Auth"
@@ -2410,6 +2825,10 @@
         {
             "name": "Reviews",
             "description": "Reviews"
+        },
+        {
+            "name": "Roles",
+            "description": "Roles"
         },
         {
             "name": "Rooms",

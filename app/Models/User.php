@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,9 +24,10 @@ class User extends Authenticatable implements JWTSubject
         'city',
         'postal_code',
         'phone',
-        'role',
-        'status',
-        'isVIP',
+        'role_id',
+        'is_pro',
+        'is_vip',
+        'token_version'
     ];
 
     protected $hidden = [
@@ -49,11 +51,12 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(): array
     {
         return [
+            'token_version' => $this->token_version,
             'id' => $this->id,
             'email' => $this->email,
-            'role' => $this->role,
-            'status' => $this->status,
-            'isVIP' => $this->isVIP,
+            'role_id' => $this->role_id,
+            'is_pro' => $this->is_pro,
+            'is_vip' => $this->is_vip,
         ];
     }
 
@@ -62,4 +65,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Review::class);
     }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+
 }

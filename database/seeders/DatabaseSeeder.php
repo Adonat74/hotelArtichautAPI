@@ -14,11 +14,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-//        UserController::factory()->create([
-//            'name' => 'Test UserController',
-//            'email' => 'test@example.com',
-//        ]);
-
         $this->call([
             ContentSeeder::class,
             NewsArticleSeeder::class,
@@ -30,6 +25,7 @@ class DatabaseSeeder extends Seeder
             RoomCategoryFeatureSeeder::class,
             LanguageSeeder::class,
             UserSeeder::class,
+            RoleSeeder::class,
         ]);
 
 

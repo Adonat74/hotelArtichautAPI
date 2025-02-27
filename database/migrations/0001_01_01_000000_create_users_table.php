@@ -21,10 +21,11 @@ return new class extends Migration
             $table->string('city');
             $table->string('postal_code');
             $table->string('phone');
-            $table->string('role');
-            $table->string('status');
-            $table->boolean('isVIP')->default(false);
+            $table->integer('role_id')->default(1);
+            $table->boolean('is_pro')->default(false);
+            $table->boolean('is_vip')->default(false);
             $table->timestamp('email_verified_at')->nullable();
+            $table->integer('token_version')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

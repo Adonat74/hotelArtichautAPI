@@ -17,18 +17,21 @@ class UserSeeder extends Seeder
         User::factory()
             ->count(15)
             ->state(new Sequence(
-                ['role' => 'user'],
-                ['role' => 'employee'],
-                ['role' => 'manager'],
-                ['role' => 'master'],
+                ['role_id' => 1],
+                ['role_id' => 1],
+                ['role_id' => 2],
+                ['role_id' => 2],
+                ['role_id' => 3],
+                ['role_id' => 3],
             ))
             ->state(new Sequence(
-                ['status' => 'standard'],
-                ['status' => 'pro'],
+                ['is_pro' => false],
+                ['is_pro' => true],
+                ['is_pro' => false],
             ))
             ->state(new Sequence(
-                ['isVIP' => 0],
-                ['isVIP' => 1],
+                ['is_vip' => false],
+                ['is_vip' => true],
             ))
             ->create();
     }
