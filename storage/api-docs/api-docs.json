@@ -426,7 +426,7 @@
                 "tags": [
                     "Auth"
                 ],
-                "summary": "get authenticated user",
+                "summary": "refresh the token",
                 "operationId": "86e894df0ccad042116bf937e5593629",
                 "responses": {
                     "200": {

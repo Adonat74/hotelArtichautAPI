@@ -83,11 +83,12 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
 
 // REVIEW ROUTES
 Route::prefix('review')->controller(ReviewController::class)->group(function () {
-    Route::get('/', 'getAllReviews'); // get ALL reviews
-    Route::get('/{id}', 'getSingleReview'); // get ONE review
-    Route::post('/', 'addReview'); // add ONE review
-    Route::post('/{id}', 'updateReview'); // modify ONE review (POST is used for updates as Laravel doesn't support file uploads via PUT)
-    Route::delete('/{id}', 'deleteReview'); // delete ONE review
+    Route::get('/', 'getAllReviews');
+    Route::get('/user', 'getAllUserReviews')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::get('/{id}', 'getSingleReview')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/', 'addReview')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/{id}', 'updateReview')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::delete('/{id}', 'deleteReview')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
 });
 
 // LANGUAGE ROUTES

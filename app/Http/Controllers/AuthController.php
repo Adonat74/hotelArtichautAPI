@@ -159,7 +159,7 @@ class AuthController extends Controller
     /**
      * @OA\Get(
      *     path="/api/refresh",
-     *     summary="get authenticated user",
+     *     summary="refresh the token",
      *     tags={"Auth"},
      *     @OA\Response(response=200, description="User fetched"),
      * )

@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 
@@ -34,6 +35,9 @@ class ReviewController extends Controller
     {
         try {
             $review = Review::findOrFail($id);
+
+            $this->authorize('view', $review); //policy to authorize only owner
+
             return response()->json($review);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -71,6 +75,31 @@ class ReviewController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/review/user",
+     *     summary="Get all user reviews",
+     *     tags={"Reviews"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllUserReviews(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            $reviews = Review::where('user_id', $user->id)->get();
+
+            return response()->json($reviews);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the reviews',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
 
     /**
@@ -94,16 +123,6 @@ class ReviewController extends Controller
      *                      type="string",
      *                      description="The Content_models of the review"
      *                  ),
-     *                  @OA\Property(
-     *                      property="display_order",
-     *                      type="integer",
-     *                      description="The desired disaly order the items should be"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="user_id",
-     *                      type="integer",
-     *                      description="The ID of the user who created the review"
-     *                  ),
      *              )
      *          )
      *     ),
@@ -118,10 +137,13 @@ class ReviewController extends Controller
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
-                'display_order' => 'bail|required|integer',
-                'user_id' => 'bail|required|numeric|exists:users,id',
+                'display_order' => 'nullable|integer',
             ]);
+
+            $user = $request->user();
+
             $review = new Review($validatedData);
+            $review->user_id = $user->id;
             $review->save();
 
             return response()->json($review, 201);
@@ -173,11 +195,6 @@ class ReviewController extends Controller
      *                       type="integer",
      *                       description="The desired disaly order the items should be"
      *                   ),
-     *                  @OA\Property(
-     *                      property="user_id",
-     *                      type="integer",
-     *                      description="The ID of the user who created the review"
-     *                  ),
      *              )
      *          )
      *     ),
@@ -193,10 +210,12 @@ class ReviewController extends Controller
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
-                'display_order' => 'bail|required|integer',
-                'user_id' => 'bail|required|numeric|exists:users,id',
+                'display_order' => 'nullable|integer',
             ]);
             $review = Review::findOrFail($id);
+
+            $this->authorize('update', $review); //policy to authorize only owner
+
             $review->update($validatedData);
 
             return response()->json($review);
@@ -239,6 +258,9 @@ class ReviewController extends Controller
     {
         try {
             $review = Review::findOrFail($id);
+
+            $this->authorize('delete', $review); //policy to authorize only owner
+
             $review->delete();
 
             return response()->json(['message' => 'review deleted successfully']);
