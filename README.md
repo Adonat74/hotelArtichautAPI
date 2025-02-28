@@ -33,7 +33,7 @@ MySQL
 - ### Autres outils : 
 Postman, Swagger, Git, Composer, Sanctum.
 
-- ### techno requises :
+- ### technos requises :
 PHP 8.3, MySQL 8.0.4, Composer 2.7.7
 
 ---
