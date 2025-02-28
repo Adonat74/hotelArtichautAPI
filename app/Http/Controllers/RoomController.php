@@ -35,7 +35,7 @@ class RoomController extends Controller
     public function getSingleRoom(int $id): JsonResponse
     {
         try {
-            $room = Room::with(['images', 'category'])->findOrFail($id);
+            $room = Room::with(['images', 'category.features', 'language'])->findOrFail($id);
             return response()->json($room);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -52,6 +52,35 @@ class RoomController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/room/lang-{lang}",
+     *     summary="Get all roomsby language selected",
+     *     tags={"Rooms"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllRoomsByLang(int $lang): JsonResponse
+    {
+        try {
+            $rooms = Room::where('language_id', $lang)->with(['images', 'category', 'language'])->get();
+            return response()->json($rooms);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the services',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/room",
      *     summary="Get all rooms",
      *     tags={"Rooms"},
@@ -62,7 +91,7 @@ class RoomController extends Controller
     public function getAllRooms(): JsonResponse
     {
         try {
-            $rooms = Room::with(['images', 'category'])->get();
+            $rooms = Room::with(['images', 'category', 'language'])->get();
             return response()->json($rooms);
         } catch (Exception $e) {
             return response()->json([
@@ -83,11 +112,26 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id"},
+     *                  required={"name", "number", "room_name", "description", "rooms_category_id", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(property="number", type="integer", description="Room number"),
-     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="room_name", type="string", description="Room name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
      *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
      *              )
      *          )
@@ -102,20 +146,26 @@ class RoomController extends Controller
         try {
             // Validation des données entrantes
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'number' => 'bail|required|integer',
-                'name' => 'bail|required|string|max:255',
+                'room_name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
 
             // Création et sauvegarde de la nouvelle catégorie
             $room = new Room([
-                'number' => $validatedData['number'],
                 'name' => $validatedData['name'],
+                'number' => $validatedData['number'],
+                'room_name' => $validatedData['room_name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $room->save();
 
@@ -124,16 +174,14 @@ class RoomController extends Controller
                     //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'room_id' => $room->id,
                     ]);
                     $image->save();
                 }
             }
             // Retourne une réponse JSON avec les données enregistrées
-            return response()->json([
-                'addedRoom' => $room->load(['images', 'category']),
-            ], 201);
+            return response()->json($room->load(['images', 'category', 'language']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -165,11 +213,26 @@ class RoomController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"number", "name", "description", "rooms_category_id", "images[]"},
+     *                  required={"name", "number", "room_name", "description", "rooms_category_id", "display_order", "language_id"},
+     *                   @OA\Property(
+     *                       property="name",
+     *                       type="string",
+     *                       description="The name to group with other languages"
+     *                   ),
      *                  @OA\Property(property="number", type="integer", description="Room number"),
-     *                  @OA\Property(property="name", type="string", description="Room name"),
+     *                  @OA\Property(property="room_name", type="string", description="Room room_name"),
      *                  @OA\Property(property="description", type="string", description="Room description"),
      *                  @OA\Property(property="rooms_category_id", type="integer", description="Room category ID"),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
+     *                  ),
      *                  @OA\Property(property="images[]", type="array", @OA\Items(type="string", format="binary"))
      *              )
      *          )
@@ -184,19 +247,25 @@ class RoomController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'number' => 'bail|required|integer',
-                'name' => 'bail|required|string|max:255',
+                'room_name' => 'bail|required|string|max:255',
                 'description' => 'bail|required|string|max:255',
                 'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
             $room = Room::findOrFail($id);
             $room->update([
-                'number' => $validatedData['number'],
                 'name' => $validatedData['name'],
+                'number' => $validatedData['number'],
+                'room_name' => $validatedData['room_name'],
                 'description' => $validatedData['description'],
                 'rooms_category_id' => $validatedData['rooms_category_id'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -213,7 +282,7 @@ class RoomController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'room_id' => $room->id,
                     ]);
                     $image->save();
@@ -221,9 +290,7 @@ class RoomController extends Controller
             }
 
 
-            return response()->json([
-                'updatedRoom' => $room->load(['images', 'category']),
-            ]);
+            return response()->json($room->load(['images', 'category', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Room not found',

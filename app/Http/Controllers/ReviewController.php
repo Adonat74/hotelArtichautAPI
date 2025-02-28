@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 
@@ -15,7 +17,7 @@ class ReviewController extends Controller
     /**
      * @OA\Get(
      *     path="/api/review/{id}",
-     *     summary="Get one review by id",
+     *     summary="Get one review by id - need to be authentified",
      *     tags={"Reviews"},
      *      @OA\Parameter(
      *          name="id",
@@ -29,10 +31,13 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getSingleReview(string $id)
+    public function getSingleReview(int $id): JsonResponse
     {
         try {
             $review = Review::findOrFail($id);
+
+            $this->authorize('view', $review); //policy to authorize only owner
+
             return response()->json($review);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -57,7 +62,7 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllReviews()
+    public function getAllReviews(): JsonResponse
     {
         try {
             $reviews = Review::all();
@@ -71,16 +76,43 @@ class ReviewController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/review/user",
+     *     summary="Get all user reviews - need to be authentified",
+     *     tags={"Reviews"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllUserReviews(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+
+            $reviews = Review::where('user_id', $user->id)->get();
+
+            return response()->json($reviews);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the reviews',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+    /**
      * @OA\Post(
      *     path="/api/review",
-     *     summary="Add a review",
+     *     summary="Add a review  - need to be authentified",
      *     tags={"Reviews"},
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "user_id"},
+     *                  required={"rate", "review_content", "display_order"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -89,13 +121,8 @@ class ReviewController extends Controller
      *                  @OA\Property(
      *                      property="review_content",
      *                      type="string",
-     *                      description="The content of the review"
+     *                      description="The Content_models of the review"
      *                  ),
-     *                  @OA\Property(
-     *                      property="user_id",
-     *                      type="integer",
-     *                      description="The ID of the user who created the review"
-     *                  )
      *              )
      *          )
      *     ),
@@ -104,15 +131,19 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addReview(Request $request)
+    public function addReview(Request $request): JsonResponse
     {
         try {
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
-                'user_id' => 'bail|required|numeric',
+                'display_order' => 'nullable|integer',
             ]);
+
+            $user = $request->user();
+
             $review = new Review($validatedData);
+            $review->user_id = $user->id;
             $review->save();
 
             return response()->json($review, 201);
@@ -134,7 +165,7 @@ class ReviewController extends Controller
     /**
      * @OA\Post(
      *     path="/api/review/{id}",
-     *     summary="Update a review by id",
+     *     summary="Update a review by id - need to be authentified",
      *     tags={"Reviews"},
      *     @OA\Parameter(
      *         name="id",
@@ -146,9 +177,9 @@ class ReviewController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *                mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"rate", "review_content", "user_id"},
+     *                  required={"rate", "review_content", "display_order"},
      *                  @OA\Property(
      *                      property="rate",
      *                      type="number",
@@ -157,13 +188,13 @@ class ReviewController extends Controller
      *                  @OA\Property(
      *                      property="review_content",
      *                      type="string",
-     *                      description="The content of the review"
+     *                      description="The Content_models of the review"
      *                  ),
-     *                  @OA\Property(
-     *                      property="user_id",
-     *                      type="integer",
-     *                      description="The ID of the user who created the review"
-     *                  )
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
      *              )
      *          )
      *     ),
@@ -173,15 +204,18 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateReview(Request $request, string $id)
+    public function updateReview(Request $request, string $id): JsonResponse
     {
         try{
             $validatedData = $request->validate([
                 'rate' => 'bail|required|numeric|min:1|max:5',
                 'review_content' => 'bail|required|string',
-                'user_id' => 'bail|required|numeric',
+                'display_order' => 'nullable|integer',
             ]);
             $review = Review::findOrFail($id);
+
+            $this->authorize('update', $review); //policy to authorize only owner
+
             $review->update($validatedData);
 
             return response()->json($review);
@@ -206,7 +240,7 @@ class ReviewController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/review/{id}",
-     *     summary="Delete a review by id",
+     *     summary="Delete a review by id - need to be authentified",
      *     tags={"Reviews"},
      *      @OA\Parameter(
      *          name="id",
@@ -220,10 +254,13 @@ class ReviewController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function deleteReview(string $id)
+    public function deleteReview(string $id): JsonResponse
     {
         try {
-            $review = Review ::findOrFail($id);
+            $review = Review::findOrFail($id);
+
+            $this->authorize('delete', $review); //policy to authorize only owner
+
             $review->delete();
 
             return response()->json(['message' => 'review deleted successfully']);

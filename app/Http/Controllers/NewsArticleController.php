@@ -34,7 +34,7 @@ class NewsArticleController extends Controller
     public function getSingleNewsArticle(int $id): object {
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
-            $newsArticle = NewsArticle::with('images')->findOrFail($id);
+            $newsArticle = NewsArticle::with(['images', 'language'])->findOrFail($id);
             return response()->json($newsArticle);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -52,6 +52,35 @@ class NewsArticleController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/news/lang-{lang}",
+     *     summary="Get all news",
+     *     tags={"News"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
+    public function getAllNewsArticlesByLang(int $lang): JsonResponse
+    {
+        try {
+            $newsArticles = NewsArticle::where('language_id', $lang)->with(['images', 'language'])->get();
+            return response()->json($newsArticles);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the news articles',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
      *     path="/api/news",
      *     summary="Get all news",
      *     tags={"News"},
@@ -62,7 +91,7 @@ class NewsArticleController extends Controller
     public function getAllNewsArticles(): JsonResponse
     {
         try {
-            $newsArticles = NewsArticle::with('images')->get();
+            $newsArticles = NewsArticle::with(['images', 'language'])->get();
             return response()->json($newsArticles);
         } catch (Exception $e) {
             return response()->json([
@@ -71,7 +100,6 @@ class NewsArticleController extends Controller
             ], 500);
         }
     }
-
 
     /**
      * @OA\Post(
@@ -83,7 +111,12 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -98,6 +131,16 @@ class NewsArticleController extends Controller
      *                      property="description",
      *                      type="string",
      *                      description="Full description of the news article"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
      *                  ),
      *                  @OA\Property(
      *                      property="images[]",
@@ -120,17 +163,23 @@ class NewsArticleController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $newsArticle = new NewsArticle([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $newsArticle->save();
 
@@ -138,16 +187,14 @@ class NewsArticleController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'news_article_id' => $newsArticle->id,
                     ]);
                     $image->save();
                 }
             }
 
-            return response()->json([
-                'addedNews' => $newsArticle->load('images'),
-            ], 201);
+            return response()->json($newsArticle->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -180,7 +227,12 @@ class NewsArticleController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "short_description", "description", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
@@ -195,6 +247,16 @@ class NewsArticleController extends Controller
      *                      property="description",
      *                      type="string",
      *                      description="Full description of the news article"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
      *                  ),
      *                  @OA\Property(
      *                      property="images[]",
@@ -218,18 +280,24 @@ class NewsArticleController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $newsArticle = NewsArticle::findOrFail($id);
             $newsArticle->update([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
                 'short_description' => $validatedData['short_description'],
                 'description' => $validatedData['description'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -245,16 +313,14 @@ class NewsArticleController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $newImage = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'news_article_id' => $newsArticle->id,
                     ]);
                     $newImage->save();
                 }
             }
 
-            return response()->json([
-                'updatedNews' => $newsArticle->load('images'),
-            ]);
+            return response()->json($newsArticle->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'News not found',

@@ -33,7 +33,7 @@ class ServiceController extends Controller
     public function getSingleService(int $id): object {
         try {
             // le with permet d'afficher les images liées au service sous forme de tableau
-            $service = Service::with('images')->findOrFail($id);
+            $service = Service::with(['images', 'language'])->findOrFail($id);
             return response()->json($service);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -43,6 +43,35 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while fetching the service',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/service/lang-{lang}",
+     *     summary="Get all servicesby language selected",
+     *     tags={"Services"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occured")
+     * )
+     */
+    public function getAllServicesByLang(int $lang): JsonResponse
+    {
+        try {
+            $services = Service::where('language_id', $lang)->with(['images', 'language'])->get();
+            return response()->json($services);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the services',
                 'message' => $e->getMessage()
             ], 500);
         }
@@ -60,7 +89,7 @@ class ServiceController extends Controller
     public function getAllServices(): JsonResponse
     {
         try {
-            $services = Service::with('images')->get();
+            $services = Service::with(['images', 'language'])->get();
             return response()->json($services);
         } catch (Exception $e) {
             return response()->json([
@@ -80,12 +109,32 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
      *                      description="The title of the service"
      *                  ),
+     *                   @OA\Property(
+     *                       property="short_description",
+     *                       type="string",
+     *                       description="The short_description of the service"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="description",
+     *                       type="string",
+     *                       description="The description of the service"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="link",
+     *                       type="string",
+     *                       description="The link of the service"
+     *                   ),
      *                  @OA\Property(
      *                      property="price_in_cent",
      *                      type="integer",
@@ -100,9 +149,19 @@ class ServiceController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="is_per_person",
-     *                      type="string",
+     *                      type="integer",
      *                      description="If the price is per person or not true or false"
      *                  ),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="language_id",
+     *                       type="integer",
+     *                       description="The ID of the language"
+     *                   ),
      *                  @OA\Property(
      *                      property="images[]",
      *                      type="array",
@@ -124,20 +183,32 @@ class ServiceController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
+                'short_description' => 'bail|required|string|max:200',
+                'description' => 'bail|required|string|max:1000',
+                'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|nullable|string|max:5',
+                'is_per_person' => 'bail|nullable|boolean',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',// vérifie que les éléments sont des images
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
 
             // n'enregistre que les fields de service
             $service = new Service([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
+                'short_description' => $validatedData['short_description'],
+                'description' => $validatedData['description'],
+                'link' => $validatedData['link'],
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $service->save();
 
@@ -147,15 +218,13 @@ class ServiceController extends Controller
                     //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'service_id' => $service->id,
                     ]);
                     $image->save();
                 }
             }
-            return response()->json([
-                'addedService' => $service->load('images'),
-            ], 201);
+            return response()->json($service->load(['images', 'language']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -186,12 +255,32 @@ class ServiceController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"title", "price_in_cent", "duration_in_day", "is_per_person", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "link", "price_in_cent", "duration_in_day", "is_per_person", "display_order", "language_id"},
+     *                    @OA\Property(
+     *                        property="name",
+     *                        type="string",
+     *                        description="The name to group with other languages"
+     *                    ),
      *                  @OA\Property(
      *                      property="title",
      *                      type="string",
      *                      description="The title of the service"
      *                  ),
+     *                    @OA\Property(
+     *                        property="short_description",
+     *                        type="string",
+     *                        description="The short_description of the service"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="description",
+     *                        type="string",
+     *                        description="The description of the service"
+     *                    ),
+     *                    @OA\Property(
+     *                        property="link",
+     *                        type="string",
+     *                        description="The link of the service"
+     *                    ),
      *                  @OA\Property(
      *                      property="price_in_cent",
      *                      type="integer",
@@ -206,8 +295,18 @@ class ServiceController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="is_per_person",
-     *                      type="string",
+     *                      type="integer",
      *                      description="If the price is per person or not true or false"
+     *                  ),
+     *                   @OA\Property(
+     *                       property="display_order",
+     *                       type="integer",
+     *                       description="The desired disaly order the items should be"
+     *                   ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
      *                  ),
      *                  @OA\Property(
      *                      property="images[]",
@@ -231,19 +330,31 @@ class ServiceController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'name' => 'bail|required|string|max:50',
                 'title' => 'bail|required|string|max:50',
+                'short_description' => 'bail|required|string|max:200',
+                'description' => 'bail|required|string|max:1000',
+                'link' => 'nullable|string|max:50',
                 'price_in_cent' => 'bail|required|numeric|min:0',
                 'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|required|string|max:5',
+                'is_per_person' => 'bail|required|boolean',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
             $service = Service::findOrFail($id);
             $service->update([
+                'name' => $validatedData['name'],
                 'title' => $validatedData['title'],
+                'short_description' => $validatedData['short_description'],
+                'description' => $validatedData['description'],
+                'link' => $validatedData['link'],
                 'price_in_cent' => $validatedData['price_in_cent'],
                 'duration_in_day' => $validatedData['duration_in_day'],
                 'is_per_person' => $validatedData['is_per_person'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -260,7 +371,7 @@ class ServiceController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'service_id' => $service->id,
                     ]);
                     $image->save();
@@ -268,7 +379,7 @@ class ServiceController extends Controller
             }
 
             return response()->json([
-                'updatedService' => $service->load('images'),
+                'updatedService' => $service->load(['images', 'language']),
             ]);
         } catch (ModelNotFoundException $e) {
             return response()->json([

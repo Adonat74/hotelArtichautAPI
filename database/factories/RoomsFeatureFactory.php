@@ -19,6 +19,7 @@ class RoomsFeatureFactory extends Factory
         return [
             'name' => $this->faker->randomElement(['Tv', 'Wifi', 'Mini bar']), // Noms générés aléatoirement
             'description' => $this->faker->sentence(10),
+            'display_order' => $this->faker->numberBetween(1, 20),
         ];
     }
 }

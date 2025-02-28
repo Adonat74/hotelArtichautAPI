@@ -10,13 +10,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Room extends Model
 {
     use HasFactory;
-    protected $table = 'rooms';
+
+    protected $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = [
-        'number',
         'name',
+        'number',
+        'room_name',
         'description',
-        'rooms_category_id'
+        'rooms_category_id',
+        'display_order',
+        'language_id',
     ];
 
     public function category(): BelongsTo
@@ -27,5 +31,10 @@ class Room extends Model
     public function images(): HasMany
     {
         return $this->hasMany(Image::class);
+    }
+
+    public function language(): BelongsTo
+    {
+        return $this->belongsTo(Language::class);
     }
 }

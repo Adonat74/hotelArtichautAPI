@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Image;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ContentController extends Controller
 {
@@ -18,31 +18,60 @@ class ContentController extends Controller
      *     path="/api/content/{id}",
      *     summary="Get one content by id",
      *     tags={"Contents"},
-     *      @OA\Parameter(
+     *     @OA\Parameter(
      *          name="id",
      *          in="path",
      *          description="The ID of the content",
      *          required=true,
      *          @OA\Schema(type="integer")
-     *      ),
+     *     ),
      *     @OA\Response(response=200, description="Successful operation"),
-     *     @OA\Response(response=404, description="Content not found"),
+     *     @OA\Response(response=404, description="content not found"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
     public function getSingleContent(int $id): JsonResponse
     {
         try {
-            $content = Content::with('images')->findOrFail($id);
+            $content = Content::with(['images', 'language'])->findOrFail($id);
             return response()->json($content);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Content not found',
+                'error' => 'content not found',
                 'message' => $e->getMessage(),
             ], 404);
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while fetching the content',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/content/lang-{lang}",
+     *     summary="Get all contents by language selected",
+     *     tags={"Contents"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllContentsByLang(string $lang): JsonResponse
+    {
+        try {
+            $contents = Content::where('language_id', $lang)->with(['images', 'language'])->get();
+            return response()->json($contents);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the contents',
                 'message' => $e->getMessage(),
             ], 500);
         }
@@ -60,7 +89,7 @@ class ContentController extends Controller
     public function getAllContents(): JsonResponse
     {
         try {
-            $contents = Content::with('images')->get();
+            $contents = Content::with(['images', 'language'])->get();
             return response()->json($contents);
         } catch (Exception $e) {
             return response()->json([
@@ -80,7 +109,7 @@ class ContentController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "display_order", "language_id"},
      *                  @OA\Property(
      *                      property="name",
      *                      type="string",
@@ -103,13 +132,28 @@ class ContentController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="landing_page_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Landing page display option"
      *                  ),
      *                  @OA\Property(
      *                      property="navbar_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Navbar display option"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="link",
+     *                      type="string",
+     *                      description="a button or link"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
      *                  ),
      *                  @OA\Property(
      *                      property="images[]",
@@ -136,10 +180,13 @@ class ContentController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|string',
-                'navbar_display' => 'bail|required|string',
+                'landing_page_display' => 'bail|required|boolean',
+                'navbar_display' => 'bail|required|boolean',
+                'link' => 'nullable|string',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $content = new Content([
@@ -149,6 +196,9 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'link' => $validatedData['link'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
             $content->save();
 
@@ -156,16 +206,14 @@ class ContentController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'content_id' => $content->id,
                     ]);
                     $image->save();
                 }
             }
 
-            return response()->json([
-                'addedContent' => $content->load('images'),
-            ], 201);
+            return response()->json($content->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -196,7 +244,7 @@ class ContentController extends Controller
      *          @OA\MediaType(
      *              mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "images[]"},
+     *                  required={"name", "title", "short_description", "description", "landing_page_display", "navbar_display", "display_order", "language_id"},
      *                  @OA\Property(
      *                      property="name",
      *                      type="string",
@@ -219,13 +267,28 @@ class ContentController extends Controller
      *                  ),
      *                  @OA\Property(
      *                      property="landing_page_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Landing page display option"
      *                  ),
      *                  @OA\Property(
      *                      property="navbar_display",
-     *                      type="string",
+     *                      type="integer",
      *                      description="Navbar display option"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="link",
+     *                      type="string",
+     *                      description="a button or link"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="display_order",
+     *                      type="integer",
+     *                      description="The desired disaly order the items should be"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="language_id",
+     *                      type="integer",
+     *                      description="The ID of the language"
      *                  ),
      *                  @OA\Property(
      *                      property="images[]",
@@ -240,7 +303,7 @@ class ContentController extends Controller
      *          )
      *     ),
      *     @OA\Response(response=200, description="Successful operation"),
-     *     @OA\Response(response=404, description="Content not found"),
+     *     @OA\Response(response=404, description="content not found"),
      *     @OA\Response(response=422, description="Validation failed"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
@@ -253,10 +316,13 @@ class ContentController extends Controller
                 'title' => 'bail|required|string|max:50',
                 'short_description' => 'bail|required|string|max:200',
                 'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|string',
-                'navbar_display' => 'bail|required|string',
+                'landing_page_display' => 'bail|required|boolean',
+                'navbar_display' => 'bail|required|boolean',
+                'link' => 'nullable|string',
+                'display_order' => 'bail|required|integer',
+                'language_id' => 'bail|required|numeric|exists:languages,id',
                 'images' => 'nullable|array',
-                'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
             ]);
 
             $content = Content::findOrFail($id);
@@ -267,6 +333,9 @@ class ContentController extends Controller
                 'description' => $validatedData['description'],
                 'landing_page_display' => $validatedData['landing_page_display'],
                 'navbar_display' => $validatedData['navbar_display'],
+                'link' => $validatedData['link'],
+                'display_order' => $validatedData['display_order'],
+                'language_id' => $validatedData['language_id'],
             ]);
 
             if ($request->hasFile('images')) {
@@ -282,19 +351,17 @@ class ContentController extends Controller
                 foreach ($request->file('images') as $image) {
                     $imagePath = $image->store('images', 'public');
                     $image = new Image([
-                        'url' => $imagePath,
+                        'url' => url('storage/' . $imagePath),
                         'content_id' => $content->id,
                     ]);
                     $image->save();
                 }
             }
 
-            return response()->json([
-                'updatedContent' => $content->load('images'),
-            ]);
+            return response()->json($content->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Content not found',
+                'error' => 'content not found',
                 'message' => $e->getMessage(),
             ], 404);
         } catch (ValidationException $exception) {
@@ -323,7 +390,7 @@ class ContentController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *     @OA\Response(response=200, description="Successful operation"),
-     *     @OA\Response(response=404, description="Content not found"),
+     *     @OA\Response(response=404, description="content not found"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
@@ -345,7 +412,7 @@ class ContentController extends Controller
             return response()->json(['message' => 'content deleted successfully']);
         } catch (ModelNotFoundException $e) {
             return response()->json([
-                'error' => 'Content not found',
+                'error' => 'content not found',
                 'message' => $e->getMessage(),
             ], 404);
         } catch (Exception $e) {

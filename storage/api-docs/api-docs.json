@@ -6,6 +6,435 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/admin/user": {
+            "get": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Get all users- need to be authentified and role = employee",
+                "operationId": "23b25d59267428953c5abfb5eb943cfe",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "add a new user- need to be authentified and role = manager",
+                "operationId": "53b318761451e4ed7912fafc7a6994d9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role_id",
+                                    "is_pro",
+                                    "is_vip"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "User's role",
+                                        "type": "integer"
+                                    },
+                                    "is_pro": {
+                                        "description": "User's status (optional)",
+                                        "type": "boolean"
+                                    },
+                                    "is_vip": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/admin/user/{id}": {
+            "get": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Get one user by id- need to be authentified and role = employee",
+                "operationId": "da8a35cf9e338a35a7bc948a22a026bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Update an existing user- need to be authentified and role = manager",
+                "operationId": "3449a798d901929069ac7b8cb79e33a9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "role_id",
+                                    "is_pro",
+                                    "is_vip"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "role_id": {
+                                        "description": "User's role",
+                                        "type": "integer"
+                                    },
+                                    "is_pro": {
+                                        "description": "User's status (optional)",
+                                        "type": "boolean"
+                                    },
+                                    "is_vip": {
+                                        "description": "Indicates if the user is VIP",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AdminUsers"
+                ],
+                "summary": "Delete a user by id- need to be authentified and role = manager",
+                "operationId": "5117178230ba4e8bc1cc2c813faf8679",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully login"
+                    },
+                    "401": {
+                        "description": "Credentials mismatch"
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register new user",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "isVIP"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "is_pro": {
+                                        "description": "User's status (optional)",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User successfully created"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout - need to be authentified and role = user",
+                "operationId": "fe8f3429cd6979b3b4517e186505f9f9",
+                "responses": {
+                    "200": {
+                        "description": "User successfully logout"
+                    }
+                }
+            }
+        },
+        "/api/refresh": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "refresh the token- need to be authentified and role = user",
+                "operationId": "86e894df0ccad042116bf937e5593629",
+                "responses": {
+                    "200": {
+                        "description": "User fetched"
+                    }
+                }
+            }
+        },
         "/api/content/{id}": {
             "get": {
                 "tags": [
@@ -29,7 +458,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
                     },
                     "500": {
                         "description": "An error occurred"
@@ -65,7 +494,8 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -86,11 +516,23 @@
                                     },
                                     "landing_page_display": {
                                         "description": "Landing page display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "navbar_display": {
                                         "description": "Navbar display option",
+                                        "type": "integer"
+                                    },
+                                    "link": {
+                                        "description": "a button or link",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -111,7 +553,7 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
                     },
                     "422": {
                         "description": "Validation failed"
@@ -143,7 +585,35 @@
                         "description": "Successful operation"
                     },
                     "404": {
-                        "description": "Content not found"
+                        "description": "content not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/content/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "Contents"
+                ],
+                "summary": "Get all contents by language selected",
+                "operationId": "cf43e6a8787e555961b16fa05e69e82a",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     },
                     "500": {
                         "description": "An error occurred"
@@ -185,7 +655,8 @@
                                     "description",
                                     "landing_page_display",
                                     "navbar_display",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -206,11 +677,23 @@
                                     },
                                     "landing_page_display": {
                                         "description": "Landing page display option",
-                                        "type": "string"
+                                        "type": "integer"
                                     },
                                     "navbar_display": {
                                         "description": "Navbar display option",
+                                        "type": "integer"
+                                    },
+                                    "link": {
+                                        "description": "a button or link",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -219,6 +702,183 @@
                                             "type": "string",
                                             "format": "binary"
                                         }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/language/{id}": {
+            "get": {
+                "tags": [
+                    "Languages"
+                ],
+                "summary": "Get one language by id- need to be authentified and role = master",
+                "operationId": "57328eab0f6e82e9d9e2e0c6ac55c236",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the language",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Language not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Languages"
+                ],
+                "summary": "Update language by id- need to be authentified and role = master",
+                "operationId": "2e802e7d00ea142543d31094ecf0025e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the language",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "lang",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "lang": {
+                                        "description": "The language",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The language image",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Language not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Languages"
+                ],
+                "summary": "Delete language by id- need to be authentified and role = master",
+                "operationId": "9c1a438d38968ea1ac5a73b3a433265f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the language",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Language not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/language": {
+            "get": {
+                "tags": [
+                    "Languages"
+                ],
+                "summary": "Get all languages- need to be authentified and role = master",
+                "operationId": "f352021dcced56118ba9d00eeae36106",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Languages"
+                ],
+                "summary": "Add language- need to be authentified and role = master",
+                "operationId": "463a3756f7279e7e03368edb9bdb15cd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "lang",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "lang": {
+                                        "description": "The language",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "The language image",
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -292,12 +952,18 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
                                     "short_description",
                                     "description",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the news article",
                                         "type": "string"
@@ -309,6 +975,14 @@
                                     "description": {
                                         "description": "Full description of the news article",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -369,6 +1043,34 @@
                 }
             }
         },
+        "/api/news/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get all news",
+                "operationId": "aaec8649c26e426b81ca4265bd45485f",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
         "/api/news": {
             "get": {
                 "tags": [
@@ -397,12 +1099,18 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
                                     "short_description",
                                     "description",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the news article",
                                         "type": "string"
@@ -414,6 +1122,14 @@
                                     "description": {
                                         "description": "Full description of the news article",
                                         "type": "string"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -447,7 +1163,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Get one review by id",
+                "summary": "Get one review by id - need to be authentified",
                 "operationId": "4b15c1314bc7795d6da3ef2d37038efd",
                 "parameters": [
                     {
@@ -476,7 +1192,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Update a review by id",
+                "summary": "Update a review by id - need to be authentified",
                 "operationId": "86f9451e0d0d19c31dcfde484162cfd5",
                 "parameters": [
                     {
@@ -492,12 +1208,12 @@
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "rate",
                                     "review_content",
-                                    "user_id"
+                                    "display_order"
                                 ],
                                 "properties": {
                                     "rate": {
@@ -505,11 +1221,11 @@
                                         "type": "number"
                                     },
                                     "review_content": {
-                                        "description": "The content of the review",
+                                        "description": "The Content_models of the review",
                                         "type": "string"
                                     },
-                                    "user_id": {
-                                        "description": "The ID of the user who created the review",
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
                                         "type": "integer"
                                     }
                                 },
@@ -537,7 +1253,7 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Delete a review by id",
+                "summary": "Delete a review by id - need to be authentified",
                 "operationId": "6aaac2ed13af9f0c01c281d8232a88f8",
                 "parameters": [
                     {
@@ -583,17 +1299,17 @@
                 "tags": [
                     "Reviews"
                 ],
-                "summary": "Add a review",
+                "summary": "Add a review  - need to be authentified",
                 "operationId": "029fd4163616c636ab2d56b8951d780d",
                 "requestBody": {
                     "required": true,
                     "content": {
-                        "application/json": {
+                        "multipart/form-data": {
                             "schema": {
                                 "required": [
                                     "rate",
                                     "review_content",
-                                    "user_id"
+                                    "display_order"
                                 ],
                                 "properties": {
                                     "rate": {
@@ -601,11 +1317,199 @@
                                         "type": "number"
                                     },
                                     "review_content": {
-                                        "description": "The content of the review",
+                                        "description": "The Content_models of the review",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/review/user": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Get all user reviews - need to be authentified",
+                "operationId": "2c4ed66b124ddb8e91dc93267b664582",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/role/{id}": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get one role by id- need to be authentified and role = master",
+                "operationId": "1a0f3a8240a06e708a67f4632d117763",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Update a role by id- need to be authentified and role = master",
+                "operationId": "6608355fac6aa851c66497cbf399fdb5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "role_name",
+                                    "priority"
+                                ],
+                                "properties": {
+                                    "role_name": {
+                                        "description": "The name of the role",
                                         "type": "string"
                                     },
-                                    "user_id": {
-                                        "description": "The ID of the user who created the review",
+                                    "priority": {
+                                        "description": "The Content_models of the role",
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Delete a role by id- need to be authentified and role = master",
+                "operationId": "8831e5a88fe3b386386a2c1655554cd3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the role",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Role not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/role": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get all roles- need to be authentified and role = master",
+                "operationId": "2af279eaf0ce873819661a33ab4e0ba2",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Add a role- need to be authentified and role = master",
+                "operationId": "0fcc7d05d3dfa5f3d456cfceb98e3f9f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "role_name",
+                                    "priority"
+                                ],
+                                "properties": {
+                                    "role_name": {
+                                        "description": "The name of the role",
+                                        "type": "string"
+                                    },
+                                    "priority": {
+                                        "description": "The Content_models of the role",
                                         "type": "integer"
                                     }
                                 },
@@ -680,19 +1584,25 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "number",
                                     "name",
+                                    "number",
+                                    "room_name",
                                     "description",
                                     "rooms_category_id",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "number": {
                                         "description": "Room number",
                                         "type": "integer"
                                     },
-                                    "name": {
-                                        "description": "Room name",
+                                    "room_name": {
+                                        "description": "Room room_name",
                                         "type": "string"
                                     },
                                     "description": {
@@ -701,6 +1611,14 @@
                                     },
                                     "rooms_category_id": {
                                         "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
                                         "type": "integer"
                                     },
                                     "images[]": {
@@ -761,6 +1679,34 @@
                 }
             }
         },
+        "/api/room/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get all roomsby language selected",
+                "operationId": "2cfb4b4162eaf6a0c2c06b6cb49dd6a6",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/room": {
             "get": {
                 "tags": [
@@ -789,17 +1735,24 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
-                                    "number",
                                     "name",
+                                    "number",
+                                    "room_name",
                                     "description",
-                                    "rooms_category_id"
+                                    "rooms_category_id",
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "number": {
                                         "description": "Room number",
                                         "type": "integer"
                                     },
-                                    "name": {
+                                    "room_name": {
                                         "description": "Room name",
                                         "type": "string"
                                     },
@@ -809,6 +1762,14 @@
                                     },
                                     "rooms_category_id": {
                                         "description": "Room category ID",
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
                                         "type": "integer"
                                     },
                                     "images[]": {
@@ -827,6 +1788,552 @@
                 "responses": {
                     "201": {
                         "description": "Room created successfully"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/rooms-category/{id}": {
+            "get": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Get one rooms-category by id",
+                "operationId": "5b976fd5fb9648bb9f97727662ec7f4d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-category",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Update a rooms-category article by id",
+                "operationId": "ce68d8507cff0ab464320b2490108ef6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-category article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "category_name",
+                                    "description",
+                                    "price_in_cent",
+                                    "bed_size",
+                                    "display_order",
+                                    "language_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "category_name": {
+                                        "description": "The category_name of the rooms-category article",
+                                        "type": "string",
+                                        "example": "Deluxe Room"
+                                    },
+                                    "description": {
+                                        "description": "Description of the rooms-category article",
+                                        "type": "string",
+                                        "example": "A luxurious room with a sea view."
+                                    },
+                                    "price_in_cent": {
+                                        "description": "The price in cents",
+                                        "type": "integer",
+                                        "example": 15000
+                                    },
+                                    "bed_size": {
+                                        "description": "The bed size as an integer value",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "rooms_features[]": {
+                                        "description": "An array of rooms_feature IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
+                                    },
+                                    "images[]": {
+                                        "description": "An array of image files",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "RoomsCategories not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Delete a rooms-category article by id",
+                "operationId": "e2e05293cd4aaa5ce9ca9a33ba6f811e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-category article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "RoomsCategories not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/rooms-category/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Get all rooms-category by lang",
+                "operationId": "54cbae976048700ab245ee79069907f6",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/api/rooms-category": {
+            "get": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Get all rooms-category",
+                "operationId": "803d0df89157482be4e0b78287c1ddec",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "RoomsCategories"
+                ],
+                "summary": "Add a rooms-category article",
+                "operationId": "d4a3839aa2a3b65a6b54192707896d86",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "category_name",
+                                    "description",
+                                    "price_in_cent",
+                                    "bed_size",
+                                    "display_order",
+                                    "language_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "category_name": {
+                                        "description": "The category_name of the rooms-category article",
+                                        "type": "string",
+                                        "example": "Deluxe Room"
+                                    },
+                                    "description": {
+                                        "description": "Description of the rooms-category article",
+                                        "type": "string",
+                                        "example": "A luxurious room with a sea view."
+                                    },
+                                    "price_in_cent": {
+                                        "description": "The price in cents",
+                                        "type": "integer",
+                                        "example": 15000
+                                    },
+                                    "bed_size": {
+                                        "description": "The bed size as an integer value",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "rooms_features[]": {
+                                        "description": "An array of rooms_feature IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
+                                    },
+                                    "images[]": {
+                                        "description": "An array of image files",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/rooms-feature/{id}": {
+            "get": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Get one rooms-feature by id",
+                "operationId": "79bff1f4a52256ca663e20dd0beaa977",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-feature",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Service not found"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Update a rooms-feature  by id",
+                "operationId": "5ba974e44b1ce9d4836547b1f1abfbce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-feature ",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "feature_name",
+                                    "description",
+                                    "display_order",
+                                    "language_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "feature_name": {
+                                        "description": "The feature_name of the rooms-feature ",
+                                        "type": "string",
+                                        "example": "Ocean View"
+                                    },
+                                    "description": {
+                                        "description": "Description of the rooms-feature ",
+                                        "type": "string",
+                                        "example": "A feature describing the ocean view from the room."
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
+                                    },
+                                    "rooms_categories[]": {
+                                        "description": "An array of rooms_category IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "RoomsFeature not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Delete a rooms-feature  by id",
+                "operationId": "73440da4a32e04a5a5328df9d7f4d6ac",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the rooms-feature ",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "RoomsFeature not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/rooms-feature/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Get all rooms-feature by lang",
+                "operationId": "f4a865b92992195a15361f36d7ce8d29",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
+        "/api/rooms-feature": {
+            "get": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Get all rooms-feature",
+                "operationId": "5f0cf0da5ff53afec56f678d8ff197d3",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "RoomsFeatures"
+                ],
+                "summary": "Add a rooms-feature",
+                "operationId": "895fccf3691291737683a535170862a4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "feature_name",
+                                    "description",
+                                    "display_order",
+                                    "language_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
+                                    "feature_name": {
+                                        "description": "The feature_name of the rooms-feature ",
+                                        "type": "string",
+                                        "example": "Ocean View"
+                                    },
+                                    "description": {
+                                        "description": "Description of the rooms-feature ",
+                                        "type": "string",
+                                        "example": "A feature describing the ocean view from the room."
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
+                                    },
+                                    "rooms_categories[]": {
+                                        "description": "An array of rooms_category IDs",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
                     },
                     "422": {
                         "description": "Validation failed"
@@ -890,15 +2397,36 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
+                                    "short_description",
+                                    "description",
+                                    "link",
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "The short_description of the service",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The description of the service",
+                                        "type": "string"
+                                    },
+                                    "link": {
+                                        "description": "The link of the service",
                                         "type": "string"
                                     },
                                     "price_in_cent": {
@@ -913,7 +2441,15 @@
                                     },
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
-                                        "type": "string"
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -974,6 +2510,34 @@
                 }
             }
         },
+        "/api/service/lang-{lang}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Get all servicesby language selected",
+                "operationId": "123bd31135ebc6578d1b87aeff51e222",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occured"
+                    }
+                }
+            }
+        },
         "/api/service": {
             "get": {
                 "tags": [
@@ -1002,15 +2566,36 @@
                         "multipart/form-data": {
                             "schema": {
                                 "required": [
+                                    "name",
                                     "title",
+                                    "short_description",
+                                    "description",
+                                    "link",
                                     "price_in_cent",
                                     "duration_in_day",
                                     "is_per_person",
-                                    "images[]"
+                                    "display_order",
+                                    "language_id"
                                 ],
                                 "properties": {
+                                    "name": {
+                                        "description": "The name to group with other languages",
+                                        "type": "string"
+                                    },
                                     "title": {
                                         "description": "The title of the service",
+                                        "type": "string"
+                                    },
+                                    "short_description": {
+                                        "description": "The short_description of the service",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "The description of the service",
+                                        "type": "string"
+                                    },
+                                    "link": {
+                                        "description": "The link of the service",
                                         "type": "string"
                                     },
                                     "price_in_cent": {
@@ -1025,7 +2610,15 @@
                                     },
                                     "is_per_person": {
                                         "description": "If the price is per person or not true or false",
-                                        "type": "string"
+                                        "type": "integer"
+                                    },
+                                    "display_order": {
+                                        "description": "The desired disaly order the items should be",
+                                        "type": "integer"
+                                    },
+                                    "language_id": {
+                                        "description": "The ID of the language",
+                                        "type": "integer"
                                     },
                                     "images[]": {
                                         "type": "array",
@@ -1053,12 +2646,180 @@
                     }
                 }
             }
+        },
+        "/api/user/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get one user by id- need to be authentified and role = user",
+                "operationId": "872b763758398bc0a2492976972417aa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update an existing user- need to be authentified and role = user",
+                "operationId": "0c3a70ac5b05d1923ee03be654c0c639",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "firstname",
+                                    "lastname",
+                                    "address",
+                                    "city",
+                                    "postal_code",
+                                    "phone",
+                                    "is_pro"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "User's email address",
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "description": "User's password (minimum 10 characters)",
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "description": "User's first name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "lastname": {
+                                        "description": "User's last name",
+                                        "type": "string",
+                                        "maxLength": 50
+                                    },
+                                    "address": {
+                                        "description": "User's address",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "city": {
+                                        "description": "User's city",
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "postal_code": {
+                                        "description": "User's postal code (5 digits)",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "User's phone number (10 digits)",
+                                        "type": "string"
+                                    },
+                                    "is_pro": {
+                                        "description": "Indicates te user status of pro or not",
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete a user by id- need to be authentified and role = user",
+                "operationId": "159036e20e48c9b57b682ba5ba42a976",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
         }
     },
     "tags": [
         {
+            "name": "AdminUsers",
+            "description": "AdminUsers"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
             "name": "Contents",
             "description": "Contents"
+        },
+        {
+            "name": "Languages",
+            "description": "Languages"
         },
         {
             "name": "News",
@@ -1069,12 +2830,28 @@
             "description": "Reviews"
         },
         {
+            "name": "Roles",
+            "description": "Roles"
+        },
+        {
             "name": "Rooms",
             "description": "Rooms"
         },
         {
+            "name": "RoomsCategories",
+            "description": "RoomsCategories"
+        },
+        {
+            "name": "RoomsFeatures",
+            "description": "RoomsFeatures"
+        },
+        {
             "name": "Services",
             "description": "Services"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
         }
     ]
 }
