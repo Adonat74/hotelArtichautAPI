@@ -2,8 +2,9 @@
 
 API Laravel du site internet d'un hotel permettant la gestion des users, des réservations, du paiement mais aussi et surtout la gestion de tous les contenus du site et de leur traduction à la manière d'un CMS.
 
+---
 
-## Contexte et Motivations :dart:
+## :dart: Contexte et Motivations 
 
 - ### Contexte : 
 Projet d'école réalisé en groupe. Une API pour le front-end réalisé par le même groupe.
@@ -16,81 +17,74 @@ Laravel est idéal pour une API d'hôtel grâce à sa flexibilité, sa sécurit�
 gestion des utilisateurs), et ses outils comme Eloquent pour gérer les réservations et les contenus.
 
 
+---
 
-## Technologies et Outils utilisés :wrench:
+## :wrench: Technologies et Outils utilisés 
 
-- **Framework** : Laravel 11
+- ### Framework :
+Laravel 11
 
-- **Authentification** : php-open-source-saver/jwt-auth (JWT)
+- ### Authentification : 
+php-open-source-saver/jwt-auth (JWT)
 
-- **Base de donnée** : MySQL
+- ### Base de donnée : 
+MySQL
 
-- **Autres outils** : Postman, Swagger, Git, Composer, Sanctum.
+- ### Autres outils : 
+Postman, Swagger, Git, Composer, Sanctum.
 
+- ### techno requises :
+PHP 8.3, MySQL 8.0.4, Composer 2.7.7
 
-## Architecture et Structure du Projet :building_construction:
+---
 
+## :building_construction: Architecture et Structure du Projet 
 
+- ### Architecture :
+API RESTful
 
+- ### Structure des répertoires : 
+Structure Laravel classique qui ne réinvent pas la roue.
 
+---
 
+## :rocket: Installation
 
+1. Cloner le répertoire.
+2. `cd hotelArtichautAPI`
+3. `npm install` pour installer les dépendances.
+4. `cp .env.example .env`
+5. Renseigner les identifiants pour se connecter à la base de donnée dans le `.env`.
+6. `php artisan jwt:secret` pour générer une clé secrète.
 
+## :scroll: utilisation
 
-## Installation
+1. Démarrer le serveur avec `php artisan serve`.
+2. Accéder à la documentation swagger et les routes via cette route `http://127.0.0.1/api/documentation/`
 
-1. Clone this repository.
-2. Navigate to the project directory.
-3. Run `npm install` to install dependencies.
-4. Configure your MariaDB connection in `credential/dbConfig.js`.
-5. Set up your private key for JWT in `credential/private-key.js` file.
+---
 
-## Usage
+## :construction: Sécurité
 
-1. Start the server by running `npm start`.
-2. Use API endpoints for user creation, login, update, and deletion.
+### Authentification JWT et Gestion des Rôles
 
-## API Endpoints
+L’authentification repose sur des JSON Web Tokens (JWT) qui, une fois générés après une connexion réussie, contiennent des informations essentielles (comme l’ID utilisateur et des métadonnées d’expiration). Le client doit inclure ce token dans l’en-tête `Authorization` pour accéder aux routes protégées.
 
-- `POST /api/createUser`: Create a new user.
-- `POST /api/login`: Log in existing user.
-- `PUT /api/updateUser/`: Update user data.
-- `DELETE /api/deleteUser`: Delete a user account.
+Les rôles sont hiérarchisés de façon incrémentale :
+- **user** : permissions de base,
+- **employee** : droits du user + supplémentaires,
+- **manager** : droits de l’employee + privilèges de gestion,
+- **master** : tous les droits cumulés.
 
-## User Model
+La vérification se fait via des policies ou middlewares, qui autorisent l’accès si l’utilisateur connecté a un rôle égal ou supérieur à celui requis.
 
-The user model contains the following data types:
+---
 
-- `id` (integer)
-- `email` (string)
-- `username` (string)
-- `password` (string)
-- `favoritemusicgenre` (string)
+## :star: Contribution
 
-each one contains various constraint.
+Les contributions sont les bienvenues. N'hésitez pas à ouvrir des issues et à faire des pull requests.
 
-## Middleware
-
-### Custom Middleware
-
-- **src/auth/auth.js**: Middleware to verify the JWT token present in the request header using a private key.
-
-### Express Middleware
-
-- `body-parser`: Parses incoming request bodies.
-- `cors`: Enables CORS.
-- `express-mongo-sanitize`: Sanitizes input against NoSQL Injection.
-- `express-rate-limit`: Limits repeated requests to prevent abuse.
-- `xss-clean`: Sanitizes user input against XSS.
-
-## Initialization
-
-- **Express Initialization**: Configuration of middleware, routes, and server start in `App.js`.
-- **Database Initialization**: Connection to MariaDB and synchronization of user model with database table in `sequelize.js`.
-
-## Contributing
-
-Contributions are welcome. Feel free to open issues and pull requests.
+---
 
 ## License
 
