@@ -19,17 +19,13 @@ gestion des utilisateurs), et ses outils comme Eloquent pour gérer les réserva
 
 ## Technologies et Outils utilisés :wrench:
 
-- ### Framework :
-Laravel 11
+- **Framework** : Laravel 11
 
-- ### Authentification : 
-php-open-source-saver/jwt-auth (JWT)
+- **Authentification** : php-open-source-saver/jwt-auth (JWT)
 
-- ### Base de donnée : 
-MySQL
+- **Base de donnée** : MySQL
 
-- ### Autres outils : 
-Postman, Swagger, Git, Composer, Sanctum.
+- **Autres outils** : Postman, Swagger, Git, Composer, Sanctum.
 
 
 ## Architecture et Structure du Projet :building_construction:
