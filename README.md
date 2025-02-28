@@ -1,14 +1,42 @@
 # Hotel Artichaut Laravel API
 
-Cette API Laravel permet la gestion des users, des réservations, du paiement mais aussi et surtout la gestion de tous les contenus du site et de leur traduction à la manière d'un CMS.
+API Laravel du site internet d'un hotel permettant la gestion des users, des réservations, du paiement mais aussi et surtout la gestion de tous les contenus du site et de leur traduction à la manière d'un CMS.
 
 
 ## Contexte et Motivations :dart:
 
 - ### Contexte : 
-Projet d'école réalisé en groupe. Le travail est séparé de la façon suivante : 2 personne sur le front-end et 2 sur le back-end.
+Projet d'école réalisé en groupe. Une API pour le front-end réalisé par le même groupe.
 
 - ### Objectifs :
+Gestion des utilisateurs et de leur authentification JWT, des réservations, du paiement grâce à stripe, du contenu de chaques pages du site web, de leur traduction à la manière d'un CMS et des médias (images, vidéos).
+
+- ### Choix techniques :
+Laravel est idéal pour une API d'hôtel grâce à sa flexibilité, sa sécurité intégrée (authentification,
+gestion des utilisateurs), et ses outils comme Eloquent pour gérer les réservations et les contenus.
+
+
+
+## Technologies et Outils utilisés :wrench:
+
+- ### Framework :
+Laravel 11
+
+- ### Authentification : 
+php-open-source-saver/jwt-auth (JWT)
+
+- ### Base de donnée : 
+MySQL
+
+- ### Autres outils : 
+Postman, Swagger, Git, Composer, Sanctum.
+
+
+## Architecture et Structure du Projet :building_construction:
+
+
+
+
 
 
 
