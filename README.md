@@ -44,7 +44,7 @@ PHP 8.3, MySQL 8.0.4, Composer 2.7.7
 API RESTful
 
 - ### Structure des répertoires : 
-Structure Laravel classique qui ne réinvent pas la roue.
+Structure Laravel classique qui ne ré-invente pas la roue.
 
 ---
 
@@ -77,6 +77,16 @@ Les rôles sont hiérarchisés de façon incrémentale :
 - **master** : tous les droits cumulés.
 
 La vérification se fait via des policies ou middlewares, qui autorisent l’accès si l’utilisateur connecté a un rôle égal ou supérieur à celui requis.
+
+---
+## :warning: Récap éléments du projet
+
+- ### Policies : 
+Reviews et Users, servent à vérifier si l'utilisateur qui cherche à modifier des informations ou bien des review sont bien les siennes.
+
+- ### Middlewares :
+  - CheckTokenVersion : Sert à vérifier que le token est valide et est bien le dernier à avoir été généré dans le cas de plusieurs connexions raprochée et donc plusieurs token encore valides.
+  - CheckRole : Sert à vérifier si l'utilisateur à le bon role pour accéder à une route.
 
 ---
 
