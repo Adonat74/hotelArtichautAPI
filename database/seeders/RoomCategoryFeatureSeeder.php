@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\RoomsCategory;
+use App\Models\RoomsFeature;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -12,8 +14,8 @@ class RoomCategoryFeatureSeeder extends Seeder
      */
     public function run()
     {
-        $roomCategories = \App\Models\RoomsCategory::all();
-        $roomFeatures = \App\Models\RoomsFeature::all();
+        $roomCategories = RoomsCategory::all();
+        $roomFeatures = RoomsFeature::all();
 
         foreach ($roomCategories as $category) {
             // Associez 1 à 5 fonctionnalités aléatoires à chaque catégorie

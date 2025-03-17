@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NewsArticleController;
@@ -15,6 +16,16 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\CheckTokenVersion;
 use Illuminate\Support\Facades\Route;
+
+
+//BOOKING ROUTES
+Route::prefix('booking')->controller(BookingController::class)->group(function () {
+    Route::get('/', 'getAllBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::get('/{id}', 'getSingleBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::post('/', 'addBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::post('/{id}', 'updateBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::delete('/{id}', 'deleteBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+});
 
 
 // AUTH ROUTES
