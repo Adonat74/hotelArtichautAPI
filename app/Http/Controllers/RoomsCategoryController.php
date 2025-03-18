@@ -373,7 +373,6 @@
                 }
 
                 return response()->json($roomCategory->load(['features',  'rooms', 'images', 'language']));
-
             } catch (ModelNotFoundException $e) {
                 return response()->json([
                     'error' => 'Category not found',
