@@ -14,8 +14,10 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('check_in');
-            $table->dateTime('check_out');
+            $table->date('check_in');
+            $table->date('check_out');
+            $table->integer('total_price_in_cents');
+            $table->integer('to_be_paid_in_cents');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

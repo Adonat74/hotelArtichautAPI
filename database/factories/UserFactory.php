@@ -24,14 +24,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $this->faker->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
-            'firstname' => fake()->name(),
-            'lastname' => fake()->name(),
-            'address' => fake()->streetAddress(),
-            'city' => fake()->city(),
-            'postal_code' => fake()->postcode(),
-            'phone' => fake()->e164PhoneNumber(),
+            'firstname' => $this->faker->name(),
+            'lastname' => $this->faker->name(),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'postal_code' => $this->faker->postcode(),
+            'phone' => $this->faker->e164PhoneNumber(),
             'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ];
