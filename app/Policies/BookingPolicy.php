@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Booking;
 use App\Models\User;
+use Exception;
 use Illuminate\Auth\Access\Response;
 
 class BookingPolicy
@@ -23,9 +24,13 @@ class BookingPolicy
      */
     public function update(User $user, Booking $booking): bool
     {
-
-
-        return $user->id === $booking->user_id;
+        if ($user->id !== $booking->user_id) {
+            return false;
+        }
+        if($booking->check_in <= now()) {
+            throw new Exception("It's too late to update booking");
+        }
+        return true;
     }
 
     /**
@@ -33,6 +38,12 @@ class BookingPolicy
      */
     public function delete(User $user, Booking $booking): bool
     {
-        return $user->id === $booking->user_id;
+        if ($user->id !== $booking->user_id) {
+            return false;
+        }
+        if($booking->check_in <= now()) {
+            throw new Exception("It's too late to delete booking");
+        }
+        return true;
     }
 }
