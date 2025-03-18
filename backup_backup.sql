@@ -91,6 +91,16 @@ INSERT INTO `languages` VALUES (1,'fr',NULL,'2025-02-21 07:41:07'),(2,'en',NULL,
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `migrations`
+--
+
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1),(2,'0001_01_01_000001_create_cache_table',1),(3,'0001_01_01_000002_create_jobs_table',1),(4,'2025_01_13_123504_create_personal_access_tokens_table',1),(5,'2025_01_13_135459_create_contents_table',1),(6,'2025_01_14_083751_create_rooms_categories_table',1),(7,'2025_01_14_101236_create_news_articles_table',1),(8,'2025_01_14_103358_create_rooms_table',1),(9,'2025_01_14_110303_create_services_table',1),(10,'2025_01_14_130433_create_rooms_features_table',1),(11,'2025_01_14_134731_create_images_table',1),(12,'2025_01_15_101407_create_reviews_table',1),(13,'2025_01_20_112152_create_room_category_feature_table',1),(14,'2025_02_17_125019_create_languages_table',1),(26,'0001_01_01_000000_create_users_table',1),(27,'0001_01_01_000001_create_cache_table',1),(28,'0001_01_01_000002_create_jobs_table',1),(29,'2025_01_13_123504_create_personal_access_tokens_table',1),(30,'2025_01_13_135459_create_contents_table',1),(31,'2025_01_14_083751_create_rooms_categories_table',1),(32,'2025_01_14_101236_create_news_articles_table',1),(33,'2025_01_14_103358_create_rooms_table',1),(34,'2025_01_14_110303_create_services_table',1),(35,'2025_01_14_130433_create_rooms_features_table',1),(36,'2025_01_14_134731_create_images_table',1),(37,'2025_01_15_101407_create_reviews_table',1),(38,'2025_01_20_112152_create_room_category_feature_table',1),(39,'2025_02_17_125019_create_languages_table',1),(40,'2025_02_26_111255_create_roles_table',1);
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `news_articles`
 --
 
@@ -216,4 +226,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-17 16:52:05
+-- Dump completed on 2025-03-18  9:12:51

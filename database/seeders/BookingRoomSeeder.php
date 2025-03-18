@@ -18,10 +18,10 @@ class BookingRoomSeeder extends Seeder
         $rooms = Room::all();
 
 
-        for ($i = 0; $i < count($bookings)*0.5; $i++) {
-            DB::table('booking_service')->insert([
+        for ($i = 0; $i < count($bookings)+10; $i++) {
+            DB::table('booking_room')->insert([
                 'booking_id' => $bookings->random()->id,
-                'service_id' => $rooms->random()->id,
+                'room_id' => $rooms->random()->id,
             ]);
         }
     }

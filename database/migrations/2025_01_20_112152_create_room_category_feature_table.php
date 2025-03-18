@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\RoomsCategory;
+use App\Models\RoomsFeature;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('room_category_feature', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rooms_categories_id')->constrained('rooms_categories')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('rooms_features_id')->constrained('rooms_features')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(RoomsCategory::class)->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(RoomsFeature::class)->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

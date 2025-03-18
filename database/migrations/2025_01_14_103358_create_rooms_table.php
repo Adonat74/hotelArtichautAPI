@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Language;
 use App\Models\RoomsCategory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -22,7 +23,7 @@ class CreateRoomsTable extends Migration
                 $table->string('description');
                 $table->foreignIdFor(RoomsCategory::class)->nullable()->cascadesOnDelete()->cascadeOnUpdate();
                 $table->string('display_order');
-                $table->string('language_id');
+                $table->foreignIdFor(Language::class);
                 $table->timestamps();                 // Colonnes created_at et updated_at
 
             });
