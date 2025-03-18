@@ -196,7 +196,7 @@ class BookingController extends Controller
                 'services.*' => 'nullable|exists:services,id',
             ]);
             $booking = Booking::findOrFail($id);
-
+//          Check si le user est bien le proprio de la résa et empeche l'update
             $this->authorize('update', $booking); // policy check
 
             $booking->update($validatedData);
@@ -249,6 +249,7 @@ class BookingController extends Controller
     {
         try {
             $booking = Booking::findOrFail($id);
+//          Check si le user est bien le proprio de la résa et empeche le delete
 
             $this->authorize('delete', $booking); // policy check
 
