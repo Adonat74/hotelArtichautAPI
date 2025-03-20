@@ -152,6 +152,7 @@ Route::prefix('rooms-category')->controller(RoomsCategoryController::class)->gro
 
 Route::prefix('room')->controller(RoomController::class)->group(function () {
     Route::get('/lang-{lang}', 'getAllRoomsByLang');
+    Route::get('/lang-{lang}/available', 'getAllRoomsAvailableByLang');
     Route::get('/', 'getAllRooms');
     Route::post('/', 'addRoom');
     Route::get('/{id}', 'getSingleRoom');
