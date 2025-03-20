@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Services\BookingService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -15,7 +16,7 @@ class BookingController extends Controller
     /**
      * @OA\Get(
      *     path="/api/booking/{id}",
-     *     summary="Get one booking by id- need to be authentified and role = booking",
+     *     summary="Get one booking by ID (requires authentication, role = user)",
      *     tags={"Bookings"},
      *      @OA\Parameter(
      *          name="id",
@@ -53,7 +54,7 @@ class BookingController extends Controller
     /**
      * @OA\Get(
      *     path="/api/booking/user",
-     *     summary="Get all user bookings - need to be authentified",
+     *     summary="Get all user bookings - need to be authentified and role = user",
      *     tags={"Bookings"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -78,26 +79,19 @@ class BookingController extends Controller
     /**
      * @OA\Post(
      *     path="/api/booking",
-     *     summary="Add a booking  - need to be authentified",
+     *     summary="Add a booking  - need to be authentified and role = user",
      *     tags={"Bookings"},
      *     @OA\RequestBody(
      *          required=true,
-     *          @OA\MediaType(
-     *                mediaType="multipart/form-data",
-     *              @OA\Schema(
-     *                  required={"rate", "booking_content", "display_order"},
-     *                  @OA\Property(
-     *                      property="rate",
-     *                      type="number",
-     *                      description="The rating of the booking, between 1 and 5"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="booking_content",
-     *                      type="string",
-     *                      description="The Content_models of the booking"
-     *                  ),
-     *              )
-     *          )
+     *          @OA\JsonContent(
+     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
+     *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
+     *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
+     *             @OA\Property(property="total_price_in_cents", type="integer", example=15000),
+     *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
+     *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
+     *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
+     *         )
      *     ),
      *     @OA\Response(response=201, description="Successful operation"),
      *     @OA\Response(response=422, description="Validation failed"),
@@ -117,6 +111,13 @@ class BookingController extends Controller
                 'services' => 'nullable|array',
                 'services.*' => 'nullable|exists:services,id',
             ]);
+
+            $bookingService = new BookingService();
+            forEach($validatedData['rooms'] as $room){
+                if (!$bookingService->checkRoomAvailability($room, $validatedData['check_in'], $validatedData['check_out'])) {
+                    throw new Exception("The room is not available for the given date");
+                }
+            }
 
             $user = $request->user();
 
@@ -149,7 +150,7 @@ class BookingController extends Controller
     /**
      * @OA\Post(
      *     path="/api/booking/{id}",
-     *     summary="Update an existing booking- need to be authentified and role = booking",
+     *     summary="Update an existing booking- need to be authentified and role = user",
      *     tags={"Bookings"},
      *     @OA\Parameter(
      *         name="id",
@@ -160,21 +161,15 @@ class BookingController extends Controller
      *     ),
      *     @OA\RequestBody(
      *          required=true,
-     *          @OA\MediaType(
-     *               mediaType="multipart/form-data",
-     *              @OA\Schema(
-     *                  required={"email", "password", "firstname", "lastname", "address", "city", "postal_code", "phone", "is_pro"},
-     *                  @OA\Property(property="email", type="string", format="email", description="Booking's email address"),
-     *                  @OA\Property(property="password", type="string", description="Booking's password (minimum 10 characters)"),
-     *                  @OA\Property(property="firstname", type="string", maxLength=50, description="Booking's first name"),
-     *                  @OA\Property(property="lastname", type="string", maxLength=50, description="Booking's last name"),
-     *                  @OA\Property(property="address", type="string", maxLength=100, description="Booking's address"),
-     *                  @OA\Property(property="city", type="string", maxLength=100, description="Booking's city"),
-     *                  @OA\Property(property="postal_code", type="string", description="Booking's postal code (5 digits)"),
-     *                  @OA\Property(property="phone", type="string", description="Booking's phone number (10 digits)"),
-     *                  @OA\Property(property="is_pro", type="boolean", description="Indicates te booking status of pro or not"),
-     *              )
-     *          )
+     *          @OA\JsonContent(
+     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
+     *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
+     *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
+     *             @OA\Property(property="total_price_in_cents", type="integer", example=20000),
+     *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=7000),
+     *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
+     *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
+     *         )
      *     ),
      *     @OA\Response(response=200, description="Booking successfully updated"),
      *     @OA\Response(response=404, description="Booking not found"),
@@ -198,6 +193,13 @@ class BookingController extends Controller
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche l'update
             $this->authorize('update', $booking); // policy check
+
+            $bookingService = new BookingService();
+            forEach($validatedData['rooms'] as $room){
+                if (!$bookingService->checkRoomAvailability($room, $validatedData['check_in'], $validatedData['check_out'])) {
+                    throw new Exception("The room is not available for the given date");
+                }
+            }
 
             $booking->update($validatedData);
 
@@ -231,7 +233,7 @@ class BookingController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/booking/{id}",
-     *     summary="Delete a booking by id- need to be authentified and role = booking",
+     *     summary="Delete a booking by id- need to be authentified and role = user",
      *     tags={"Bookings"},
      *      @OA\Parameter(
      *          name="id",

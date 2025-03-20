@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Room;
+use App\Services\BookingService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -35,6 +36,7 @@ class RoomController extends Controller
     public function getSingleRoom(int $id): JsonResponse
     {
         try {
+
             $room = Room::with(['images', 'category.features', 'language'])->findOrFail($id);
             return response()->json($room);
         } catch (ModelNotFoundException $e) {
@@ -69,7 +71,81 @@ class RoomController extends Controller
     public function getAllRoomsByLang(int $lang): JsonResponse
     {
         try {
-            $rooms = Room::where('language_id', $lang)->with(['images', 'category', 'language'])->get();
+            $rooms = Room::where('language_id', $lang)
+                ->with(['images', 'category', 'language'])
+                ->groupBy('rooms_category_id')
+                ->get();
+
+            return response()->json($rooms);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the services',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/room/lang-{lang}/available",
+     *     summary="Get all roomsby language selected and filter by date selected ?check_in=2025-03-21&check_out=2025-04-03&category=1 for example(if no category selected return all rooms)",
+     *     tags={"Rooms"},
+     *       @OA\Parameter(
+     *            name="lang",
+     *            in="path",
+     *            description="The lang desired",
+     *            required=true,
+     *            @OA\Schema(type="integer")
+     *       ),
+     *      @OA\Parameter(
+     *           name="check_in",
+     *           in="query",
+     *           description="Check-in date (YYYY-MM-DD)",
+     *           required=true,
+     *           @OA\Schema(type="string", format="date", example="2025-03-21")
+     *      ),
+     *      @OA\Parameter(
+     *           name="check_out",
+     *           in="query",
+     *           description="Check-out date (YYYY-MM-DD)",
+     *           required=true,
+     *           @OA\Schema(type="string", format="date", example="2025-04-03")
+     *      ),
+     *      @OA\Parameter(
+     *          name="category",
+     *          in="query",
+     *          description="Room category ID (optional)",
+     *          required=false,
+     *          @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=400, description="Invalid request parameters"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllRoomsAvailableByLang(int $lang, Request $request): JsonResponse
+    {
+        try {
+            if($request->has('category')) {
+                $rooms = Room::where('language_id', $lang)
+                    ->where('rooms_category_id', $request->query('category'))
+                    ->with(['images', 'category', 'language'])
+                    ->get();
+            } else {
+                $rooms = Room::where('language_id', $lang)
+                    ->orderBy('rooms_category_id')
+                    ->with(['images', 'category', 'language'])
+                    ->get();
+            }
+
+            $bookingService = new BookingService();
+            forEach($rooms as $key => $room){
+                if (!$bookingService->checkRoomAvailability($room->id,$request->query('check_in'), $request->query('check_out'))) {
+                    unset($rooms[$key]);
+                }
+            }
+
+            $rooms = $rooms->values(); // Reindex the collection
             return response()->json($rooms);
         } catch (Exception $e) {
             return response()->json([

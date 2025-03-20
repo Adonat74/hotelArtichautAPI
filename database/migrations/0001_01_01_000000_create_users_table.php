@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('postal_code');
             $table->string('phone');
-            $table->foreignIdFor(Role::class);
+            $table->foreignIdFor(Role::class)->default(1);
             $table->boolean('is_pro')->default(false);
             $table->boolean('is_vip')->default(false);
             $table->timestamp('email_verified_at')->nullable();
