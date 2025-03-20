@@ -10,14 +10,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-class BookingController extends Controller
+class AdminBookingController extends Controller
 {
 
     /**
      * @OA\Get(
-     *     path="/api/booking/{id}",
-     *     summary="Get one booking by ID (requires authentication, role = user)",
-     *     tags={"Bookings"},
+     *     path="/api/admin/booking/{id}",
+     *     summary="Get one booking by ID (requires authentication, role = employee)",
+     *     tags={"AdminBookings"},
      *      @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -30,12 +30,10 @@ class BookingController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getSingleUserBooking(int $id): JsonResponse
+    public function getSingleBooking(int $id): JsonResponse
     {
         try {
             $booking = Booking::with(['services', 'rooms', 'user'])->findOrFail($id);
-
-            $this->authorize('view', $booking); // policy check
 
             return response()->json($booking);
         } catch (ModelNotFoundException $e) {
@@ -53,19 +51,43 @@ class BookingController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/booking/user",
-     *     summary="Get all user bookings - need to be authentified and role = user",
-     *     tags={"Bookings"},
+     *     path="/api/admin/booking",
+     *     summary="Get all bookings - need to be authentified and role = employee",
+     *     tags={"AdminBookings"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getAllUserBookings(Request $request): JsonResponse
+    public function getAllBookings(): JsonResponse
     {
         try {
-            $user = $request->user();
+            $bookings = Booking::with(['services', 'rooms', 'user'])
+                ->get();
 
-            $bookings = Booking::with(['services', 'rooms', 'user'])->where('user_id', $user->id)->get();
+            return response()->json($bookings);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching the bookings',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/admin/booking/user-{id}",
+     *     summary="Get all user bookings - need to be authentified and role = employee",
+     *     tags={"AdminBookings"},
+     *     @OA\Response(response=200, description="Successful operation"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function getAllUserBookings(int $id): JsonResponse
+    {
+        try {
+            $bookings = Booking::with(['services', 'rooms', 'user'])
+                ->where('user_id', $id)
+                ->get();
 
             return response()->json($bookings);
         } catch (Exception $e) {
@@ -78,17 +100,18 @@ class BookingController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/booking",
-     *     summary="Add a booking  - need to be authentified and role = user",
-     *     tags={"Bookings"},
+     *     path="/api/admin/booking",
+     *     summary="Add a booking - need to be authentified and role = manager",
+     *     tags={"AdminBookings"},
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
+     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "user_id", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
      *             @OA\Property(property="total_price_in_cents", type="integer", example=15000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
+     *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
      *         )
@@ -102,10 +125,11 @@ class BookingController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after_or_equal:now',
+                'check_in' => 'bail|required|date|after:today',
                 'check_out' => 'bail|required|date|after:check_in',
                 'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
+                'user_id' => 'bail|required|exists:users,id',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
                 'services' => 'nullable|array',
@@ -119,10 +143,7 @@ class BookingController extends Controller
                 }
             }
 
-            $user = $request->user();
-
             $booking = new Booking($validatedData);
-            $booking->user_id = $user->id;
             $booking->save();
 
 //            Associe rooms et services si fournis dans le body de la requete
@@ -149,9 +170,9 @@ class BookingController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/booking/{id}",
-     *     summary="Update an existing booking- need to be authentified and role = user",
-     *     tags={"Bookings"},
+     *     path="/api/admin/booking/{id}",
+     *     summary="Update an existing booking- need to be authentified and role = manager",
+     *     tags={"AdminBookings"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -167,6 +188,7 @@ class BookingController extends Controller
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
      *             @OA\Property(property="total_price_in_cents", type="integer", example=20000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=7000),
+     *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
      *         )
@@ -181,10 +203,11 @@ class BookingController extends Controller
     {
         try{
             $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after_or_equal:now',
+                'check_in' => 'bail|required|date|after:today',
                 'check_out' => 'bail|required|date|after:check_in',
                 'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
+                'user_id' => 'bail|required|exists:users,id',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
                 'services' => 'nullable|array',
@@ -192,7 +215,6 @@ class BookingController extends Controller
             ]);
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche l'update
-            $this->authorize('update', $booking); // policy check
 
             $bookingService = new BookingService();
             forEach($validatedData['rooms'] as $room){
@@ -209,7 +231,6 @@ class BookingController extends Controller
             if (isset($validatedData['services'])) {
                 $booking->services()->sync($validatedData['services']);
             }
-
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
@@ -232,9 +253,9 @@ class BookingController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/booking/{id}",
-     *     summary="Delete a booking by id- need to be authentified and role = user",
-     *     tags={"Bookings"},
+     *     path="/api/admin/booking/{id}",
+     *     summary="Delete a booking by id- need to be authentified and role = manager",
+     *     tags={"AdminBookings"},
      *      @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -252,8 +273,6 @@ class BookingController extends Controller
         try {
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche le delete
-
-            $this->authorize('delete', $booking); // policy check
 
             $booking->delete();
 
