@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Language;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->string('feature_name');
             $table->string('description')->nullable();
             $table->string('display_order');
-            $table->string('language_id');
+            $table->foreignIdFor(Language::class);
             $table->timestamps();
 
         });

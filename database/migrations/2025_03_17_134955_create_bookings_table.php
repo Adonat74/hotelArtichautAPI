@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +14,11 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('check_in');
-            $table->dateTime('check_out');
-            $table->foreignId('user_id')->constrained('users');
+            $table->date('check_in');
+            $table->date('check_out');
+            $table->integer('total_price_in_cents');
+            $table->integer('to_be_paid_in_cents');
+            $table->foreignIdFor(User::class);
             $table->timestamps();
         });
     }

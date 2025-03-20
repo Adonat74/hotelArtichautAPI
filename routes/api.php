@@ -18,16 +18,46 @@ use App\Http\Middleware\CheckTokenVersion;
 use Illuminate\Support\Facades\Route;
 
 
-//BOOKING ROUTES
-Route::prefix('booking')->controller(BookingController::class)->group(function () {
-    Route::get('/', 'getAllBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
-    Route::get('/{id}', 'getSingleBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
-    Route::post('/', 'addBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
-    Route::post('/{id}', 'updateBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+///////////////////////// BOOKINGS ///////////////////////
+// BOOKING ROUTES
+Route::prefix('admin/booking')->controller(BookingController::class)->group(function () {
+    Route::get('/', 'getAllBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
+    Route::get('/user-{id}', 'getAllUserBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
+    Route::get('/{id}', 'getSingleBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
+    Route::post('/', 'addBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::post('/{id}', 'updateBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
     Route::delete('/{id}', 'deleteBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
 });
 
+// BOOKING ROUTES
+Route::prefix('booking')->controller(BookingController::class)->group(function () {
+    Route::get('/user', 'getAllUserBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::get('/{id}', 'getSingleUserBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/', 'addBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/{id}', 'updateBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::delete('/{id}', 'deleteBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+});
 
+// BOOKING MANAGEMENT ROUTES
+Route::prefix('booking-management')->controller(BookingController::class)->group(function () {
+    Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/booking-{booking_id}/service-{service_id}', 'addServiceToBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::get('/qr-code/user-{id}', 'getQRCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+});
+
+// ADMIN PAYMENT ROUTES
+Route::prefix('admin/payment')->controller(BookingController::class)->group(function () {
+    Route::get('/', 'getAllPayments')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::get('/booking-{id}', 'getAllBookingPayments')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::get('/{id}', 'getSinglePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::post('/{id}', 'updatePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+    Route::delete('/{id}', 'deletePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
+});
+
+
+
+////////////////////////// AUTHENTICATION //////////////////////////
 // AUTH ROUTES
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -122,6 +152,7 @@ Route::prefix('rooms-category')->controller(RoomsCategoryController::class)->gro
 
 Route::prefix('room')->controller(RoomController::class)->group(function () {
     Route::get('/lang-{lang}', 'getAllRoomsByLang');
+    Route::get('/lang-{lang}/available', 'getAllRoomsAvailableByLang');
     Route::get('/', 'getAllRooms');
     Route::post('/', 'addRoom');
     Route::get('/{id}', 'getSingleRoom');

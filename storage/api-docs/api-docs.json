@@ -343,8 +343,7 @@
                                     "address",
                                     "city",
                                     "postal_code",
-                                    "phone",
-                                    "isVIP"
+                                    "phone"
                                 ],
                                 "properties": {
                                     "email": {
@@ -385,8 +384,8 @@
                                         "type": "string"
                                     },
                                     "is_pro": {
-                                        "description": "User's status (optional)",
-                                        "type": "boolean"
+                                        "description": "User's status (optional) 1 or 2 default false(0)",
+                                        "type": "integer"
                                     }
                                 },
                                 "type": "object"
@@ -431,6 +430,250 @@
                 "responses": {
                     "200": {
                         "description": "User fetched"
+                    }
+                }
+            }
+        },
+        "/api/booking/{id}": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Get one booking by ID (requires authentication, role = user)",
+                "operationId": "d1a4a1d31d40b07dcca447b9a21eab4f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the booking",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Update an existing booking- need to be authentified and role = user",
+                "operationId": "d0bc16ac6c8c0ac8468424e1ae5a9fc7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the booking",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "check_in",
+                                    "check_out",
+                                    "total_price_in_cents",
+                                    "to_be_paid_in_cents",
+                                    "rooms"
+                                ],
+                                "properties": {
+                                    "check_in": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-01"
+                                    },
+                                    "check_out": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-06-10"
+                                    },
+                                    "total_price_in_cents": {
+                                        "type": "integer",
+                                        "example": 20000
+                                    },
+                                    "to_be_paid_in_cents": {
+                                        "type": "integer",
+                                        "example": 7000
+                                    },
+                                    "rooms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            4,
+                                            5
+                                        ]
+                                    },
+                                    "services": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            7,
+                                            8
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Booking successfully updated"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Delete a booking by id- need to be authentified and role = user",
+                "operationId": "b7f3a51db9856ed7db54c87f8c044430",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the booking",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Booking not found"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/booking/user": {
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Get all user bookings - need to be authentified and role = user",
+                "operationId": "70c060f1770a28afb220e2eab4d05065",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/booking": {
+            "post": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Add a booking  - need to be authentified and role = user",
+                "operationId": "f7a26fc2e685c51ea7cf62b5430e8d9a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "check_in",
+                                    "check_out",
+                                    "total_price_in_cents",
+                                    "to_be_paid_in_cents",
+                                    "rooms"
+                                ],
+                                "properties": {
+                                    "check_in": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-10"
+                                    },
+                                    "check_out": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-15"
+                                    },
+                                    "total_price_in_cents": {
+                                        "type": "integer",
+                                        "example": 15000
+                                    },
+                                    "to_be_paid_in_cents": {
+                                        "type": "integer",
+                                        "example": 5000
+                                    },
+                                    "rooms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "services": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            5,
+                                            6
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
                     }
                 }
             }
@@ -1707,6 +1950,69 @@
                 }
             }
         },
+        "/api/room/lang-{lang}/available": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get all roomsby language selected and filter by date selected ?check_in=2025-03-21&check_out=2025-04-03&category=1 for example(if no category selected return all rooms)",
+                "operationId": "6b7bd2ad5fb10ac36d558fa299cba48d",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "path",
+                        "description": "The lang desired",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "check_in",
+                        "in": "query",
+                        "description": "Check-in date (YYYY-MM-DD)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-03-21"
+                        }
+                    },
+                    {
+                        "name": "check_out",
+                        "in": "query",
+                        "description": "Check-out date (YYYY-MM-DD)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-04-03"
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "Room category ID (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid request parameters"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/room": {
             "get": {
                 "tags": [
@@ -2812,6 +3118,10 @@
         {
             "name": "Auth",
             "description": "Auth"
+        },
+        {
+            "name": "Bookings",
+            "description": "Bookings"
         },
         {
             "name": "Contents",

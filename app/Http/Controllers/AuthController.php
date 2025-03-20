@@ -74,7 +74,7 @@ class AuthController extends Controller
      *          @OA\MediaType(
      *               mediaType="multipart/form-data",
      *              @OA\Schema(
-     *                  required={"email", "password", "firstname", "lastname", "address", "city", "postal_code", "phone", "isVIP"},
+     *                  required={"email", "password", "firstname", "lastname", "address", "city", "postal_code", "phone"},
      *                  @OA\Property(property="email", type="string", format="email", description="User's email address"),
      *                  @OA\Property(property="password", type="string", description="User's password (minimum 10 characters)"),
      *                  @OA\Property(property="firstname", type="string", maxLength=50, description="User's first name"),
@@ -83,7 +83,7 @@ class AuthController extends Controller
      *                  @OA\Property(property="city", type="string", maxLength=100, description="User's city"),
      *                  @OA\Property(property="postal_code", type="string", description="User's postal code (5 digits)"),
      *                  @OA\Property(property="phone", type="string", description="User's phone number (10 digits)"),
-     *                  @OA\Property(property="is_pro", type="boolean", description="User's status (optional)"),
+     *                  @OA\Property(property="is_pro", type="integer", description="User's status (optional) 1 or 2 default false(0)"),
      *              )
      *          )
      *     ),
@@ -105,7 +105,6 @@ class AuthController extends Controller
                 'city' => 'bail|required|string|max:100',
                 'postal_code' => 'bail|required|string|max:15',
                 'phone' => 'bail|required|string|max:12',
-                'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
                 'is_pro' => 'bail|required|boolean',
             ]);
             $user = new User($validatedData);
