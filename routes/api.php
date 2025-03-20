@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
@@ -20,13 +21,13 @@ use Illuminate\Support\Facades\Route;
 
 ///////////////////////// BOOKINGS ///////////////////////
 // BOOKING ROUTES
-Route::prefix('admin/booking')->controller(BookingController::class)->group(function () {
+Route::prefix('admin/booking')->controller(AdminBookingController::class)->group(function () {
     Route::get('/', 'getAllBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
     Route::get('/user-{id}', 'getAllUserBookings')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
     Route::get('/{id}', 'getSingleBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':employee']);
     Route::post('/', 'addBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
     Route::post('/{id}', 'updateBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
-    Route::delete('/{id}', 'deleteBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':master']);
+    Route::delete('/{id}', 'deleteBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
 });
 
 // BOOKING ROUTES
