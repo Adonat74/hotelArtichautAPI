@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Room;
 use App\Services\BookingService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -71,10 +72,15 @@ class RoomController extends Controller
     public function getAllRoomsByLang(int $lang): JsonResponse
     {
         try {
+//          Query qui sert à récupérer uniquement les réservations qui sont en cours et avec ça le user associé.
+            $now = Carbon::now();
             $rooms = Room::where('language_id', $lang)
-                ->with(['images', 'category', 'language'])
-                ->groupBy('rooms_category_id')
+                ->with(['images', 'category', 'language', 'bookings' => function($query) use ($now) { // on peut faire des query dans le with pour filtrer par exemple
+                    $query->where('check_in', '<', $now)
+                        ->where('check_out', '>=', $now);
+                } ,'bookings.user'])
                 ->get();
+
 
             return response()->json($rooms);
         } catch (Exception $e) {
