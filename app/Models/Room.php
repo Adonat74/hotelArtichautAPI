@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,19 @@ class Room extends Model
         'display_order',
         'language_id',
     ];
+
+    protected $appends = ['is_available'];
+
+    public function getIsAvailableAttribute(): bool
+    {
+        $now = Carbon::now();
+        $hasActiveBooking = $this->bookings()
+            ->where('check_in', '<', $now)
+            ->where('check_out', '>=', $now)
+            ->get();
+
+        return !$hasActiveBooking->isEmpty();
+    }
 
     public function category(): BelongsTo
     {
