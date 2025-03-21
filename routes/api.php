@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingManagementController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\NewsArticleController;
@@ -40,10 +41,10 @@ Route::prefix('booking')->controller(BookingController::class)->group(function (
 });
 
 // BOOKING MANAGEMENT ROUTES
-Route::prefix('booking-management')->controller(BookingController::class)->group(function () {
+Route::prefix('booking-management')->controller(BookingManagementController::class)->group(function () {
     Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
     Route::post('/booking-{booking_id}/service-{service_id}', 'addServiceToBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
-    Route::get('/qr-code/user-{id}', 'getQRCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::get('/qr-code/user-{id}', 'getQrCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
 });
 
 // ADMIN PAYMENT ROUTES
@@ -55,7 +56,6 @@ Route::prefix('admin/payment')->controller(BookingController::class)->group(func
     Route::post('/{id}', 'updatePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
     Route::delete('/{id}', 'deletePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':manager']);
 });
-
 
 
 ////////////////////////// AUTHENTICATION //////////////////////////
