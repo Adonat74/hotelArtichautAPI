@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\Models\RoomsFeature;
+    use App\Services\ImagesManagementService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
@@ -11,7 +12,6 @@
 
     class RoomsFeatureController extends Controller
     {
-
 
         /**
          * @OA\Get(

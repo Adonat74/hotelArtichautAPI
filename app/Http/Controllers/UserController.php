@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
 
     /**
      * @OA\Get(
@@ -121,22 +128,7 @@ class UserController extends Controller
                 'is_pro' => $validatedData['is_pro'],
             ]);
 
-            if ($request->hasFile('image')) {
-                $existingImage = $user->images()->get();
-
-                //supprime les images du strage et l'url de la table images
-                if ($existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-                $image = $request->file('images');
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'user_id' => $user->id,
-                ]);
-                $image->save();
-            }
+            $this->imagesManagementService->updateSingleImage($request, $user, 'user_id');
 
             return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
@@ -180,11 +172,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $this->authorize('delete', $user); // policy check
 
-            $existingImage = $user->images()->get();
-            if ($existingImage) {
-                Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete();
-            }
+            $this->imagesManagementService->deleteSingleImage($user);
 
             $user->delete();
 
