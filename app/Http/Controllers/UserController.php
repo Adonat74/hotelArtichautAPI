@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -32,7 +34,7 @@ class UserController extends Controller
     public function getSingleUser(int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::with(['images'])->findOrFail($id);
 
             $this->authorize('view', $user); // policy check
 
@@ -79,6 +81,7 @@ class UserController extends Controller
      *                  @OA\Property(property="postal_code", type="string", description="User's postal code (5 digits)"),
      *                  @OA\Property(property="phone", type="string", description="User's phone number (10 digits)"),
      *                  @OA\Property(property="is_pro", type="boolean", description="Indicates te user status of pro or not"),
+     *                  @OA\Property(property="image", type="string", format="binary")
      *              )
      *          )
      *     ),
@@ -101,15 +104,41 @@ class UserController extends Controller
                 'postal_code' => 'bail|required|string|max:15',
                 'phone' => 'bail|required|string|max:12',
                 'is_pro' => 'bail|required|boolean',
+                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
             $user = User::findOrFail($id);
-
             $this->authorize('update', $user); // policy check
 
+            $user->update([
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'address' => $validatedData['address'],
+                'city' => $validatedData['city'],
+                'postal_code' => $validatedData['postal_code'],
+                'phone' => $validatedData['phone'],
+                'is_pro' => $validatedData['is_pro'],
+            ]);
 
-            $user->update($validatedData);
+            if ($request->hasFile('image')) {
+                $existingImage = $user->images()->get();
 
-            return response()->json($user);
+                //supprime les images du strage et l'url de la table images
+                if ($existingImage) {
+                    Storage::disk('public')->delete($existingImage->url);
+                    $existingImage->delete();
+                }
+                $image = $request->file('images');
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'room_id' => $user->id,
+                ]);
+                $image->save();
+            }
+
+            return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'User not found',
@@ -149,8 +178,14 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-
             $this->authorize('delete', $user); // policy check
+
+            $existingImage = $user->images()->get();
+
+            if ($existingImage) {
+                Storage::disk('public')->delete($existingImage->url);
+                $existingImage->delete();
+            }
 
             $user->delete();
 

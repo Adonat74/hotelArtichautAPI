@@ -53,7 +53,6 @@ class User extends Authenticatable implements JWTSubject
         return [
             'token_version' => $this->token_version,
             'id' => $this->id,
-            'email' => $this->email,
             'role_id' => $this->role_id,
             'is_pro' => $this->is_pro,
             'is_vip' => $this->is_vip,
@@ -64,6 +63,11 @@ class User extends Authenticatable implements JWTSubject
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
     }
 
     public function role(): BelongsTo
