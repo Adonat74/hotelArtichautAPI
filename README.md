@@ -56,6 +56,12 @@ Structure Laravel classique qui ne ré-invente pas la roue.
 4. `cp .env.example .env`
 5. Renseigner les identifiants pour se connecter à la base de donnée dans le `.env`.
 6. `php artisan jwt:secret` pour générer une clé secrète.
+7. `sudo apt-get install php8.3-imagick`Installer le package imagick pour la génération de QR codes en images png :
+8. Ajouter `QR_CODE_DRIVER=imagick` au .env 
+8. `sudo phpenmod imagick` pour activer le package.
+9. `sudo systemctl restart apache2` re-démarrer le serveur.
+10. Ajouter un cronjob pour envoyer les qr codes par email au jour du début de la réservation : `crontab -e` dans le terminal puis ajouter cette ligne dans le fichier : `* * * * * cd /chemin/absolut/du/projet && php artisan schedule:run >> /dev/null 2>&1`
+
 
 ## :scroll: utilisation
 
@@ -87,6 +93,10 @@ Reviews et Users, servent à vérifier si l'utilisateur qui cherche à modifier 
 - ### Middlewares :
   - CheckTokenVersion : Sert à vérifier que le token est valide et est bien le dernier à avoir été généré dans le cas de plusieurs connexions raprochée et donc plusieurs token encore valides.
   - CheckRole : Sert à vérifier si l'utilisateur à le bon role pour accéder à une route.
+
+- ### Console/Commands + routes/console.php
+  - les commandes permettent d'écrire et d'éxécuter des tâches via les lignes de commandes. 
+  - Le fichier console.php permet dans notre cas de planifier l'éxécution de commandes artisan avec Schedule.
 
 ---
 
