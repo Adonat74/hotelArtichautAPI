@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Room;
 use App\Services\BookingService;
+use App\Services\ImagesManagementService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,6 +17,13 @@ use Illuminate\Validation\ValidationException;
 
 class RoomController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
+
 
     /**
      * @OA\Get(
@@ -251,17 +259,9 @@ class RoomController extends Controller
             ]);
             $room->save();
 
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
-                    $imagePath = $image->store('images', 'public');
-                    $image = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'room_id' => $room->id,
-                    ]);
-                    $image->save();
-                }
-            }
+            $this->imagesManagementService->addImages($request, $room, 'room_id');
+
+
             // Retourne une réponse JSON avec les données enregistrées
             return response()->json($room->load(['images', 'category', 'language']), 201);
         } catch (ValidationException $e) {
@@ -350,26 +350,8 @@ class RoomController extends Controller
                 'language_id' => $validatedData['language_id'],
             ]);
 
-            if ($request->hasFile('images')) {
-                $existingImages = $room->images()->get();
 
-                //supprime les images du strage et l'url de la table images
-                if ($existingImages) {
-                    foreach ($existingImages as $existingImage) {
-                        Storage::disk('public')->delete($existingImage->url);
-                        $existingImage->delete();
-                    }
-                }
-
-                foreach ($request->file('images') as $image) {
-                    $imagePath = $image->store('images', 'public');
-                    $image = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'room_id' => $room->id,
-                    ]);
-                    $image->save();
-                }
-            }
+            $this->imagesManagementService->updateImages($request, $room, 'room_id');
 
 
             return response()->json($room->load(['images', 'category', 'language']));
@@ -414,14 +396,9 @@ class RoomController extends Controller
     {
         try {
             $room = Room::findOrFail($id);
-            $existingImages = $room->images()->get();
 
-            if ($existingImages) {
-                foreach ($existingImages as $existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-            }
+            $this->imagesManagementService->deleteImages($room);
+
             $room->delete();
 
             return response()->json(['message' => 'room deleted successfully']);
