@@ -22,14 +22,11 @@ class QrCodeMail extends Mailable
      */
     public function __construct($qrCodeData)
     {
-        // Generate and store the QR code image
         $filename = 'qrcode_' . time() . '.png';
         $qrCodeImage = QrCode::format('png')->size(300)->generate($qrCodeData);
 
-        // Save QR code in the storage/app/public/qrcodes folder
         Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
 
-        // Path to the QR code
         $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
 
     }

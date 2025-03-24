@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -84,6 +85,7 @@ class AuthController extends Controller
      *                  @OA\Property(property="postal_code", type="string", description="User's postal code (5 digits)"),
      *                  @OA\Property(property="phone", type="string", description="User's phone number (10 digits)"),
      *                  @OA\Property(property="is_pro", type="integer", description="User's status (optional) 1 or 2 default false(0)"),
+     *                  @OA\Property(property="image", type="string", format="binary")
      *              )
      *          )
      *     ),
@@ -106,15 +108,38 @@ class AuthController extends Controller
                 'postal_code' => 'bail|required|string|max:15',
                 'phone' => 'bail|required|string|max:12',
                 'is_pro' => 'bail|required|boolean',
+                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
-            $user = new User($validatedData);
+            $user = new User([
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'address' => $validatedData['address'],
+                'city' => $validatedData['city'],
+                'postal_code' => $validatedData['postal_code'],
+                'phone' => $validatedData['phone'],
+                'is_pro' => $validatedData['is_pro'],
+            ]);
             $user->save();
+
+
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'room_id' => $user->id,
+                ]);
+                $image->save();
+            }
 
             $token = Auth::login($user);
             return response()->json([
                 'status' => 'success',
                 'message' => 'User created successfully',
-                'user' => $user,
+                'user' => $user->load(['images']),
                 'authorisation' => [
                     'token' => $token,
                     'type' => 'bearer',

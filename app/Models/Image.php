@@ -21,8 +21,13 @@ class Image extends Model
         'rooms_category_id',
         'room_id',
         'language_id',
+        'user_id',
     ];
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function content(): BelongsTo
     {
