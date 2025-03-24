@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class AdminUserController extends Controller
@@ -24,7 +26,7 @@ class AdminUserController extends Controller
     public function getAllUsers(): JsonResponse
     {
         try {
-            $users = User::all();
+            $users = User::with(['images'])->get();
             return response()->json($users);
         } catch (Exception $e) {
             return response()->json([
@@ -55,7 +57,7 @@ class AdminUserController extends Controller
     public function getSingleUser(int $id): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::with(['images'])->findOrFail($id);
             return response()->json($user);
         } catch (ModelNotFoundException $e) {
             return response()->json([
@@ -95,6 +97,7 @@ class AdminUserController extends Controller
      *                  @OA\Property(property="role_id", type="integer", description="User's role"),
      *                  @OA\Property(property="is_pro", type="boolean", description="User's status (optional)"),
      *                  @OA\Property(property="is_vip", type="boolean", description="Indicates if the user is VIP"),
+     *                  @OA\Property(property="image", type="string", format="binary")
      *              )
      *          )
      *     ),
@@ -118,11 +121,35 @@ class AdminUserController extends Controller
                 'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
                 'is_pro' => 'bail|required|boolean',
                 'is_vip' => 'bail|required|boolean',
+                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
-            $user = new User($validatedData);
+            $user = new User([
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'address' => $validatedData['address'],
+                'city' => $validatedData['city'],
+                'postal_code' => $validatedData['postal_code'],
+                'phone' => $validatedData['phone'],
+                'role_id' => $validatedData['role_id'],
+                'is_pro' => $validatedData['is_pro'],
+                'is_vip' => $validatedData['is_vip'],
+            ]);
             $user->save();
 
-            return response()->json($user, 201);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'user_id' => $user->id,
+                ]);
+                $image->save();
+            }
+
+            return response()->json($user->load(['images']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -166,6 +193,7 @@ class AdminUserController extends Controller
      *                  @OA\Property(property="role_id", type="integer", description="User's role"),
      *                  @OA\Property(property="is_pro", type="boolean", description="User's status (optional)"),
      *                  @OA\Property(property="is_vip", type="boolean", description="Indicates if the user is VIP"),
+     *                  @OA\Property(property="image", type="string", format="binary")
      *              )
      *          )
      *     ),
@@ -190,11 +218,44 @@ class AdminUserController extends Controller
                 'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
                 'is_pro' => 'bail|required|boolean',
                 'is_vip' => 'bail|required|boolean',
+                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
+
             ]);
             $user = User::findOrFail($id);
-            $user->update($validatedData);
+            $user->update([
+                'email' => $validatedData['email'],
+                'password' => $validatedData['password'],
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
+                'address' => $validatedData['address'],
+                'city' => $validatedData['city'],
+                'postal_code' => $validatedData['postal_code'],
+                'phone' => $validatedData['phone'],
+                'role_id' => $validatedData['role_id'],
+                'is_pro' => $validatedData['is_pro'],
+                'is_vip' => $validatedData['is_vip'],
+            ]);
 
-            return response()->json($user);
+
+            if ($request->hasFile('image')) {
+                $existingImage = $user->images()->get();
+
+                //supprime les images du strage et l'url de la table images
+                if ($existingImage) {
+                    Storage::disk('public')->delete($existingImage->url);
+                    $existingImage->delete();
+                }
+                $image = $request->file('images');
+                $imagePath = $image->store('images', 'public');
+                $image = new Image([
+                    'url' => url('storage/' . $imagePath),
+                    'user_id' => $user->id,
+                ]);
+                $image->save();
+            }
+
+
+            return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'User not found',
@@ -235,6 +296,13 @@ class AdminUserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+
+            $existingImage = $user->images()->get();
+            if ($existingImage) {
+                Storage::disk('public')->delete($existingImage->url);
+                $existingImage->delete();
+            }
+
             $user->delete();
 
             return response()->json(['message' => 'user deleted successfully']);

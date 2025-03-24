@@ -133,7 +133,7 @@ class UserController extends Controller
                 $imagePath = $image->store('images', 'public');
                 $image = new Image([
                     'url' => url('storage/' . $imagePath),
-                    'room_id' => $user->id,
+                    'user_id' => $user->id,
                 ]);
                 $image->save();
             }
@@ -181,7 +181,6 @@ class UserController extends Controller
             $this->authorize('delete', $user); // policy check
 
             $existingImage = $user->images()->get();
-
             if ($existingImage) {
                 Storage::disk('public')->delete($existingImage->url);
                 $existingImage->delete();
