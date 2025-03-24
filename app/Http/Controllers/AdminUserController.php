@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class AdminUserController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
 
     /**
      * @OA\Get(
@@ -138,16 +145,7 @@ class AdminUserController extends Controller
             ]);
             $user->save();
 
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'user_id' => $user->id,
-                ]);
-                $image->save();
-            }
+            $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
 
             return response()->json($user->load(['images']), 201);
         } catch (ValidationException $e) {
@@ -236,24 +234,7 @@ class AdminUserController extends Controller
                 'is_vip' => $validatedData['is_vip'],
             ]);
 
-
-            if ($request->hasFile('image')) {
-                $existingImage = $user->images()->get();
-
-                //supprime les images du strage et l'url de la table images
-                if ($existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-                $image = $request->file('images');
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'user_id' => $user->id,
-                ]);
-                $image->save();
-            }
-
+            $this->imagesManagementService->updateSingleImage($request, $user, 'user_id');
 
             return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
@@ -297,11 +278,7 @@ class AdminUserController extends Controller
         try {
             $user = User::findOrFail($id);
 
-            $existingImage = $user->images()->get();
-            if ($existingImage) {
-                Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete();
-            }
+            $this->imagesManagementService->deleteSingleImage($user);
 
             $user->delete();
 
