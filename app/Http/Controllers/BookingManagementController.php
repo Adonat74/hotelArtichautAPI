@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Mail\QrCodeMail;
+use App\Models\Booking;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -13,19 +15,19 @@ class BookingManagementController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/booking-management/qr-code/user-{id}",
-     *     summary="Send a mail with a qr code to the user",
+     *     path="/api/booking-management/qr-code",
+     *     summary="Send a mail with a qr code to the user - need to be authentified and role = user",
      *     tags={"BookingManagement"},
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getQrCode(int $id): JsonResponse
+    public function sendQrCode(): JsonResponse
     {
         try {
-            $qrCodeData = "https://upload.wikimedia.org/wikipedia/commons/f/f6/Toucher_rectal.jpg";
+            $user = Auth::user();
 
-            Mail::to('lucas.gratien@le-campus-numerique.fr')->send(new QrCodeMail($qrCodeData));
+            Mail::to($user->email)->send(new QrCodeMail($user->id));
 
             return response()->json(["message" => "mail successfully sent"]);
         } catch (Exception $e) {

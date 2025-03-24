@@ -946,6 +946,23 @@
                 }
             }
         },
+        "/api/booking-management/qr-code": {
+            "get": {
+                "tags": [
+                    "BookingManagement"
+                ],
+                "summary": "Send a mail with a qr code to the user - need to be authentified and role = user",
+                "operationId": "62f1daba9866175d3f09a339ae1266d6",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/content/{id}": {
             "get": {
                 "tags": [
@@ -3394,6 +3411,10 @@
         {
             "name": "Bookings",
             "description": "Bookings"
+        },
+        {
+            "name": "BookingManagement",
+            "description": "BookingManagement"
         },
         {
             "name": "Contents",
