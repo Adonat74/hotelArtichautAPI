@@ -57,7 +57,7 @@ class AuthController extends Controller
         $user = Auth::user();
         return response()->json([
             'status' => 'success',
-            'user' => $user,
+            'user' => $user->load(['images']),
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',
@@ -130,7 +130,7 @@ class AuthController extends Controller
                 $imagePath = $image->store('images', 'public');
                 $image = new Image([
                     'url' => url('storage/' . $imagePath),
-                    'room_id' => $user->id,
+                    'user_id' => $user->id,
                 ]);
                 $image->save();
             }
