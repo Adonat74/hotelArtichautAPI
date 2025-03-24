@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\NewsArticle;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class NewsArticleController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
 
     /**
      * @OA\Get(
@@ -183,16 +190,7 @@ class NewsArticleController extends Controller
             ]);
             $newsArticle->save();
 
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $imagePath = $image->store('images', 'public');
-                    $image = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'news_article_id' => $newsArticle->id,
-                    ]);
-                    $image->save();
-                }
-            }
+            $this->imagesManagementService->addImages($request, $newsArticle, 'news_article_id');
 
             return response()->json($newsArticle->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
@@ -300,25 +298,8 @@ class NewsArticleController extends Controller
                 'language_id' => $validatedData['language_id'],
             ]);
 
-            if ($request->hasFile('images')) {
-                $existingImages = $newsArticle->images()->get();
+            $this->imagesManagementService->updateImages($request, $newsArticle, 'news_article_id');
 
-                // Delete existing images
-                foreach ($existingImages as $existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-
-                // Store new images
-                foreach ($request->file('images') as $image) {
-                    $imagePath = $image->store('images', 'public');
-                    $newImage = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'news_article_id' => $newsArticle->id,
-                    ]);
-                    $newImage->save();
-                }
-            }
 
             return response()->json($newsArticle->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
@@ -360,13 +341,8 @@ class NewsArticleController extends Controller
     {
         try {
             $newsArticle = NewsArticle::findOrFail($id);
-            $existingImages = $newsArticle->images()->get();
 
-            // Delete existing images
-            foreach ($existingImages as $existingImage) {
-                Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete();
-            }
+            $this->imagesManagementService->deleteImages($newsArticle);
 
             $newsArticle->delete();
 

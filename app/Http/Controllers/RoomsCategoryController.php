@@ -4,6 +4,7 @@
 
     use App\Models\Image;
     use App\Models\RoomsCategory;
+    use App\Services\ImagesManagementService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@
 
     class RoomsCategoryController extends Controller
     {
+        protected ImagesManagementService $imagesManagementService;
+
+        public function __construct(ImagesManagementService $imagesManagementService)
+        {
+            $this->imagesManagementService = $imagesManagementService;
+        }
 
 
         /**
@@ -212,16 +219,8 @@
                     $roomCategory->features()->attach($validatedData['rooms_features']);
                 }
 
-                if ($request->hasFile('images')) {
-                    foreach ($request->file('images') as $image) {
-                        $imagePath = $image->store('images', 'public');
-                        $image = new Image([
-                            'url' => url('storage/' . $imagePath),
-                            'rooms_category_id' => $roomCategory->id,
-                        ]);
-                        $image->save();
-                    }
-                }
+                $this->imagesManagementService->addImages($request, $roomCategory, 'rooms_category_id');
+
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($roomCategory->load(['features', 'rooms', 'images', 'language']), 201);
             } catch (ValidationException $e) {
@@ -353,24 +352,8 @@
                     $roomCategory->features()->sync($validatedData['rooms_features']);
                 }
 
-                if ($request->hasFile('images')) {
-                    $existingImages = $roomCategory->images()->get();
-                    if ($existingImages) {
-                        foreach ($existingImages as $existingImage) {
-                            Storage::disk('public')->delete($existingImage->url);
-                            $existingImage->delete();
-                        }
-                    }
+                $this->imagesManagementService->updateImages($request, $roomCategory, 'rooms_category_id');
 
-                    foreach ($request->file('images') as $image) {
-                        $imagePath = $image->store('images', 'public');
-                        $image = new Image([
-                            'url' => url('storage/' . $imagePath),
-                            'rooms_category_id' => $roomCategory->id,
-                        ]);
-                        $image->save();
-                    }
-                }
 
                 return response()->json($roomCategory->load(['features',  'rooms', 'images', 'language']));
             } catch (ModelNotFoundException $e) {
@@ -414,6 +397,10 @@
             try {
                 $category = RoomsCategory::findOrFail($id);
                 $category->features()->detach();
+
+                $this->imagesManagementService->deleteImages($category);
+
+
                 $category->delete();
 
                 return response()->json(['message' => 'Catégorie deleted successfully']);

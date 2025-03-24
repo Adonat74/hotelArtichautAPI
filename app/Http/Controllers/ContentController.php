@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Image;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class ContentController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
     /**
      * @OA\Get(
      *     path="/api/content/{id}",
@@ -202,16 +209,7 @@ class ContentController extends Controller
             ]);
             $content->save();
 
-            if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
-                    $imagePath = $image->store('images', 'public');
-                    $image = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'content_id' => $content->id,
-                    ]);
-                    $image->save();
-                }
-            }
+            $this->imagesManagementService->addImages($request, $content, 'content_id');
 
             return response()->json($content->load(['images', 'language']), 201);
         } catch (ValidationException $exception) {
@@ -338,25 +336,7 @@ class ContentController extends Controller
                 'language_id' => $validatedData['language_id'],
             ]);
 
-            if ($request->hasFile('images')) {
-                $existingImages = $content->images()->get();
-
-                if ($existingImages) {
-                    foreach ($existingImages as $existingImage) {
-                        Storage::disk('public')->delete($existingImage->url);
-                        $existingImage->delete();
-                    }
-                }
-
-                foreach ($request->file('images') as $image) {
-                    $imagePath = $image->store('images', 'public');
-                    $image = new Image([
-                        'url' => url('storage/' . $imagePath),
-                        'content_id' => $content->id,
-                    ]);
-                    $image->save();
-                }
-            }
+            $this->imagesManagementService->updateImages($request, $content, 'content_id');
 
             return response()->json($content->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
@@ -398,14 +378,8 @@ class ContentController extends Controller
     {
         try {
             $content = Content::findOrFail($id);
-            $existingImages = $content->images()->get();
 
-            if ($existingImages) {
-                foreach ($existingImages as $existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-            }
+            $this->imagesManagementService->deleteImages($content);
 
             $content->delete();
 
