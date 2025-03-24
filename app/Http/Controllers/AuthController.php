@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
 
     /**
      * @OA\Post(
@@ -123,17 +130,7 @@ class AuthController extends Controller
             ]);
             $user->save();
 
-
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                //enregistre les images dans le dossier storage/app/public/images et l'url pour y accéder dans la table image
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'user_id' => $user->id,
-                ]);
-                $image->save();
-            }
+            $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
 
             $token = Auth::login($user);
             return response()->json([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Language;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class LanguageController extends Controller
 {
+    protected ImagesManagementService $imagesManagementService;
+
+    public function __construct(ImagesManagementService $imagesManagementService)
+    {
+        $this->imagesManagementService = $imagesManagementService;
+    }
     /**
      * @OA\Get(
      *     path="/api/language/{id}",
@@ -113,15 +120,7 @@ class LanguageController extends Controller
             ]);
             $language->save();
 
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'language_id' => $language->id,
-                ]);
-                $image->save();
-            }
+            $this->imagesManagementService->addSingleImage($request, $language, 'language_id');
 
             return response()->json($language->load(['image']), 201);
         } catch (ValidationException $exception) {
@@ -188,22 +187,7 @@ class LanguageController extends Controller
                 'lang' => $validatedData['lang']
             ]);
 
-            if ($request->hasFile('image')) {
-                $existingImage = $language->image;
-
-                if ($existingImage) {
-                    Storage::disk('public')->delete($existingImage->url);
-                    $existingImage->delete();
-                }
-
-                $image = $request->file('image');
-                $imagePath = $image->store('images', 'public');
-                $image = new Image([
-                    'url' => url('storage/' . $imagePath),
-                    'language_id' => $language->id,
-                ]);
-                $image->save();
-            }
+            $this->imagesManagementService->updateSingleImage($request, $language, 'language_id');
 
             return response()->json($language->load(['image']));
         } catch (ModelNotFoundException $e) {
@@ -245,14 +229,8 @@ class LanguageController extends Controller
     {
         try {
             $language = Language::findOrFail($id);
-            $existingImage = $language->image;
 
-            if ($existingImage) {
-                Storage::disk('public')->delete($existingImage->url);
-                $existingImage->delete();
-
-            }
-
+            $this->imagesManagementService->deleteSingleImage($language);
 
             $language->delete();
 
