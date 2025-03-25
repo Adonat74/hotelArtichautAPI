@@ -55,6 +55,7 @@ Structure Laravel classique qui ne ré-invente pas la roue.
 3. `npm install` pour installer les dépendances.
 4. `cp .env.example .env`
 5. Renseigner les identifiants pour se connecter à la base de donnée dans le `.env`.
+6. `php artisan key:generate` pour générer une APP_KEY servant à encrypt/decrypt data, generate random strings and tokens.
 6. `php artisan jwt:secret` pour générer une clé secrète.
 7. `sudo apt-get install php8.3-imagick`Installer le package imagick pour la génération de QR codes en images png :
 8. Ajouter `QR_CODE_DRIVER=imagick` au .env 
