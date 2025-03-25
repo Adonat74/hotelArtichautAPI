@@ -363,6 +363,10 @@
                                     "is_vip": {
                                         "description": "Indicates if the user is VIP",
                                         "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -497,6 +501,10 @@
                                     "is_vip": {
                                         "description": "Indicates if the user is VIP",
                                         "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -654,6 +662,10 @@
                                     "is_pro": {
                                         "description": "User's status (optional) 1 or 2 default false(0)",
                                         "type": "integer"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
@@ -3342,6 +3354,10 @@
                                     "is_pro": {
                                         "description": "Indicates te user status of pro or not",
                                         "type": "boolean"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
                                     }
                                 },
                                 "type": "object"
