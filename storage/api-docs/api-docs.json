@@ -3250,24 +3250,13 @@
                 }
             }
         },
-        "/api/user/{id}": {
+        "/api/user": {
             "get": {
                 "tags": [
                     "Users"
                 ],
                 "summary": "Get one user by id- need to be authentified and role = user",
-                "operationId": "872b763758398bc0a2492976972417aa",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The ID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+                "operationId": "8b49fc173a62cd7ff5215e9f5cdadf1e",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -3285,18 +3274,7 @@
                     "Users"
                 ],
                 "summary": "Update an existing user- need to be authentified and role = user",
-                "operationId": "0c3a70ac5b05d1923ee03be654c0c639",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The ID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+                "operationId": "3ccbce84fff269aa3371ca5e3de5786d",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -3385,18 +3363,7 @@
                     "Users"
                 ],
                 "summary": "Delete a user by id- need to be authentified and role = user",
-                "operationId": "159036e20e48c9b57b682ba5ba42a976",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The ID of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+                "operationId": "9281cc2cda63356f7e0a6e4652e698d2",
                 "responses": {
                     "200": {
                         "description": "Successful operation"

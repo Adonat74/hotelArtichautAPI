@@ -132,7 +132,8 @@ class AuthController extends Controller
 
             $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
 
-            $token = Auth::login($user);
+            $credentials = $request->only('email', 'password');
+            $token = Auth::attempt($credentials);
             return response()->json([
                 'status' => 'success',
                 'message' => 'User created successfully',
