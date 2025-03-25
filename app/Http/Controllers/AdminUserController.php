@@ -4,21 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\CompareUserRoleService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class AdminUserController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected CompareUserRoleService $compareUserRoleService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(ImagesManagementService $imagesManagementService, CompareUserRoleService $compareUserRoleService)
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->compareUserRoleService = $compareUserRoleService;
     }
 
     /**
@@ -130,6 +135,10 @@ class AdminUserController extends Controller
                 'is_vip' => 'bail|required|boolean',
                 'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
+
+            //Check user role, so it can't create/update/delete a user with bigger role
+            $this->compareUserRoleService->compareUserRole(Auth::user(), $validatedData['role_id']);
+
             $user = new User([
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
@@ -204,8 +213,12 @@ class AdminUserController extends Controller
     public function updateUser(Request $request, string $id): JsonResponse
     {
         try{
+            $user = User::findOrFail($id);
+
             $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
+//                permet de rendre l'email unique sauf pour le précédent email
+                'email' => ['bail', 'required', 'email:rfc', Rule::unique('users', 'email')->ignore($user->id),
+                ],
                 'password' => 'bail|required|string|min:10',
                 'firstname' => 'bail|required|string|max:50',
                 'lastname' => 'bail|required|string|max:50',
@@ -217,9 +230,13 @@ class AdminUserController extends Controller
                 'is_pro' => 'bail|required|boolean',
                 'is_vip' => 'bail|required|boolean',
                 'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-
             ]);
-            $user = User::findOrFail($id);
+
+
+            // Check user role, so it can't create/update/delete a user with bigger role
+            $this->compareUserRoleService->compareUserRole(Auth::user(), $user->role->id);
+            $this->compareUserRoleService->compareUserRole(Auth::user(), $validatedData['role_id']);
+
             $user->update([
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
@@ -276,7 +293,12 @@ class AdminUserController extends Controller
     public function deleteUser(string $id): JsonResponse
     {
         try {
+
             $user = User::findOrFail($id);
+
+            //Check user role, so it can't create/update/delete a user with bigger role
+            $this->compareUserRoleService->compareUserRole(Auth::user(), $user->role->id);
+
 
             $this->imagesManagementService->deleteSingleImage($user);
 
