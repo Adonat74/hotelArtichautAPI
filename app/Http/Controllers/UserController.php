@@ -27,13 +27,6 @@ class UserController extends Controller
      *     path="/api/user",
      *     summary="Get one user by id- need to be authentified and role = user",
      *     tags={"Users"},
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          description="The ID of the user",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="User not found"),
      *     @OA\Response(response=500, description="An error occurred")
@@ -68,13 +61,6 @@ class UserController extends Controller
      *     path="/api/user",
      *     summary="Update an existing user- need to be authentified and role = user",
      *     tags={"Users"},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="The ID of the user",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\MediaType(
@@ -156,13 +142,6 @@ class UserController extends Controller
      *     path="/api/user",
      *     summary="Delete a user by id- need to be authentified and role = user",
      *     tags={"Users"},
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          description="The ID of the user",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=404, description="User not found"),
      *     @OA\Response(response=500, description="An error occurred")
