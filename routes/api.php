@@ -67,9 +67,9 @@ Route::get('/refresh', [AuthController::class, 'refresh'])->middleware(['auth:ap
 
 // USER ROUTES
 Route::prefix('user')->controller(UserController::class)->group(function () {
-    Route::get('/{id}', 'getSingleUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
-    Route::post('/{id}', 'updateUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
-    Route::delete('/{id}', 'deleteUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::get('/', 'getSingleUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/', 'updateUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::delete('/', 'deleteUser')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
 });
 
 // ADMIN USER ROUTES
