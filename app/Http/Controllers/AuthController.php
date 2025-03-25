@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QrCodeMail;
+use App\Mail\RegisterMail;
 use App\Models\Image;
 use App\Models\User;
 use App\Services\ImagesManagementService;
@@ -10,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -131,6 +134,10 @@ class AuthController extends Controller
             $user->save();
 
             $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
+
+
+
+            Mail::to($user->email)->send(new RegisterMail($user));
 
             $credentials = $request->only('email', 'password');
             $token = Auth::attempt($credentials);
