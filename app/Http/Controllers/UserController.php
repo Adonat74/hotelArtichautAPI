@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -23,7 +24,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/user/{id}",
+     *     path="/api/user",
      *     summary="Get one user by id- need to be authentified and role = user",
      *     tags={"Users"},
      *      @OA\Parameter(
@@ -38,14 +39,15 @@ class UserController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function getSingleUser(int $id): JsonResponse
+    public function getSingleUser(): JsonResponse
     {
+
         try {
-            $user = User::with(['images'])->findOrFail($id);
+            $user = Auth::user();
 
             $this->authorize('view', $user); // policy check
 
-            return response()->json($user);
+            return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'user not found',
@@ -63,7 +65,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/user/{id}",
+     *     path="/api/user",
      *     summary="Update an existing user- need to be authentified and role = user",
      *     tags={"Users"},
      *     @OA\Parameter(
@@ -98,7 +100,7 @@ class UserController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateUser(Request $request, string $id): JsonResponse
+    public function updateUser(Request $request): JsonResponse
     {
         try{
             $validatedData = $request->validate([
@@ -113,7 +115,7 @@ class UserController extends Controller
                 'is_pro' => 'bail|required|boolean',
                 'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
-            $user = User::findOrFail($id);
+            $user = Auth::user();
             $this->authorize('update', $user); // policy check
 
             $user->update([
@@ -151,7 +153,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/user/{id}",
+     *     path="/api/user",
      *     summary="Delete a user by id- need to be authentified and role = user",
      *     tags={"Users"},
      *      @OA\Parameter(
@@ -166,10 +168,10 @@ class UserController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function deleteUser(string $id): JsonResponse
+    public function deleteUser(): JsonResponse
     {
         try {
-            $user = User::findOrFail($id);
+            $user = Auth::user();
             $this->authorize('delete', $user); // policy check
 
             $this->imagesManagementService->deleteSingleImage($user);
