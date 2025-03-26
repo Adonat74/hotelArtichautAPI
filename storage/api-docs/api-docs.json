@@ -792,6 +792,10 @@
                                         "type": "integer",
                                         "example": 7000
                                     },
+                                    "number_of_persons": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
                                     "rooms": {
                                         "type": "array",
                                         "items": {
@@ -917,6 +921,10 @@
                                     "to_be_paid_in_cents": {
                                         "type": "integer",
                                         "example": 5000
+                                    },
+                                    "number_of_persons": {
+                                        "type": "integer",
+                                        "example": 2
                                     },
                                     "rooms": {
                                         "type": "array",

@@ -21,6 +21,7 @@ class Booking extends Model
         'check_out',
         'total_price_in_cents',
         'to_be_paid_in_cents',
+        'number_of_persons',
         'user_id',
     ];
 
