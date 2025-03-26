@@ -9,17 +9,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RegisterMail extends Mailable
+class BookingMail extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $userData;
+    protected $bookingData;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($userData)
+    public function __construct($bookingData)
     {
-        $this->userData = $userData;
+        $this->bookingData = $bookingData;
     }
 
     /**
@@ -28,7 +28,7 @@ class RegisterMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Register Mail',
+            subject: 'Booking Mail',
         );
     }
 
@@ -38,8 +38,8 @@ class RegisterMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registerMail',
-            with: ["user_firstname" => $this->userData->fistname]
+            view: 'emails.bookingMail',
+            with: ["qrCodePath" => $this->bookingData]
         );
     }
 

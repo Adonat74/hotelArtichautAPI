@@ -15,7 +15,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class QrCodeMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $qrCodePath;
+    protected $qrCodePath;
 
     /**
      * Create a new message instance.

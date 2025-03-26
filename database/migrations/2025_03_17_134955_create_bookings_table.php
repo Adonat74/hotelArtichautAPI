@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('check_out');
             $table->integer('total_price_in_cents');
             $table->integer('to_be_paid_in_cents');
+            $table->integer('number_of_persons');
             $table->foreignIdFor(User::class);
             $table->timestamps();
         });

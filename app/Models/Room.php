@@ -35,7 +35,7 @@ class Room extends Model
             ->where('check_out', '>=', $now)
             ->get();
 
-        return !$hasActiveBooking->isEmpty();
+        return $hasActiveBooking->isEmpty();
     }
 
     public function category(): BelongsTo

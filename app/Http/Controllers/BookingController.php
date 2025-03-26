@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BookingMail;
+use App\Mail\QrCodeMail;
 use App\Models\Booking;
+use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
+    protected BookingPriceCalculationService $bookingPriceCalculationService;
+
+    public function __construct(BookingPriceCalculationService $bookingPriceCalculationService)
+    {
+        $this->bookingPriceCalculationService = $bookingPriceCalculationService;
+    }
+
 
     /**
      * @OA\Get(
@@ -89,6 +102,7 @@ class BookingController extends Controller
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
      *             @OA\Property(property="total_price_in_cents", type="integer", example=15000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
+     *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
      *         )
@@ -106,6 +120,7 @@ class BookingController extends Controller
                 'check_out' => 'bail|required|date|after:check_in',
                 'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
+                'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
                 'services' => 'nullable|array',
@@ -115,13 +130,13 @@ class BookingController extends Controller
             $bookingService = new BookingService();
             forEach($validatedData['rooms'] as $room){
                 if (!$bookingService->checkRoomAvailability($room, $validatedData['check_in'], $validatedData['check_out'])) {
-                    throw new Exception("The room is not available for the given date");
+                    throw new Exception("The room ". $room ." is not available for the given date");
                 }
             }
 
-            $user = $request->user();
-
+            $user = Auth::user();
             $booking = new Booking($validatedData);
+
             $booking->user_id = $user->id;
             $booking->save();
 
@@ -133,7 +148,12 @@ class BookingController extends Controller
                 $booking->services()->attach($validatedData['services']);
             }
 
-            return response()->json($booking->load(['services', 'rooms', 'user']), 201);
+            $booking->total_price_in_cents = $this->bookingPriceCalculationService->calculatePrice($booking);
+            $booking->save();
+
+//            Mail::to($user->email)->send(new BookingMail($booking->load([''])));
+
+            return response()->json($booking->load(['services', 'rooms.category', 'user']), 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
@@ -167,6 +187,7 @@ class BookingController extends Controller
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
      *             @OA\Property(property="total_price_in_cents", type="integer", example=20000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=7000),
+     *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
      *         )
@@ -185,6 +206,7 @@ class BookingController extends Controller
                 'check_out' => 'bail|required|date|after:check_in',
                 'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
+                'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
                 'services' => 'nullable|array',
