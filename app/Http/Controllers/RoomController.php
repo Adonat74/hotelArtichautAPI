@@ -154,7 +154,7 @@ class RoomController extends Controller
 
             $bookingService = new BookingService();
             forEach($rooms as $key => $room){
-                if (!$bookingService->checkRoomAvailability($room->id,$request->query('check_in'), $request->query('check_out'))) {
+                if (!$bookingService->checkRoomAvailability($room->id, $request->query('check_in'), $request->query('check_out'))) {
                     unset($rooms[$key]);
                 }
             }
