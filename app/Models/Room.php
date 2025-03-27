@@ -30,6 +30,15 @@ class Room extends Model
     public function getIsAvailableAttribute(): bool
     {
         $now = Carbon::now();
+        $tradRooms = Room::where('number', $this->number)->get();
+        foreach ($tradRooms as $tradRoom) {
+            $hasActiveBooking = $tradRoom->bookings()
+                ->where('check_in', '<', $now)
+                ->where('check_out', '>=', $now)
+                ->get();
+            return $hasActiveBooking->isEmpty();
+        }
+
         $hasActiveBooking = $this->bookings()
             ->where('check_in', '<', $now)
             ->where('check_out', '>=', $now)
