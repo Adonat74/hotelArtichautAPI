@@ -39,7 +39,7 @@ class RegisterMail extends Mailable
     {
         return new Content(
             view: 'emails.registerMail',
-            with: ["user_firstname" => $this->userData->fistname]
+            with: ["user_firstname" => $this->userData->firstname]
         );
     }
 

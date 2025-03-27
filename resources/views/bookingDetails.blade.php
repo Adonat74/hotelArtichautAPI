@@ -11,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
-        /* Inline styles for simplicity, consider using CSS classes for larger templates */
-        body {
-            font-family: Lora, Arial, sans-serif;
+/* Inline styles for simplicity, consider using CSS classes for larger templates */
+body {
+    font-family: Lora, Arial, sans-serif;
             width: 100%;
             height: 100%;
             margin: 0;
@@ -22,12 +22,12 @@
             color: #273425;
         }
         h1, h2, h3, h4, h5, h6 {
-            font-family: Cardo, Arial, sans-serif;
+    font-family: Cardo, Arial, sans-serif;
             font-weight: 300;
             margin: 0;
         }
         header{
-            font-family: Cardo, Arial, sans-serif;
+    font-family: Cardo, Arial, sans-serif;
             color: #EAC684;
             background-color: #4B6547;
             font-size: 4rem;
@@ -35,36 +35,36 @@
             padding: 60px 0 0 40px;
         }
         .title {
-            font-size: 3rem;
+    font-size: 3rem;
             margin: 20px 0;
         }
         h3{
-            font-size: 2rem;
+    font-size: 2rem;
         }
         main {
-            width: 100%;
-            height: 100%;
-            text-align: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
         }
 
         .piscine {
-            width: 100%;
-            height: 500px;
+    width: 100%;
+    height: 500px;
             object-fit: cover;
             border-top: 25px solid #EAC684;
             border-bottom: 25px solid #EAC684;
         }
 
         .info_container {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 
         }
 
         .info {
-            width: 100%;
-            background-color: #F1EBD9;
+    width: 100%;
+    background-color: #F1EBD9;
             margin: 10px;
             font-size: 1.3rem;
             padding: 50px;
@@ -72,22 +72,22 @@
         }
 
         .cocktail {
-            width: 100%;
-            height: 500px;
+    width: 100%;
+    height: 500px;
             object-fit: cover;
         }
 
         .logo {
-            text-align: center;
+    text-align: center;
             width: 50%;
         }
 
         .message {
-            font-size: 3rem;
+    font-size: 3rem;
         }
 
         footer {
-            text-align: center;
+    text-align: center;
             margin-top: 20px;
         }
     </style>
@@ -129,8 +129,6 @@
             @endforeach
         </div>
     </div>
-
-    <img src="{!! $message->embedData((string) QrCode::format('png')->size(300)->generate('http://192.168.1.245:8000/qr/reservation/'.$booking_id), 'QrCode.png', 'image/png') !!}" alt="qr code">
 
     <h2 class="title">Cadeau de bienvenue</h2>
     <img class="cocktail" src="{{ url('images/cocktail.png') }}" alt="cocktail">

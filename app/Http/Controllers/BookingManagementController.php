@@ -41,7 +41,7 @@ class BookingManagementController extends Controller
         try {
             $user = Auth::user();
 
-            Mail::to($user->email)->send(new QrCodeMail($user->id));
+            Mail::to($user->email)->send(new QrCodeMail($user));
 
             return response()->json(["message" => "mail successfully sent"]);
         } catch (Exception $e) {

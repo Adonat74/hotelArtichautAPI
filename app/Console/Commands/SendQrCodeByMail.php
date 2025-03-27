@@ -35,10 +35,10 @@ class SendQrCodeByMail extends Command
             ->get();
 
         foreach ($bookings as $booking) {
-            $qrCodeUserdata = $booking->user;
+            $user = $booking->user;
 
-            Mail::to($qrCodeUserdata->email)->send(new QrCodeMail(
-                $qrCodeUserdata->id
+            Mail::to($user->email)->send(new QrCodeMail(
+                $user
             ));
         }
     }

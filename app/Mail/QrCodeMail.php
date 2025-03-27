@@ -15,19 +15,14 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class QrCodeMail extends Mailable
 {
     use Queueable, SerializesModels;
-    protected $qrCodePath;
+    protected $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($qrCodeData)
+    public function __construct($user)
     {
-        $filename = 'qrcode_' . time() . '.png';
-        $qrCodeImage = QrCode::format('png')->size(300)->generate($qrCodeData);
-
-        Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
-
-        $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
+        $this->user = $user;
     }
 
     /**
@@ -36,7 +31,7 @@ class QrCodeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Qr Code Mail',
+            subject: 'Début de séjour',
         );
     }
 
@@ -47,7 +42,10 @@ class QrCodeMail extends Mailable
     {
         return new Content(
             view: 'emails.qrCodeMail',
-            with: ["qrCodePath" => $this->qrCodePath]
+            with: [
+                "user_firstname" => $this->user->firstname,
+                "user_id" => $this->user->id,
+            ],
         );
     }
 
@@ -58,10 +56,6 @@ class QrCodeMail extends Mailable
      */
     public function attachments(): array
     {
-        return [
-            Attachment::fromPath($this->qrCodePath)
-                ->as('qrcode.png')
-                ->withMime('image/png'),
-        ];
+        return [];
     }
 }
