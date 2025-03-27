@@ -100,7 +100,6 @@ class BookingController extends Controller
      *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="total_price_in_cents", type="integer", example=15000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
@@ -118,7 +117,6 @@ class BookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
@@ -140,7 +138,7 @@ class BookingController extends Controller
             $booking->user_id = $user->id;
             $booking->save();
 
-//            Associe rooms et services si fournis dans le body de la requete
+//          Associe rooms et services si fournis dans le body de la requete
             if (isset($validatedData['rooms'])) {
                 $booking->rooms()->attach($validatedData['rooms']);
             }
@@ -151,7 +149,7 @@ class BookingController extends Controller
             $booking->total_price_in_cents = $this->bookingPriceCalculationService->calculatePrice($booking);
             $booking->save();
 
-//            Mail::to($user->email)->send(new BookingMail($booking->load([''])));
+            Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 
             return response()->json($booking->load(['services', 'rooms.category', 'user']), 201);
         } catch (ValidationException $e) {
@@ -185,7 +183,6 @@ class BookingController extends Controller
      *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
-     *             @OA\Property(property="total_price_in_cents", type="integer", example=20000),
      *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=7000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
@@ -204,7 +201,6 @@ class BookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cents' => 'bail|required|integer',
                 'to_be_paid_in_cents' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',

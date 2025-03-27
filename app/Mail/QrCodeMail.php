@@ -28,7 +28,6 @@ class QrCodeMail extends Mailable
         Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
 
         $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
-
     }
 
     /**
