@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/qr/reservation/{id}', function ($id) {
     $bookingData = Booking::with('services', 'rooms.category', 'user')->findOrFail($id);
 
-    return view('emails.bookingMail', [
+    return view('bookingDetails', [
         "booking_check_in" => $bookingData->check_in,
         "booking_check_out" => $bookingData->check_out,
         "booking_price" => $bookingData->total_price_in_cents/100 . ' €',

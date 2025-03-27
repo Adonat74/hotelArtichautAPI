@@ -16,7 +16,7 @@ class BookingMail extends Mailable
 {
     use Queueable, SerializesModels;
     protected $bookingData;
-    protected $qrCodePath;
+//    protected $qrCodePath;
 
 
     /**
@@ -26,12 +26,12 @@ class BookingMail extends Mailable
     {
         $this->bookingData = $bookingData;
 
-        $filename = 'qrcode_' . time() . '.png';
-        $qrCodeImage = QrCode::format('png')->size(300)->generate('http://192.168.1.245:8000/qr/reservation/'.$bookingData->id);
-
-        Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
-
-        $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
+//        $filename = 'qrcode_' . time() . '.png';
+//        $qrCodeImage = QrCode::format('png')->size(300)->generate('http://192.168.1.245:8000/qr/reservation/'.$bookingData->id);
+//
+//        Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
+//
+//        $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
     }
 
     /**
@@ -52,6 +52,7 @@ class BookingMail extends Mailable
         return new Content(
             view: 'emails.bookingMail',
             with: [
+                "booking_id" => $this->bookingData->id,
                 "booking_check_in" => $this->bookingData->check_in,
                 "booking_check_out" => $this->bookingData->check_out,
                 "booking_price" => $this->bookingData->total_price_in_cents/100 . ' €',
@@ -77,9 +78,9 @@ class BookingMail extends Mailable
     public function attachments(): array
     {
         return [
-            Attachment::fromPath($this->qrCodePath)
-                ->as('qrcode.png')
-                ->withMime('image/png'),
+//            Attachment::fromPath($this->qrCodePath)
+//                ->as('qrcode.png')
+//                ->withMime('image/png'),
         ];
     }
 }

@@ -137,7 +137,8 @@ class AuthController extends Controller
 
 
 
-            Mail::to($user->email)->send(new RegisterMail($user));
+//            Mail::to($user->email)->send(new RegisterMail($user));
+            Mail::to('donatgoninet.antoine@gmail.com')->send(new RegisterMail($user));
 
             $credentials = $request->only('email', 'password');
             $token = Auth::attempt($credentials);
