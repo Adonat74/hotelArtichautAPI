@@ -5,14 +5,19 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BookingMail extends Mailable
 {
     use Queueable, SerializesModels;
     protected $bookingData;
+    protected $qrCodePath;
+
 
     /**
      * Create a new message instance.
@@ -20,6 +25,13 @@ class BookingMail extends Mailable
     public function __construct($bookingData)
     {
         $this->bookingData = $bookingData;
+
+        $filename = 'qrcode_' . time() . '.png';
+        $qrCodeImage = QrCode::format('png')->size(300)->generate('http://192.168.1.245:8000/qr/reservation/'.$bookingData->id);
+
+        Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
+
+        $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
     }
 
     /**
@@ -28,7 +40,7 @@ class BookingMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Booking Mail',
+            subject: 'Booking confirmation',
         );
     }
 
@@ -39,7 +51,21 @@ class BookingMail extends Mailable
     {
         return new Content(
             view: 'emails.bookingMail',
-            with: ["qrCodePath" => $this->bookingData]
+            with: [
+                "booking_check_in" => $this->bookingData->check_in,
+                "booking_check_out" => $this->bookingData->check_out,
+                "booking_price" => $this->bookingData->total_price_in_cents/100 . ' €',
+                "booking_number_person" => $this->bookingData->number_of_persons,
+                "services" => $this->bookingData->services,
+
+                "user_lastname" => $this->bookingData->user->lastname,
+                "user_firstname" => $this->bookingData->user->firstname,
+                "user_address" => $this->bookingData->user->address,
+                "user_postal_code" => $this->bookingData->user->postal_code,
+                "user_city" => $this->bookingData->user->city,
+                "user_phone" => $this->bookingData->user->phone,
+                "user_email" => $this->bookingData->user->email,
+            ]
         );
     }
 
@@ -50,6 +76,10 @@ class BookingMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromPath($this->qrCodePath)
+                ->as('qrcode.png')
+                ->withMime('image/png'),
+        ];
     }
 }
