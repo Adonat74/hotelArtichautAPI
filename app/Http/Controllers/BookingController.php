@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\BookingMail;
 use App\Mail\QrCodeMail;
 use App\Models\Booking;
+use App\Models\Room;
+use App\Models\Service;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
 use Carbon\Carbon;
@@ -135,6 +137,9 @@ class BookingController extends Controller
             $user = Auth::user();
             $booking = new Booking($validatedData);
 
+            $rooms = Room::whereIn('id', $validatedData['rooms'])->get();
+            $services = Service::whereIn('id', $validatedData['services'])->get();
+            $booking->total_price_in_cents = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
             $booking->user_id = $user->id;
             $booking->save();
 
@@ -145,9 +150,6 @@ class BookingController extends Controller
             if (isset($validatedData['services'])) {
                 $booking->services()->attach($validatedData['services']);
             }
-
-            $booking->total_price_in_cents = $this->bookingPriceCalculationService->calculatePrice($booking);
-            $booking->save();
 
             Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 

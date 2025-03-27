@@ -45,6 +45,7 @@ Route::prefix('booking-management')->controller(BookingManagementController::cla
     Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
     Route::post('/booking-{booking_id}/service-{service_id}', 'addServiceToBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
     Route::get('/qr-code', 'sendQrCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
+    Route::post('/total-price', 'getTotalPrice');
 });
 
 // ADMIN PAYMENT ROUTES

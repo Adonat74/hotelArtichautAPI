@@ -6,11 +6,11 @@ use Carbon\Carbon;
 
 class BookingPriceCalculationService
 {
-    public function calculatePrice($booking): int {
+
+    public function calculatePrice($check_in, $check_out, $rooms, $services): int {
         $bookingPrice = 0;
-        $bookingDuration = Carbon::parse($booking->check_in)->diffInDays(Carbon::parse($booking->check_out));
-        $categories = $booking->rooms->pluck('category');
-        $services = $booking->services;
+        $bookingDuration = Carbon::parse($check_in)->diffInDays(Carbon::parse($check_out));
+        $categories = $rooms->pluck('category');
 
 //      Calcul du prix des chambre par le nombre de jours
         foreach ($categories as $category) {

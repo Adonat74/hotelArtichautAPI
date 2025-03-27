@@ -784,10 +784,6 @@
                                         "format": "date",
                                         "example": "2025-06-10"
                                     },
-                                    "total_price_in_cents": {
-                                        "type": "integer",
-                                        "example": 20000
-                                    },
                                     "to_be_paid_in_cents": {
                                         "type": "integer",
                                         "example": 7000
@@ -914,10 +910,6 @@
                                         "format": "date",
                                         "example": "2025-04-15"
                                     },
-                                    "total_price_in_cents": {
-                                        "type": "integer",
-                                        "example": 15000
-                                    },
                                     "to_be_paid_in_cents": {
                                         "type": "integer",
                                         "example": 5000
@@ -976,6 +968,84 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/booking-management/total-price": {
+            "post": {
+                "tags": [
+                    "BookingManagement"
+                ],
+                "summary": "Get the total price of a booking",
+                "operationId": "8a950342cbd7ba7c23b77c3be32af1b8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "check_in",
+                                    "check_out",
+                                    "total_price_in_cents",
+                                    "to_be_paid_in_cents",
+                                    "rooms"
+                                ],
+                                "properties": {
+                                    "check_in": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-10"
+                                    },
+                                    "check_out": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-15"
+                                    },
+                                    "to_be_paid_in_cents": {
+                                        "type": "integer",
+                                        "example": 5000
+                                    },
+                                    "number_of_persons": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "rooms": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "services": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            5,
+                                            6
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
                     },
                     "500": {
                         "description": "An error occurred"
