@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $userData;
+    protected $userData;
 
     /**
      * Create a new message instance.
