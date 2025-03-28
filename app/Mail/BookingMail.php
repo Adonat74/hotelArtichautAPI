@@ -26,12 +26,6 @@ class BookingMail extends Mailable
     {
         $this->bookingData = $bookingData;
 
-//        $filename = 'qrcode_' . time() . '.png';
-//        $qrCodeImage = QrCode::format('png')->size(300)->generate('http://192.168.1.245:8000/qr/reservation/'.$bookingData->id);
-//
-//        Storage::disk('public')->put('qrcodes/' . $filename, $qrCodeImage);
-//
-//        $this->qrCodePath = storage_path('app/public/qrcodes/' . $filename);
     }
 
     /**
@@ -55,7 +49,7 @@ class BookingMail extends Mailable
                 "booking_id" => $this->bookingData->id,
                 "booking_check_in" => $this->bookingData->check_in,
                 "booking_check_out" => $this->bookingData->check_out,
-                "booking_price" => $this->bookingData->total_price_in_cents/100 . ' €',
+                "booking_price" => $this->bookingData->total_price_in_cent/100 . ' €',
                 "booking_number_person" => $this->bookingData->number_of_persons,
                 "services" => $this->bookingData->services,
 

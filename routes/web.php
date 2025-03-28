@@ -10,7 +10,7 @@ Route::get('/qr/reservation/{id}', function ($id) {
     return view('bookingDetails', [
         "booking_check_in" => $bookingData->check_in,
         "booking_check_out" => $bookingData->check_out,
-        "booking_price" => $bookingData->total_price_in_cents/100 . ' €',
+        "booking_price" => $bookingData->total_price_in_cent/100 . ' €',
         "booking_number_person" => $bookingData->number_of_persons,
         "services" => $bookingData->services,
 

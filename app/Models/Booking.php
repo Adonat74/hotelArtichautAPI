@@ -19,8 +19,8 @@ class Booking extends Model
     protected $fillable = [
         'check_in',
         'check_out',
-        'total_price_in_cents',
-        'to_be_paid_in_cents',
+        'total_price_in_cent',
+        'to_be_paid_in_cent',
         'number_of_persons',
         'user_id',
     ];

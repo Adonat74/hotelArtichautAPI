@@ -958,6 +958,51 @@
                 }
             }
         },
+        "/api/add-services/booking-{id}": {
+            "post": {
+                "tags": [
+                    "BookingManagement"
+                ],
+                "summary": "Add services to a booking",
+                "operationId": "f652593580de37fc63bd1d571f3fab36",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "services"
+                                ],
+                                "properties": {
+                                    "services": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            5,
+                                            6
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
         "/api/booking-management/qr-code": {
             "get": {
                 "tags": [

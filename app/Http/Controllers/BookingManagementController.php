@@ -28,6 +28,58 @@ class BookingManagementController extends Controller
 
 
     /**
+     * @OA\Post(
+     *     path="/api/booking-management/add-services/booking-{id}",
+     *     summary="Add services to a booking",
+     *     tags={"BookingManagement"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *             required={"services"},
+     *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Successful operation"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function addServicesToBooking(Request $request, int $id): JsonResponse
+    {
+        try {
+            $validatedData = $request->validate([
+                'services' => 'nullable|array',
+                'services.*' => 'nullable|exists:services,id',
+            ]);
+
+            $booking = Booking::findOrFail($id);
+            $this->authorize('update', $booking); // policy check
+
+            if (isset($validatedData['services'])) {
+                $booking->services()->attach($validatedData['services']);
+            }
+
+            foreach ($booking->services as $service) {
+                $booking->total_price_in_cent += $service->price_in_cent;
+            }
+
+            $booking->save();
+
+            return response()->json($booking->load(['rooms', 'services', 'user']), 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while adding the booking',
+                'message'=>    $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * @OA\Get(
      *     path="/api/booking-management/qr-code",
      *     summary="Send a mail with a qr code to the user - need to be authentified and role = user",
@@ -60,10 +112,10 @@ class BookingManagementController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
+     *             required={"check_in", "check_out", "to_be_paid_in_cent", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
+     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=5000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
@@ -80,7 +132,7 @@ class BookingManagementController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'to_be_paid_in_cents' => 'bail|required|integer',
+                'to_be_paid_in_cent' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
@@ -100,7 +152,7 @@ class BookingManagementController extends Controller
             $totalPrice = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
 
 
-            return response()->json(['total_price_in_cents' => $totalPrice], 201);
+            return response()->json(['total_price_in_cent' => $totalPrice], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => 'Validation failed',
