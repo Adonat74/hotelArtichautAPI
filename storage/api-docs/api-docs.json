@@ -61,8 +61,8 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cents",
-                                    "to_be_paid_in_cents",
+                                    "total_price_in_cent",
+                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -76,11 +76,11 @@
                                         "format": "date",
                                         "example": "2025-06-10"
                                     },
-                                    "total_price_in_cents": {
+                                    "total_price_in_cent": {
                                         "type": "integer",
                                         "example": 20000
                                     },
-                                    "to_be_paid_in_cents": {
+                                    "to_be_paid_in_cent": {
                                         "type": "integer",
                                         "example": 7000
                                     },
@@ -189,8 +189,8 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cents",
-                                    "to_be_paid_in_cents",
+                                    "total_price_in_cent",
+                                    "to_be_paid_in_cent",
                                     "user_id",
                                     "rooms"
                                 ],
@@ -205,11 +205,11 @@
                                         "format": "date",
                                         "example": "2025-04-15"
                                     },
-                                    "total_price_in_cents": {
+                                    "total_price_in_cent": {
                                         "type": "integer",
                                         "example": 15000
                                     },
-                                    "to_be_paid_in_cents": {
+                                    "to_be_paid_in_cent": {
                                         "type": "integer",
                                         "example": 5000
                                     },
@@ -769,8 +769,8 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cents",
-                                    "to_be_paid_in_cents",
+                                    "total_price_in_cent",
+                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -784,7 +784,7 @@
                                         "format": "date",
                                         "example": "2025-06-10"
                                     },
-                                    "to_be_paid_in_cents": {
+                                    "to_be_paid_in_cent": {
                                         "type": "integer",
                                         "example": 7000
                                     },
@@ -895,8 +895,8 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cents",
-                                    "to_be_paid_in_cents",
+                                    "total_price_in_cent",
+                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -910,7 +910,7 @@
                                         "format": "date",
                                         "example": "2025-04-15"
                                     },
-                                    "to_be_paid_in_cents": {
+                                    "to_be_paid_in_cent": {
                                         "type": "integer",
                                         "example": 5000
                                     },
@@ -958,13 +958,13 @@
                 }
             }
         },
-        "/api/add-services/booking-{id}": {
+        "/api/booking-management/add-services/booking-{id}": {
             "post": {
                 "tags": [
                     "BookingManagement"
                 ],
                 "summary": "Add services to a booking",
-                "operationId": "f652593580de37fc63bd1d571f3fab36",
+                "operationId": "c6690d1dcf99365204ee2b423c27cd51",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1035,8 +1035,7 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cents",
-                                    "to_be_paid_in_cents",
+                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -1050,7 +1049,7 @@
                                         "format": "date",
                                         "example": "2025-04-15"
                                     },
-                                    "to_be_paid_in_cents": {
+                                    "to_be_paid_in_cent": {
                                         "type": "integer",
                                         "example": 5000
                                     },
