@@ -14,7 +14,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 
 class BookingManagementController extends Controller
 {
@@ -26,6 +29,56 @@ class BookingManagementController extends Controller
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
     }
 
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/booking-management/checkout/{id}",
+     *     summary="Add services to a booking",
+     *     tags={"BookingManagement"},
+     *     @OA\Response(response=201, description="Successful operation"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function checkout(int $id)
+    {
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            $booking = Booking::findOrFail($id);
+
+            // Create a new PaymentIntent with Stripe
+            $payment_intent = \Stripe\PaymentIntent::create([
+                'description' => 'Stripe Test Payment',
+                'amount' => $booking->total_price_in_cent,
+                'currency' => 'eur',
+                'payment_method_types' => ['card'],
+            ]);
+
+            // Get the client secret to authenticate the payment on the frontend
+            $intent = $payment_intent->client_secret;
+            // Return view with the payment intent client secret
+            return view('credit-card', compact('intent'));
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while adding the booking',
+                'message'=>    $e->getMessage(),
+            ], 500);
+        }
+    }
+    //Handles the post-payment process.
+    public function afterPayment()
+    {
+        // Display a message confirming the payment was successful
+        return 'Payment received. Thank you for using our services.';
+    }
 
     /**
      * @OA\Post(
