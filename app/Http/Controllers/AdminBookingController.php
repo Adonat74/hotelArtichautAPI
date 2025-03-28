@@ -106,11 +106,11 @@ class AdminBookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "user_id", "rooms"},
+     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "user_id", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="total_price_in_cents", type="integer", example=15000),
-     *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=5000),
+     *             @OA\Property(property="total_price_in_cent", type="integer", example=15000),
+     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=5000),
      *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
@@ -127,8 +127,8 @@ class AdminBookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after:today',
                 'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cents' => 'bail|required|integer',
-                'to_be_paid_in_cents' => 'bail|required|integer',
+                'total_price_in_cent' => 'bail|required|integer',
+                'to_be_paid_in_cent' => 'bail|required|integer',
                 'user_id' => 'bail|required|exists:users,id',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
@@ -183,11 +183,11 @@ class AdminBookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cents", "to_be_paid_in_cents", "rooms"},
+     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
-     *             @OA\Property(property="total_price_in_cents", type="integer", example=20000),
-     *             @OA\Property(property="to_be_paid_in_cents", type="integer", example=7000),
+     *             @OA\Property(property="total_price_in_cent", type="integer", example=20000),
+     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=7000),
      *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
@@ -205,8 +205,8 @@ class AdminBookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after:today',
                 'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cents' => 'bail|required|integer',
-                'to_be_paid_in_cents' => 'bail|required|integer',
+                'total_price_in_cent' => 'bail|required|integer',
+                'to_be_paid_in_cent' => 'bail|required|integer',
                 'user_id' => 'bail|required|exists:users,id',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',

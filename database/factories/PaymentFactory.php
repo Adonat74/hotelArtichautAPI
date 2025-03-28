@@ -19,7 +19,7 @@ class PaymentFactory extends Factory
     {
         $booking = Booking::inRandomOrder()->first();
         return [
-            'amount_in_cents' => $this->faker->numberBetween(10000, 1000000),
+            'amount_in_cent' => $this->faker->numberBetween(10000, 1000000),
             'method' => $this->faker->creditCardType,
             'booking_id' => $booking->id,
         ];

@@ -23,8 +23,8 @@ class BookingFactory extends Factory
             'check_in' => $this->faker->dateTimeBetween($startDate = 'now', $endDate = '+ 10 days'),
             'check_out' => $this->faker->dateTimeBetween($startDate = '+ 12 days', $endDate = '+ 50 days'),
 
-            'total_price_in_cents' => $this->faker->numberBetween(10000, 1000000),
-            'to_be_paid_in_cents' => $this->faker->numberBetween(10000, 1000000),
+            'total_price_in_cent' => $this->faker->numberBetween(10000, 1000000),
+            'to_be_paid_in_cent' => $this->faker->numberBetween(10000, 1000000),
             'number_of_persons' => $this->faker->numberBetween(1, 4),
             'user_id' => $user->id,
         ];

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount_in_cents');
+            $table->integer('amount_in_cent');
             $table->string('method');
             $table->foreignIdFor(Booking::class);
             $table->timestamps();
