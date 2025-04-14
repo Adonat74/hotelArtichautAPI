@@ -17,6 +17,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Stripe\Checkout\Session;
+use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
 class BookingManagementController extends Controller
@@ -48,8 +49,10 @@ class BookingManagementController extends Controller
         try {
             $booking = Booking::findOrFail($id);
 
+            $this->authorize('view', $booking);
+
             // Create a new PaymentIntent with Stripe
-            $payment_intent = \Stripe\PaymentIntent::create([
+            $payment_intent = PaymentIntent::create([
                 'description' => 'Stripe Test Payment',
                 'amount' => $booking->total_price_in_cent,
                 'currency' => 'eur',
@@ -61,14 +64,9 @@ class BookingManagementController extends Controller
             // Return view with the payment intent client secret
             return view('credit-card', compact('intent'));
 
-        } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
         } catch (Exception $e) {
             return response()->json([
-                'error' => 'An error occurred while adding the booking',
+                'error' => 'An error occurred during the payment',
                 'message'=>    $e->getMessage(),
             ], 500);
         }

@@ -84,7 +84,7 @@
         if (event.error) {
             displayError.textContent = event.error.message;
         } else {
-            displayError.textContent = '';
+            displayError.textContent = 'An error occured, please try again later.';
         }
     });
     // Handle form submission

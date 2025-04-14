@@ -7,6 +7,7 @@
 /storage/pail
 /vendor
 backup.sql
+backup_backup.sql
 .env
 .env.backup
 .env.production
