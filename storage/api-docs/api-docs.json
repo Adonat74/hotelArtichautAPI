@@ -769,8 +769,6 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cent",
-                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -891,8 +889,6 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "total_price_in_cent",
-                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -950,13 +946,37 @@
                 }
             }
         },
-        "/api/booking-management/checkout/{id}": {
+        "/api/booking-management/add-payment need to be authenticated and role = employee": {
             "post": {
                 "tags": [
                     "BookingManagement"
                 ],
-                "summary": "Add services to a booking",
-                "operationId": "6ac68903385c3dcf807e5ee810791e1e",
+                "summary": "Add a payment for the admins",
+                "operationId": "1df0c6835779ae2f0e1f30cc467a75db",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "booking_id",
+                                    "payment_amount"
+                                ],
+                                "properties": {
+                                    "booking_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "payment_amount": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "201": {
                         "description": "Successful operation"
@@ -964,6 +984,39 @@
                     "422": {
                         "description": "Validation failed"
                     },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/booking-management/checkout needs to be authenticated and role = user": {
+            "post": {
+                "tags": [
+                    "BookingManagement"
+                ],
+                "summary": "initiate a checkout with stripe",
+                "operationId": "2133368a83e330fe3fe919358d50e3a0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "payment_amount"
+                                ],
+                                "properties": {
+                                    "booking_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
                     "500": {
                         "description": "An error occurred"
                     }
@@ -1047,7 +1100,6 @@
                                 "required": [
                                     "check_in",
                                     "check_out",
-                                    "to_be_paid_in_cent",
                                     "rooms"
                                 ],
                                 "properties": {
@@ -1060,10 +1112,6 @@
                                         "type": "string",
                                         "format": "date",
                                         "example": "2025-04-15"
-                                    },
-                                    "to_be_paid_in_cent": {
-                                        "type": "integer",
-                                        "example": 5000
                                     },
                                     "number_of_persons": {
                                         "type": "integer",

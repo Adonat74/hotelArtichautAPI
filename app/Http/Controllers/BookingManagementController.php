@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\Service;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
+use App\Services\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -28,12 +29,66 @@ class BookingManagementController extends Controller
 {
 
     protected BookingPriceCalculationService $bookingPriceCalculationService;
+    protected PaymentService $paymentService;
 
-    public function __construct(BookingPriceCalculationService $bookingPriceCalculationService)
+    public function __construct(
+        BookingPriceCalculationService $bookingPriceCalculationService,
+        PaymentService $paymentService
+    )
     {
+        $this->paymentService = $paymentService;
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/booking-management/add-payment need to be authenticated and role = employee",
+     *     summary="Add a payment for the admins",
+     *     tags={"BookingManagement"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *             required={"booking_id", "payment_amount"},
+     *             @OA\Property(property="booking_id", type="integer", example=2),
+     *             @OA\Property(property="payment_amount", type="integer", example=2),
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Successful operation"),
+     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\Response(response=500, description="An error occurred")
+     * )
+     */
+    public function addPayment(Request $request): JsonResponse
+    {
+        try {
+            $validatedData = $request->validate([
+                'booking_id' => 'bail|required|exists:bookings,id',
+                'payment_amount' => 'bail|required|numeric',
+            ]);
+            $booking = Booking::findOrFail($validatedData['booking_id']);
+            $booking->to_be_paid_in_cents -= $validatedData['payment_amount'];
+            $booking->save();
+
+            $payment = new Payment();
+            $payment->amount_in_cent = $validatedData['payment_amount'];
+            $payment->method = 'master card';
+            $payment->booking_id = $validatedData['booking_id'];
+            $payment->save();
+
+            return response()->json($booking->load(['payments']), 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while adding the booking',
+                'message'=>    $e->getMessage(),
+            ], 500);
+        }
+    }
 
     public function handleWebhook(Request $request)
     {
@@ -55,26 +110,18 @@ class BookingManagementController extends Controller
             return response()->json(['error' => 'Invalid signature'], 400);
         }
 
-        // Handle the event
-        switch ($event->type) {
-            case 'checkout.session.completed':
-                // Retrieve the session object
-                $session = $event->data->object;
+        $session = $event->data->object;
 
-                $payment = new Payment();
-                $payment->amount_in_cent = $session->amount_total;
-                $payment->method = 'Master Card';
-                $payment->booking_id = $session->metadata->booking_id;
-                $payment->save();
+        $payment = new Payment();
+        $payment->amount_in_cent = $session->amount_total;
+        $payment->method = 'Master Card';
+        $payment->booking_id = $session->metadata->booking_id;
+        $payment->save();
 
-                break;
-            case 'payment_intent.succeeded':
-                $paymentIntent = $event->data->object;
-                // Handle successful payment here as well
-                break;
-            default:
-                Log::info('Unhandled event type: ' . $event->type);
-        }
+        $booking = Booking::findOrFail($session->metadata->booking_id);
+        $booking->to_be_paid_in_cent -= $session->amount_total;
+        $booking->save();
+
 
         return response()->json(['status' => 'success'], 200);
     }
@@ -82,11 +129,16 @@ class BookingManagementController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/booking-management/checkout/{id}",
-     *     summary="Add services to a booking",
+     *     path="/api/booking-management/checkout needs to be authenticated and role = user",
+     *     summary="initiate a checkout with stripe",
      *     tags={"BookingManagement"},
-     *     @OA\Response(response=201, description="Successful operation"),
-     *     @OA\Response(response=422, description="Validation failed"),
+     *     @OA\RequestBody(
+     *        required=true,
+     *           @OA\JsonContent(
+     *              required={"payment_amount"},
+     *              @OA\Property(property="booking_id", type="integer", example=2),
+     *        )
+     *     ),
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
@@ -99,8 +151,9 @@ class BookingManagementController extends Controller
             $validatedData = $request->validate([
                 'booking_id' => 'bail|required|exists:bookings,id'
             ]);
-
             $booking = Booking::findOrFail($validatedData['booking_id']);
+
+            $this->paymentService->checkPaymentAlreadyExist($booking);
             $this->authorize('view', $booking); // policy check
 
             $checkoutSession = Session::create([
@@ -115,8 +168,8 @@ class BookingManagementController extends Controller
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => 'http://192.168.1.245:8000/qr/reservation/15',  // Assuming you use Vue router's hash mode or adjust accordingly
-                'cancel_url'  => 'http://192.168.1.245:8000/qr/reservation/15',
+                'success_url' => $domain . '/success',  // Assuming you use Vue router's hash mode or adjust accordingly
+                'cancel_url'  => $domain . '/error',
                 'metadata' => [
                     'booking_id' => $validatedData['booking_id'],
                 ],
@@ -126,7 +179,7 @@ class BookingManagementController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred during the payment',
-                'message'=>    $e->getMessage(),
+                'message'=> $e->getMessage(),
             ], 500);
         }
     }
@@ -179,7 +232,7 @@ class BookingManagementController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred while adding the booking',
-                'message'=>    $e->getMessage(),
+                'message'=> $e->getMessage(),
             ], 500);
         }
     }
@@ -217,10 +270,9 @@ class BookingManagementController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "to_be_paid_in_cent", "rooms"},
+     *             required={"check_in", "check_out", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=5000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
@@ -237,7 +289,6 @@ class BookingManagementController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'to_be_paid_in_cent' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',

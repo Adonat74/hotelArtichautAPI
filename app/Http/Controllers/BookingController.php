@@ -99,7 +99,7 @@ class BookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
+     *             required={"check_in", "check_out", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
@@ -182,7 +182,7 @@ class BookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
+     *             required={"check_in", "check_out", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
@@ -227,7 +227,6 @@ class BookingController extends Controller
             if (isset($validatedData['services'])) {
                 $booking->services()->sync($validatedData['services']);
             }
-
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {

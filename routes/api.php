@@ -47,7 +47,7 @@ Route::group(['middleware'=>[
     // BOOKING MANAGEMENT ROUTES
     Route::prefix('booking-management')->controller(BookingManagementController::class)->group(function () {
         Route::post('/stripe-webhook',  'handleWebhook');
-        Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
+        Route::post('/add-payment', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':employee', ]);
         Route::post('/checkout', 'checkout')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
         Route::post('/add-services/booking-{id}', 'addServicesToBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
         Route::get('/qr-code', 'sendQrCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
