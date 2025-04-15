@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\QrCodeMail;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\Room;
 use App\Models\Service;
 use App\Services\BookingPriceCalculationService;
@@ -12,13 +13,16 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Stripe\Checkout\Session;
-use Stripe\PaymentIntent;
+use Stripe\Exception\SignatureVerificationException;
 use Stripe\Stripe;
+use Stripe\Webhook;
+use UnexpectedValueException;
 
 class BookingManagementController extends Controller
 {
@@ -31,6 +35,50 @@ class BookingManagementController extends Controller
     }
 
 
+    public function handleWebhook(Request $request)
+    {
+        // Set your Stripe secret key to verify signatures
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $endpointSecret = env('STRIPE_WEBHOOK_SECRET'); // from Stripe dashboard
+        $payload = $request->getContent();
+        $sigHeader = $request->header('Stripe-Signature');
+
+        try {
+            // Verify the event with the endpoint signing secret
+            $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
+        } catch (UnexpectedValueException $e) {
+            // Invalid payload
+            return response()->json(['error' => 'Invalid payload'], 400);
+        } catch (SignatureVerificationException $e) {
+            // Invalid signature
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
+
+        // Handle the event
+        switch ($event->type) {
+            case 'checkout.session.completed':
+                // Retrieve the session object
+                $session = $event->data->object;
+
+                $payment = new Payment();
+                $payment->amount_in_cent = $session->amount_total;
+                $payment->method = 'Master Card';
+                $payment->booking_id = $session->metadata->booking_id;
+                $payment->save();
+
+                break;
+            case 'payment_intent.succeeded':
+                $paymentIntent = $event->data->object;
+                // Handle successful payment here as well
+                break;
+            default:
+                Log::info('Unhandled event type: ' . $event->type);
+        }
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
 
     /**
      * @OA\Post(
@@ -42,28 +90,39 @@ class BookingManagementController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function checkout(int $id)
+    public function checkout(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET'));
+        $domain = env('FRONT_URL');
 
         try {
-            $booking = Booking::findOrFail($id);
-
-            $this->authorize('view', $booking);
-
-            // Create a new PaymentIntent with Stripe
-            $payment_intent = PaymentIntent::create([
-                'description' => 'Stripe Test Payment',
-                'amount' => $booking->total_price_in_cent,
-                'currency' => 'eur',
-                'payment_method_types' => ['card'],
+            $validatedData = $request->validate([
+                'booking_id' => 'bail|required|exists:bookings,id'
             ]);
 
-            // Get the client secret to authenticate the payment on the frontend
-            $intent = $payment_intent->client_secret;
-            // Return view with the payment intent client secret
-            return view('credit-card', compact('intent'));
+            $booking = Booking::findOrFail($validatedData['booking_id']);
+            $this->authorize('view', $booking); // policy check
 
+            $checkoutSession = Session::create([
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => 'Custom Amount',
+                        ],
+                        'unit_amount' => $booking->total_price_in_cent,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => 'http://192.168.1.245:8000/qr/reservation/15',  // Assuming you use Vue router's hash mode or adjust accordingly
+                'cancel_url'  => 'http://192.168.1.245:8000/qr/reservation/15',
+                'metadata' => [
+                    'booking_id' => $validatedData['booking_id'],
+                ],
+            ]);
+
+            return response()->json(['url' => $checkoutSession->url]);
         } catch (Exception $e) {
             return response()->json([
                 'error' => 'An error occurred during the payment',
@@ -71,12 +130,7 @@ class BookingManagementController extends Controller
             ], 500);
         }
     }
-    //Handles the post-payment process.
-    public function afterPayment()
-    {
-        // Display a message confirming the payment was successful
-        return 'Payment received. Thank you for using our services.';
-    }
+
 
     /**
      * @OA\Post(

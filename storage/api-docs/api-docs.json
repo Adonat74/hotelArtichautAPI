@@ -784,10 +784,6 @@
                                         "format": "date",
                                         "example": "2025-06-10"
                                     },
-                                    "to_be_paid_in_cent": {
-                                        "type": "integer",
-                                        "example": 7000
-                                    },
                                     "number_of_persons": {
                                         "type": "integer",
                                         "example": 2
@@ -910,10 +906,6 @@
                                         "format": "date",
                                         "example": "2025-04-15"
                                     },
-                                    "to_be_paid_in_cent": {
-                                        "type": "integer",
-                                        "example": 5000
-                                    },
                                     "number_of_persons": {
                                         "type": "integer",
                                         "example": 2
@@ -945,6 +937,26 @@
                         }
                     }
                 },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation failed"
+                    },
+                    "500": {
+                        "description": "An error occurred"
+                    }
+                }
+            }
+        },
+        "/api/booking-management/checkout/{id}": {
+            "post": {
+                "tags": [
+                    "BookingManagement"
+                ],
+                "summary": "Add services to a booking",
+                "operationId": "6ac68903385c3dcf807e5ee810791e1e",
                 "responses": {
                     "201": {
                         "description": "Successful operation"

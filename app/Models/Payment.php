@@ -16,7 +16,7 @@ class Payment extends Model
     protected $hidden = ['created_at', 'updated_at', 'pivot'];
 
     protected $fillable = [
-        'amount_in_cents',
+        'amount_in_cent',
         'method',
         'booking_id'
     ];
