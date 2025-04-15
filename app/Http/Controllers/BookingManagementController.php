@@ -135,7 +135,7 @@ class BookingManagementController extends Controller
      *     @OA\RequestBody(
      *        required=true,
      *           @OA\JsonContent(
-     *              required={"payment_amount"},
+     *              required={"booking_id"},
      *              @OA\Property(property="booking_id", type="integer", example=2),
      *        )
      *     ),
@@ -219,6 +219,7 @@ class BookingManagementController extends Controller
 
             foreach ($booking->services as $service) {
                 $booking->total_price_in_cent += $service->price_in_cent;
+                $booking->to_be_paid_in_cent += $service->price_in_cent;
             }
 
             $booking->save();
