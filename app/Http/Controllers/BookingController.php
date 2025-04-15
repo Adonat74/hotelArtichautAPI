@@ -102,7 +102,6 @@ class BookingController extends Controller
      *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=5000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
@@ -119,7 +118,6 @@ class BookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'to_be_paid_in_cent' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',
@@ -139,7 +137,9 @@ class BookingController extends Controller
 
             $rooms = Room::whereIn('id', $validatedData['rooms'])->get();
             $services = Service::whereIn('id', $validatedData['services'])->get();
-            $booking->total_price_in_cent = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
+            $price = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
+            $booking->total_price_in_cent = $price;
+            $booking->to_be_paid_in_cent = $price;
             $booking->user_id = $user->id;
             $booking->save();
 
@@ -185,7 +185,6 @@ class BookingController extends Controller
      *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
-     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=7000),
      *             @OA\Property(property="number_of_persons", type="integer", example=2),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
@@ -203,7 +202,6 @@ class BookingController extends Controller
             $validatedData = $request->validate([
                 'check_in' => 'bail|required|date|after_or_equal:now',
                 'check_out' => 'bail|required|date|after:check_in',
-                'to_be_paid_in_cent' => 'bail|required|integer',
                 'number_of_persons' => 'bail|required|integer',
                 'rooms' => 'bail|required|array',
                 'rooms.*' => 'bail|required|exists:rooms,id',

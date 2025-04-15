@@ -17,10 +17,13 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\CheckTokenVersion;
+use App\Http\Middleware\Sanitization;
 use Illuminate\Support\Facades\Route;
 
-//Route::group(['middleware'=>'Sanitization'], function() {
-Route::group(['middleware'=>'throttle:100,1'], function() {
+Route::group(['middleware'=>[
+    'throttle:100,1',
+    Sanitization::class
+]], function() {
     ///////////////////////// BOOKINGS ///////////////////////
     // BOOKING ROUTES
     Route::prefix('admin/booking')->controller(AdminBookingController::class)->group(function () {
@@ -43,11 +46,9 @@ Route::group(['middleware'=>'throttle:100,1'], function() {
 
     // BOOKING MANAGEMENT ROUTES
     Route::prefix('booking-management')->controller(BookingManagementController::class)->group(function () {
+        Route::post('/stripe-webhook',  'handleWebhook');
         Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
-
-        //    Route::get('/checkout/{id}', 'checkout')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user',
-        //    Route::post('/checkout', 'afterPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user'])->name('credit-card');
-
+        Route::post('/checkout', 'checkout')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
         Route::post('/add-services/booking-{id}', 'addServicesToBooking')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
         Route::get('/qr-code', 'sendQrCode')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':user', ]);
         Route::post('/total-price', 'getTotalPrice')->middleware();

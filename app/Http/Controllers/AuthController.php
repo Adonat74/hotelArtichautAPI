@@ -118,7 +118,7 @@ class AuthController extends Controller
                 'postal_code' => 'bail|required|string|max:15',
                 'phone' => 'bail|required|string|max:12',
                 'is_pro' => 'bail|required|boolean',
-                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
+                'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
             ]);
             $user = new User([
                 'email' => $validatedData['email'],
@@ -136,9 +136,7 @@ class AuthController extends Controller
             $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
 
 
-
-//            Mail::to($user->email)->send(new RegisterMail($user));
-            Mail::to('donatgoninet.antoine@gmail.com')->send(new RegisterMail($user));
+            Mail::to($user->email)->send(new RegisterMail($user));
 
             $credentials = $request->only('email', 'password');
             $token = Auth::attempt($credentials);

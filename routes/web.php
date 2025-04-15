@@ -3,10 +3,11 @@
 use App\Http\Controllers\BookingManagementController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\CheckTokenVersion;
+use App\Http\Middleware\Sanitization;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware'=>'Sanitization'], function() {
+Route::group(['middleware'=>Sanitization::class], function() {
 
     Route::get('/qr/reservation/{id}', function ($id) {
         $bookingData = Booking::with('services', 'rooms.category', 'user')->findOrFail($id);
@@ -27,16 +28,4 @@ Route::group(['middleware'=>'Sanitization'], function() {
             "user_email" => $bookingData->user->email,
         ]);
     });
-
-
-    Route::prefix('booking-management')->controller(BookingManagementController::class)->group(function () {
-
-    //    Route::get('/checkout/{id}', 'checkout')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user']);
-    //    Route::post('/checkout', 'afterPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class.':user'])->name('credit-card');
-
-        Route::get('/checkout/{id}', 'checkout');
-        Route::post('/checkout', 'afterPayment')->name('credit-card');
-
-    });
-
 });
