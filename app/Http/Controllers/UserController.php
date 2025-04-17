@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,10 +17,16 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
 
     /**
@@ -42,15 +49,9 @@ class UserController extends Controller
 
             return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'user not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the user',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -120,20 +121,11 @@ class UserController extends Controller
 
             return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'User not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('user', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the User',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -159,15 +151,9 @@ class UserController extends Controller
 
             return response()->json(['message' => 'user deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'User not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the user',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 }

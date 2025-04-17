@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\Service;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
+use App\Services\ErrorsService;
 use App\Services\PaymentService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -30,14 +31,17 @@ class BookingManagementController extends Controller
 
     protected BookingPriceCalculationService $bookingPriceCalculationService;
     protected PaymentService $paymentService;
+    protected ErrorsService $errorsService;
 
     public function __construct(
         BookingPriceCalculationService $bookingPriceCalculationService,
-        PaymentService $paymentService
+        PaymentService $paymentService,
+        ErrorsService $errorsService
     )
     {
         $this->paymentService = $paymentService;
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
+        $this->errorsService = $errorsService;
     }
 
 
@@ -78,15 +82,9 @@ class BookingManagementController extends Controller
 
             return response()->json($booking->load(['payments']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the booking',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -177,10 +175,7 @@ class BookingManagementController extends Controller
 
             return response()->json(['url' => $checkoutSession->url]);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred during the payment',
-                'message'=> $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -226,15 +221,9 @@ class BookingManagementController extends Controller
 
             return response()->json($booking->load(['rooms', 'services', 'user']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the booking',
-                'message'=> $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -256,10 +245,7 @@ class BookingManagementController extends Controller
 
             return response()->json(["message" => "mail successfully sent"]);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while sending email',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -311,15 +297,9 @@ class BookingManagementController extends Controller
 
             return response()->json(['total_price_in_cent' => $totalPrice], 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->exception('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the booking',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 }

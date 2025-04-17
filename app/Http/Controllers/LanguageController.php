@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Language;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,10 +16,15 @@ use Illuminate\Validation\ValidationException;
 class LanguageController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
     /**
      * @OA\Get(
@@ -43,15 +49,9 @@ class LanguageController extends Controller
             $language = Language::with(['image'])->findOrFail($id);
             return response()->json($language);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Language not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('language', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the language',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('language', $e);
         }
     }
 
@@ -70,10 +70,7 @@ class LanguageController extends Controller
             $languages = Language::with(['image'])->get();
             return response()->json($languages);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the languages',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('language', $e);
         }
     }
 
@@ -123,16 +120,10 @@ class LanguageController extends Controller
             $this->imagesManagementService->addSingleImage($request, $language, 'language_id');
 
             return response()->json($language->load(['image']), 201);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('language', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the language',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('language', $e);
         }
     }
 
@@ -191,20 +182,11 @@ class LanguageController extends Controller
 
             return response()->json($language->load(['image']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Language not found',
-                'message' => $e->getMessage(),
-            ], 404);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+            return $this->errorsService->modelNotFoundException('language', $e);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('language', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while updating the language',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('language', $e);
         }
     }
 
@@ -236,15 +218,9 @@ class LanguageController extends Controller
 
             return response()->json(['message' => 'language deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Language not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('language', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the language',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('language', $e);
         }
     }
 }

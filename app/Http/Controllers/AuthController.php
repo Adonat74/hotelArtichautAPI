@@ -104,7 +104,6 @@ class AuthController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-
     public function register(Request $request): JsonResponse
     {
         try {

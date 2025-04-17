@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Services\BookingService;
+use App\Services\ErrorsService;
+use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -12,6 +14,14 @@ use Illuminate\Validation\ValidationException;
 
 class AdminBookingController extends Controller
 {
+
+    protected ErrorsService $errorsService;
+    public function __construct(
+        ErrorsService $errorsService
+    )
+    {
+        $this->errorsService = $errorsService;
+    }
 
     /**
      * @OA\Get(
@@ -34,18 +44,11 @@ class AdminBookingController extends Controller
     {
         try {
             $booking = Booking::with(['services', 'rooms', 'user'])->findOrFail($id);
-
             return response()->json($booking);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'booking not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the booking',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -61,15 +64,10 @@ class AdminBookingController extends Controller
     public function getAllBookings(): JsonResponse
     {
         try {
-            $bookings = Booking::with(['services', 'rooms', 'user'])
-                ->get();
-
+            $bookings = Booking::with(['services', 'rooms', 'user'])->get();
             return response()->json($bookings);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the bookings',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -91,10 +89,7 @@ class AdminBookingController extends Controller
 
             return response()->json($bookings);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the bookings',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -156,15 +151,9 @@ class AdminBookingController extends Controller
 
             return response()->json($booking->load(['services', 'rooms', 'user']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the booking',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -234,20 +223,11 @@ class AdminBookingController extends Controller
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Booking not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the Booking',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -273,20 +253,12 @@ class AdminBookingController extends Controller
         try {
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche le delete
-
             $booking->delete();
-
             return response()->json(['message' => 'booking deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Booking not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the booking',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 }
