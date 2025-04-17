@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NewsArticleRequest;
 use App\Models\Image;
 use App\Models\NewsArticle;
 use App\Services\ErrorsService;
@@ -160,28 +161,10 @@ class NewsArticleController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addNewsArticle(Request $request): JsonResponse
+    public function addNewsArticle(NewsArticleRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-            ]);
-
-            $newsArticle = new NewsArticle([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $newsArticle = new NewsArticle($request->safe()->except(['images']));
             $newsArticle->save();
 
             $this->imagesManagementService->addImages($request, $newsArticle, 'news_article_id');
@@ -262,32 +245,13 @@ class NewsArticleController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateNewsArticle(Request $request, String $id): JsonResponse
+    public function updateNewsArticle(NewsArticleRequest $request, String $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-            ]);
-
             $newsArticle = NewsArticle::findOrFail($id);
-            $newsArticle->update([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $newsArticle->update($request->safe()->except(['images']));
 
             $this->imagesManagementService->updateImages($request, $newsArticle, 'news_article_id');
-
 
             return response()->json($newsArticle->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {

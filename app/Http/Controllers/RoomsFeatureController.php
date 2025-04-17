@@ -2,15 +2,14 @@
 
     namespace App\Http\Controllers;
 
+    use App\Http\Requests\RoomsFeatureRequest;
     use App\Models\RoomsFeature;
     use App\Services\AttachService;
     use App\Services\ErrorsService;
-    use App\Services\ImagesManagementService;
     use App\Services\SyncService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
-    use Illuminate\Http\Request;
     use Illuminate\Validation\ValidationException;
 
     class RoomsFeatureController extends Controller
@@ -159,19 +158,10 @@
          * )
          */
 
-        public function addFeature(Request $request): JsonResponse
+        public function addFeature(RoomsFeatureRequest $request): JsonResponse
         {
-
             try {
-                $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:50',
-                    'feature_name' => 'bail|required|string|max:100',
-                    'description' => 'bail|required|string|max:1000',
-                    'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric|exists:languages,id',
-                    'rooms_categories' => 'nullable|array',  // Validation des catégories
-                    'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
-                ]);
+                $validatedData = $request->validated();
                 $feature = new RoomsFeature($validatedData);
                 $feature->save();
 
@@ -252,18 +242,10 @@
          *     @OA\Response(response=500, description="An error occurred")
          *)
          */
-        public function updateFeature(Request $request, string $id): JsonResponse
+        public function updateFeature(RoomsFeatureRequest $request, string $id): JsonResponse
         {
             try {
-                $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:50',
-                    'feature_name' => 'required|string|max:100',
-                    'description' => 'required|string|max:1000',
-                    'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric|exists:languages,id',
-                    'rooms_categories' => 'nullable|array',  // Validation des catégories
-                    'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
-                ]);
+                $validatedData = $request->validated();
                 $feature = RoomsFeature::findOrFail($id);
                 $feature->update($validatedData);
 

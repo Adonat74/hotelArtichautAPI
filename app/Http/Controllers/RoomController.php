@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoomRequest;
 use App\Models\Image;
 use App\Models\Room;
 use App\Services\BookingService;
@@ -223,32 +224,11 @@ class RoomController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addRoom(Request $request): JsonResponse
+    public function addRoom(RoomRequest $request): JsonResponse
     {
         try {
-            // Validation des données entrantes
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'number' => 'bail|required|integer',
-                'room_name' => 'bail|required|string|max:255',
-                'description' => 'bail|required|string|max:255',
-                'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-            ]);
-
             // Création et sauvegarde de la nouvelle catégorie
-            $room = new Room([
-                'name' => $validatedData['name'],
-                'number' => $validatedData['number'],
-                'room_name' => $validatedData['room_name'],
-                'description' => $validatedData['description'],
-                'rooms_category_id' => $validatedData['rooms_category_id'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $room = new Room($request->safe()->except(['images']));
             $room->save();
 
             $this->imagesManagementService->addImages($request, $room, 'room_id');
@@ -311,34 +291,13 @@ class RoomController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateRoom(Request $request, string $id): JsonResponse
+    public function updateRoom(RoomRequest $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'number' => 'bail|required|integer',
-                'room_name' => 'bail|required|string|max:255',
-                'description' => 'bail|required|string|max:255',
-                'rooms_category_id' => 'bail|required|integer|exists:rooms_categories,id',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-            ]);
             $room = Room::findOrFail($id);
-            $room->update([
-                'name' => $validatedData['name'],
-                'number' => $validatedData['number'],
-                'room_name' => $validatedData['room_name'],
-                'description' => $validatedData['description'],
-                'rooms_category_id' => $validatedData['rooms_category_id'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
-
+            $room->update($request->safe()->except(['images']));
 
             $this->imagesManagementService->updateImages($request, $room, 'room_id');
-
 
             return response()->json($room->load(['images', 'category', 'language']));
         } catch (ModelNotFoundException $e) {

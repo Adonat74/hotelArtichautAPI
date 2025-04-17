@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest;
 use App\Mail\QrCodeMail;
 use App\Mail\RegisterMail;
 use App\Models\Image;
@@ -110,36 +111,13 @@ class AuthController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function register(Request $request): JsonResponse
+    public function register(AuthRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
-                'password' => 'bail|required|string|min:10',
-                'firstname' => 'bail|required|string|max:50',
-                'lastname' => 'bail|required|string|max:50',
-                'address' => 'bail|required|string|max:70',
-                'city' => 'bail|required|string|max:30',
-                'postal_code' => 'bail|required|string|max:15',
-                'phone' => 'bail|required|string|max:12',
-                'is_pro' => 'bail|required|boolean',
-                'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-            ]);
-            $user = new User([
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'firstname' => $validatedData['firstname'],
-                'lastname' => $validatedData['lastname'],
-                'address' => $validatedData['address'],
-                'city' => $validatedData['city'],
-                'postal_code' => $validatedData['postal_code'],
-                'phone' => $validatedData['phone'],
-                'is_pro' => $validatedData['is_pro'],
-            ]);
+            $user = new User($request->safe()->except(['image']));
             $user->save();
 
             $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
-
 
             Mail::to($user->email)->send(new RegisterMail($user));
 

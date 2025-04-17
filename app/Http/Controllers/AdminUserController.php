@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminUserRequest;
 use App\Models\Image;
 use App\Models\User;
 use App\Services\CompareUserRoleService;
@@ -118,40 +119,15 @@ class AdminUserController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addUser(Request $request): JsonResponse
+    public function addUser(AdminUserRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'email' => 'bail|required|email:rfc|unique:App\Models\User,email',
-                'password' => 'bail|required|string|min:10',
-                'firstname' => 'bail|required|string|max:50',
-                'lastname' => 'bail|required|string|max:50',
-                'address' => 'bail|required|string|max:70',
-                'city' => 'bail|required|string|max:30',
-                'postal_code' => 'bail|required|string|max:15',
-                'phone' => 'bail|required|string|max:12',
-                'role_id' => 'bail|required|integer|exists:App\Models\Role,id',
-                'is_pro' => 'bail|required|boolean',
-                'is_vip' => 'bail|required|boolean',
-                'image' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-            ]);
+            $validatedData = $request->validated();
 
             //Check user role, so it can't create/update/delete a user with bigger role
             $this->compareUserRoleService->compareUserRole(Auth::user(), $validatedData['role_id']);
 
-            $user = new User([
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'firstname' => $validatedData['firstname'],
-                'lastname' => $validatedData['lastname'],
-                'address' => $validatedData['address'],
-                'city' => $validatedData['city'],
-                'postal_code' => $validatedData['postal_code'],
-                'phone' => $validatedData['phone'],
-                'role_id' => $validatedData['role_id'],
-                'is_pro' => $validatedData['is_pro'],
-                'is_vip' => $validatedData['is_vip'],
-            ]);
+            $user = new User($request->safe()->except(['image']));
             $user->save();
 
             $this->imagesManagementService->addSingleImage($request, $user, 'user_id');
@@ -204,7 +180,7 @@ class AdminUserController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateUser(Request $request, string $id): JsonResponse
+    public function updateUser(AdminUserRequest $request, string $id): JsonResponse
     {
         try{
             $user = User::findOrFail($id);
@@ -231,19 +207,7 @@ class AdminUserController extends Controller
             $this->compareUserRoleService->compareUserRole(Auth::user(), $user->role->id);
             $this->compareUserRoleService->compareUserRole(Auth::user(), $validatedData['role_id']);
 
-            $user->update([
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'firstname' => $validatedData['firstname'],
-                'lastname' => $validatedData['lastname'],
-                'address' => $validatedData['address'],
-                'city' => $validatedData['city'],
-                'postal_code' => $validatedData['postal_code'],
-                'phone' => $validatedData['phone'],
-                'role_id' => $validatedData['role_id'],
-                'is_pro' => $validatedData['is_pro'],
-                'is_vip' => $validatedData['is_vip'],
-            ]);
+            $user->update($request->safe()->except(['image']));
 
             $this->imagesManagementService->updateSingleImage($request, $user, 'user_id');
 
