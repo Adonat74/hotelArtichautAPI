@@ -19,13 +19,6 @@ Content-Type: application/json
   "is_pro": false
 }
 
-> {%
-    // parse the JSON response
-    const data = JSON.parse(response.body);
-    // store token in a global variable
-    client.global.set("ID", data.user.id);
-%}
-
 ###  Login after register
 POST {{base_address}}/login
 Content-Type: application/json
@@ -56,8 +49,25 @@ GET {{base_address}}/user
 Authorization: Bearer {{TOKEN}}
 
 ### Update user infos
-POST
+POST {{base_address}}/user
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
 
+{
+  "email": "test1@test1.com",
+  "password": "testpassword1",
+  "firstname": "test",
+  "lastname": "test",
+  "address": "123 Main Street",
+  "city": "Paris",
+  "postal_code": "75001",
+  "phone": "0612345678",
+  "is_pro": false
+}
+
+### Delete user infos
+DELETE {{base_address}}/user
+Authorization: Bearer {{TOKEN}}
 
 ############################################################ ADMIN USER
 ### Login token
@@ -76,7 +86,207 @@ Content-Type: application/json
     client.global.set("TOKEN", data.authorisation.token);
 %}
 
-############################################################SERVICES
+### Create a user
+POST {{base_address}}/admin/user
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testpassword",
+  "firstname": "test",
+  "lastname": "test",
+  "address": "123 Main Street",
+  "city": "Paris",
+  "postal_code": "75001",
+  "phone": "0612345678",
+  "is_pro": false
+}
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("ID", data.user.id);
+%}
+
+### Login user
+POST {{base_address}}/login
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "testpassword"
+}
+
+### Get all users
+GET {{base_address}}/admin/user
+Authorization: Bearer {{TOKEN}}
+
+### Get single user
+GET {{base_address}}/admin/user/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+### Update user
+POST {{base_address}}/admin/user/{{ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+    "email": "test1@test1.com",
+    "password": "testpassword1",
+    "firstname": "test",
+    "lastname": "test",
+    "address": "123 Main Street",
+    "city": "Paris",
+    "postal_code": "75001",
+    "phone": "0612345678",
+    "is_pro": false
+}
+
+### Delete user
+DELETE {{base_address}}/admin/user/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+############################################################ ROLE
+
+### GET all roles
+GET {{base_address}}/role
+Authorization: Bearer {{TOKEN}}
+
+### POST one role
+POST {{base_address}}/role
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "role_name": "Super mega giga admin",
+    "priority": 9999
+}
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("ID", data.user.id);
+%}
+
+### GET one role
+GET {{base_address}}/role/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+### PUT one role
+POST {{base_address}}/role/{{ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "role_name": "Super mega giga admin deluxe",
+    "priority": 10000
+}
+
+### DELETE one role
+DELETE {{base_address}}/role/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+############################################################ BOOKING
+
+### GET all user bookings
+GET {{base_address}}/booking/user
+Authorization: Bearer {{TOKEN}}
+
+### POST one booking
+POST {{base_address}}/booking
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "check_in": "2026-11-26",
+    "check_out": "2026-12-06",
+    "number_of_persons": 3,
+    "services": [17, 15],
+    "rooms": [101, 102]
+}
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("ID", data.user.id);
+%}
+
+### GET one user booking
+GET {{base_address}}/booking/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+### PUT one booking
+POST {{base_address}}/booking/{{ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "check_in": "2027-11-26",
+    "check_out": "2028-12-06",
+    "number_of_persons": 4,
+    "services": [17, 15],
+    "rooms": [101, 102, 103]
+}
+
+### DELETE one booking
+DELETE {{base_address}}/booking/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+############################################################ ADMIN BOOKING
+
+### GET all bookings
+GET {{base_address}}/admin/booking
+Authorization: Bearer {{TOKEN}}
+
+### POST one booking
+POST {{base_address}}/booking
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "check_in": "2026-11-26",
+    "check_out": "2026-12-06",
+    "user_id": 21,
+    "number_of_persons": 3,
+    "services": [17, 15],
+    "rooms": [101, 102]
+}
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("ID", data.user.id);
+%}
+
+### GET all user bookings
+GET {{base_address}}/admin/booking/user-21
+Authorization: Bearer {{TOKEN}}
+
+### GET one booking
+GET {{base_address}}/admin/booking/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+### PUT one booking
+POST {{base_address}}/booking/{{ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+    "check_in": "2027-11-26",
+    "check_out": "2028-12-06",
+    "user_id": 22,
+    "number_of_persons": 4,
+    "services": [17, 15],
+    "rooms": [101, 102, 103]
+}
+
+### DELETE one booking
+DELETE {{base_address}}/booking/{{ID}}
+Authorization: Bearer {{TOKEN}}
+
+
+############################################################ SERVICES
 ### GET all services by language:  1 = fr, 2 = en
 GET {{base_address}}/service/lang-1
 
