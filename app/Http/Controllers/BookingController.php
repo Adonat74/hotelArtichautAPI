@@ -7,9 +7,11 @@ use App\Mail\QrCodeMail;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\Service;
+use App\Services\AttachService;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
+use App\Services\SyncService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,16 +25,20 @@ class BookingController extends Controller
 {
     protected BookingPriceCalculationService $bookingPriceCalculationService;
     protected ErrorsService $errorsService;
-
+    protected SyncService $syncService;
+    protected AttachService $attachService;
 
     public function __construct(
         BookingPriceCalculationService $bookingPriceCalculationService,
-        ErrorsService $errorsService
+        ErrorsService $errorsService,
+        SyncService $syncService,
+        AttachService $attachService,
     )
     {
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
         $this->errorsService = $errorsService;
-
+        $this->syncService = $syncService;
+        $this->attachService = $attachService;
     }
 
 
@@ -143,12 +149,8 @@ class BookingController extends Controller
             $booking->save();
 
 //          Associe rooms et services si fournis dans le body de la requete
-            if (isset($validatedData['rooms'])) {
-                $booking->rooms()->attach($validatedData['rooms']);
-            }
-            if (isset($validatedData['services'])) {
-                $booking->services()->attach($validatedData['services']);
-            }
+            $this->attachService->attachRelatedModel($booking, $validatedData['rooms']);
+            $this->attachService->attachRelatedModel($booking, $validatedData['services']);
 
             Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 
@@ -214,13 +216,9 @@ class BookingController extends Controller
 
             $booking->update($validatedData);
 
-            if (isset($validatedData['rooms'])) {
-                $booking->rooms()->sync($validatedData['rooms']);
-            }
-            if (isset($validatedData['services'])) {
-                $booking->services()->sync($validatedData['services']);
-            }
-
+            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
+            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
+            
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
             return $this->errorsService->modelNotFoundException('booking', $e);

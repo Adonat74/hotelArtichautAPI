@@ -21,7 +21,7 @@ use App\Http\Middleware\Sanitization;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware'=>[
-    'throttle:100,1',
+    'throttle:60,1',
     Sanitization::class
 ]], function() {
     ///////////////////////// BOOKINGS ///////////////////////

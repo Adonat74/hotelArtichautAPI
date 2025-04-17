@@ -4,8 +4,10 @@
 
     use App\Models\Image;
     use App\Models\RoomsCategory;
+    use App\Services\AttachService;
     use App\Services\ErrorsService;
     use App\Services\ImagesManagementService;
+    use App\Services\SyncService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
@@ -17,14 +19,20 @@
     {
         protected ImagesManagementService $imagesManagementService;
         protected ErrorsService $errorsService;
+        protected SyncService $syncService;
+        protected AttachService $attachService;
 
         public function __construct(
             ImagesManagementService $imagesManagementService,
-            ErrorsService $errorsService
+            ErrorsService $errorsService,
+            SyncService $syncService,
+            AttachService $attachService,
         )
         {
             $this->imagesManagementService = $imagesManagementService;
             $this->errorsService = $errorsService;
+            $this->syncService = $syncService;
+            $this->attachService = $attachService;
         }
 
 
@@ -212,9 +220,7 @@
                 $roomCategory->save();
 
                 // Si des features sont fournies, les associer à la catégorie
-                if (isset($validatedData['rooms_features'])) {
-                    $roomCategory->features()->attach($validatedData['rooms_features']);
-                }
+                $this->attachService->attachRelatedModel($roomCategory, $validatedData['rooms_features']);
 
                 $this->imagesManagementService->addImages($request, $roomCategory, 'rooms_category_id');
 
@@ -339,9 +345,8 @@
                 ]);
 
                 // Si des features sont fournies, les associer à la catégorie
-                if (isset($validatedData['rooms_features'])) {
-                    $roomCategory->features()->sync($validatedData['rooms_features']);
-                }
+                $this->syncService->syncRelatedModel($roomCategory, $validatedData['rooms_features']);
+
 
                 $this->imagesManagementService->updateImages($request, $roomCategory, 'rooms_category_id');
 

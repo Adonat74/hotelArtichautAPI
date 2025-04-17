@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\Room;
 use App\Models\Service;
+use App\Services\AttachService;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
@@ -32,16 +33,20 @@ class BookingManagementController extends Controller
     protected BookingPriceCalculationService $bookingPriceCalculationService;
     protected PaymentService $paymentService;
     protected ErrorsService $errorsService;
+    protected AttachService $attachService;
+
 
     public function __construct(
         BookingPriceCalculationService $bookingPriceCalculationService,
         PaymentService $paymentService,
-        ErrorsService $errorsService
+        ErrorsService $errorsService,
+        AttachService $attachService,
     )
     {
         $this->paymentService = $paymentService;
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
         $this->errorsService = $errorsService;
+        $this->attachService = $attachService;
     }
 
 
@@ -208,9 +213,7 @@ class BookingManagementController extends Controller
             $booking = Booking::findOrFail($id);
             $this->authorize('update', $booking); // policy check
 
-            if (isset($validatedData['services'])) {
-                $booking->services()->attach($validatedData['services']);
-            }
+            $this->attachService->attachRelatedModel($booking, $validatedData['services']);
 
             foreach ($booking->services as $service) {
                 $booking->total_price_in_cent += $service->price_in_cent;
