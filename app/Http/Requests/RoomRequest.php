@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoomRequest extends FormRequest
@@ -24,5 +25,11 @@ class RoomRequest extends FormRequest
             'images' => 'nullable|array',// vérifie que c'est un tableau
             'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

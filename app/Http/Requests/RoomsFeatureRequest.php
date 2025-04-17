@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RoomsFeatureRequest extends FormRequest
@@ -22,5 +23,11 @@ class RoomsFeatureRequest extends FormRequest
             'rooms_categories' => 'nullable|array',  // Validation des catégories
             'rooms_categories.*' => 'nullable|exists:rooms_categories,id',
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

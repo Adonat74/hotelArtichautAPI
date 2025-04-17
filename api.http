@@ -1,4 +1,80 @@
 @base_address = http://localhost:8000/api
+@TOKEN =
+@ID =
+
+############################################################AUTH
+### Register
+POST {{base_address}}/register
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testpassword",
+  "firstname": "test",
+  "lastname": "test",
+  "address": "123 Main Street",
+  "city": "Paris",
+  "postal_code": "75001",
+  "phone": "0612345678",
+  "is_pro": false
+}
+
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("ID", data.user.id);
+%}
+
+###  Login after register
+POST {{base_address}}/login
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "testpassword"
+}
+
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("TOKEN", data.authorisation.token);
+%}
+
+### Refresh
+GET {{base_address}}/refresh
+Authorization: Bearer {{TOKEN}}
+
+### Logout
+POST {{base_address}}/logout
+Authorization: Bearer {{TOKEN}}
+
+############################################################ USER
+### GET USER INFOS
+GET {{base_address}}/user
+Authorization: Bearer {{TOKEN}}
+
+### Update user infos
+POST
+
+
+############################################################ ADMIN USER
+### Login token
+POST {{base_address}}/login
+Content-Type: application/json
+
+{
+    "email": "admin@admin.com",
+    "password": "adminadmin"
+}
+
+> {%
+    // parse the JSON response
+    const data = JSON.parse(response.body);
+    // store token in a global variable
+    client.global.set("TOKEN", data.authorisation.token);
+%}
 
 ############################################################SERVICES
 ### GET all services by language:  1 = fr, 2 = en
@@ -10,6 +86,7 @@ GET {{base_address}}/service/1
 ### POST one service
 POST {{base_address}}/service
 Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
 
 {
     "title": "Hello lucas ",
