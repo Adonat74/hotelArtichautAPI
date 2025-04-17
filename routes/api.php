@@ -54,16 +54,6 @@ Route::group(['middleware'=>[
         Route::post('/total-price', 'getTotalPrice');
     });
 
-    // ADMIN PAYMENT ROUTES
-    Route::prefix('admin/payment')->controller(BookingController::class)->group(function () {
-        Route::get('/', 'getAllPayments')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-        Route::get('/booking-{id}', 'getAllBookingPayments')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-        Route::get('/{id}', 'getSinglePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-        Route::post('/', 'addPayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-        Route::post('/{id}', 'updatePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-        Route::delete('/{id}', 'deletePayment')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager', ]);
-    });
-
 
     ////////////////////////// AUTHENTICATION //////////////////////////
     // AUTH ROUTES
@@ -104,7 +94,6 @@ Route::group(['middleware'=>[
         Route::get('/lang-{lang}', 'getAllContentsByLang'); // get ALL contents by language
         Route::get('/', 'getAllContents'); // get ALL contents
         Route::get('/{id}', 'getSingleContent'); // get ONE Content
-
         Route::post('/', 'addContent')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // add ONE Content
         Route::post('/{id}', 'updateContent')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // modify ONE Content (POST is used for updates as Laravel doesn't support file uploads via PUT)
         Route::delete('/{id}', 'deleteContent')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // delete ONE Content
