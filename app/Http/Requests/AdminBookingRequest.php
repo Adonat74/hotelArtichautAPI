@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminBookingRequest extends FormRequest
@@ -24,5 +25,11 @@ class AdminBookingRequest extends FormRequest
             'services' => 'nullable|array',
             'services.*' => 'nullable|exists:services,id',
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

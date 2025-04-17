@@ -15,6 +15,7 @@ class ContentController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
     protected ErrorsService $errorsService;
+    protected ContentRequest $contentRequest;
 
     public function __construct(
         ImagesManagementService $imagesManagementService,

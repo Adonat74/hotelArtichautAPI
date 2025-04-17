@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContentRequest extends FormRequest
 {
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,5 +27,11 @@ class ContentRequest extends FormRequest
             'images' => 'nullable|array',
             'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

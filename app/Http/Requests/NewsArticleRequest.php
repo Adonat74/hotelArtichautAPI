@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NewsArticleRequest extends FormRequest
@@ -23,5 +24,11 @@ class NewsArticleRequest extends FormRequest
             'images' => 'nullable|array',
             'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }

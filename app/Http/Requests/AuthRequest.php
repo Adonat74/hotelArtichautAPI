@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AuthRequest extends FormRequest
@@ -25,5 +26,11 @@ class AuthRequest extends FormRequest
             'is_pro' => 'bail|required|boolean',
             'image' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
         ];
+    }
+
+    public $validator = null;
+    protected function failedValidation(Validator $validator)
+    {
+        $this->validator = $validator;
     }
 }
