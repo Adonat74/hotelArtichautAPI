@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Room;
 use App\Services\BookingService;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Carbon\Carbon;
 use Exception;
@@ -18,10 +19,16 @@ use Illuminate\Validation\ValidationException;
 class RoomController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
 
 
@@ -49,15 +56,9 @@ class RoomController extends Controller
             $room = Room::with(['images', 'category.features', 'language'])->findOrFail($id);
             return response()->json($room);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Room not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('room', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Something went wrong',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -92,10 +93,7 @@ class RoomController extends Controller
 
             return response()->json($rooms);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the services',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -162,10 +160,7 @@ class RoomController extends Controller
             $rooms = $rooms->values(); // Reindex the collection
             return response()->json($rooms);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the services',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -184,10 +179,7 @@ class RoomController extends Controller
             $rooms = Room::with(['images', 'category', 'language'])->get();
             return response()->json($rooms);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the services',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -265,15 +257,9 @@ class RoomController extends Controller
             // Retourne une réponse JSON avec les données enregistrées
             return response()->json($room->load(['images', 'category', 'language']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('room', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the room',
-                'details' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -356,20 +342,11 @@ class RoomController extends Controller
 
             return response()->json($room->load(['images', 'category', 'language']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Room not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('room', $e);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('room', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while updating the Room',
-                'details' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 
@@ -403,15 +380,9 @@ class RoomController extends Controller
 
             return response()->json(['message' => 'room deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Room not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('room', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the room',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('room', $e);
         }
     }
 }

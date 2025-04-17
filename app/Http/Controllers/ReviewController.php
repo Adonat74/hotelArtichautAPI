@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
+use App\Services\ErrorsService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,15 @@ use Illuminate\Validation\ValidationException;
 
 class ReviewController extends Controller
 {
+
+    protected ErrorsService $errorsService;
+
+    public function __construct(
+        ErrorsService $errorsService
+    )
+    {
+        $this->errorsService = $errorsService;
+    }
 
     /**
      * @OA\Get(
@@ -40,15 +50,9 @@ class ReviewController extends Controller
 
             return response()->json($review);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'review not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('review', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the review',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 
@@ -68,10 +72,7 @@ class ReviewController extends Controller
             $reviews = Review::all();
             return response()->json($reviews);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the reviews',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 
@@ -93,10 +94,7 @@ class ReviewController extends Controller
 
             return response()->json($reviews);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the reviews',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 
@@ -148,15 +146,9 @@ class ReviewController extends Controller
 
             return response()->json($review, 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-                ], 422);
+            return $this->errorsService->validationException('review', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the review',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 
@@ -220,20 +212,11 @@ class ReviewController extends Controller
 
             return response()->json($review);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Review not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('review', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('review', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the Review',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 
@@ -265,15 +248,9 @@ class ReviewController extends Controller
 
             return response()->json(['message' => 'review deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Review not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('review', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the review',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('review', $e);
         }
     }
 }

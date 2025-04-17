@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\NewsArticle;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,10 +16,15 @@ use Illuminate\Validation\ValidationException;
 class NewsArticleController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
 
     /**
@@ -44,15 +50,9 @@ class NewsArticleController extends Controller
             $newsArticle = NewsArticle::with(['images', 'language'])->findOrFail($id);
             return response()->json($newsArticle);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'News not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('news', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the news',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('news', $e);
         }
     }
 
@@ -79,10 +79,7 @@ class NewsArticleController extends Controller
             $newsArticles = NewsArticle::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($newsArticles);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the news articles',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('news', $e);
         }
     }
 
@@ -101,10 +98,7 @@ class NewsArticleController extends Controller
             $newsArticles = NewsArticle::with(['images', 'language'])->get();
             return response()->json($newsArticles);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the news articles',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('news', $e);
         }
     }
 
@@ -193,16 +187,10 @@ class NewsArticleController extends Controller
             $this->imagesManagementService->addImages($request, $newsArticle, 'news_article_id');
 
             return response()->json($newsArticle->load(['images', 'language']), 201);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('news', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the news article',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('news', $e);
         }
     }
 
@@ -303,20 +291,12 @@ class NewsArticleController extends Controller
 
             return response()->json($newsArticle->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'News not found',
-                'message' => $e->getMessage(),
-            ], 404);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+            return $this->errorsService->modelNotFoundException('news', $e);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('news', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while updating the news article',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('news', $e);
+
         }
     }
 
@@ -348,15 +328,9 @@ class NewsArticleController extends Controller
 
             return response()->json(['message' => 'news deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'News not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('news', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the news article',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('news', $e);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Services\ErrorsService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -11,6 +12,15 @@ use Illuminate\Validation\ValidationException;
 
 class RoleController extends Controller
 {
+    protected ErrorsService $errorsService;
+
+    public function __construct(
+        ErrorsService $errorsService
+    )
+    {
+        $this->errorsService = $errorsService;
+    }
+
     /**
      * @OA\Get(
      *     path="/api/role/{id}",
@@ -34,15 +44,9 @@ class RoleController extends Controller
             $role = Role::findOrFail($id);
             return response()->json($role);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'role not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('role', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the role',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('role', $e);
         }
     }
 
@@ -62,10 +66,7 @@ class RoleController extends Controller
             $roles = Role::all();
             return response()->json($roles);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the roles',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('role', $e);
         }
     }
 
@@ -112,15 +113,9 @@ class RoleController extends Controller
 
             return response()->json($role, 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('role', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the role',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('role', $e);
         }
     }
 
@@ -175,20 +170,11 @@ class RoleController extends Controller
 
             return response()->json($role);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Role not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('role', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('role', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the Role',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('role', $e);
         }
     }
 
@@ -217,15 +203,9 @@ class RoleController extends Controller
 
             return response()->json(['message' => 'role deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Role not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('role', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the role',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('role', $e);
         }
     }
 }

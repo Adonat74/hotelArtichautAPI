@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\User;
 use App\Services\CompareUserRoleService;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -19,11 +20,19 @@ class AdminUserController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
     protected CompareUserRoleService $compareUserRoleService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService, CompareUserRoleService $compareUserRoleService)
+
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        CompareUserRoleService $compareUserRoleService,
+        ErrorsService $errorsService
+
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
         $this->compareUserRoleService = $compareUserRoleService;
+        $this->errorsService = $errorsService;
     }
 
     /**
@@ -41,10 +50,7 @@ class AdminUserController extends Controller
             $users = User::with(['images'])->get();
             return response()->json($users);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the users',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -72,15 +78,9 @@ class AdminUserController extends Controller
             $user = User::with(['images'])->findOrFail($id);
             return response()->json($user);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'user not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the user',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -158,15 +158,9 @@ class AdminUserController extends Controller
 
             return response()->json($user->load(['images']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the user',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -255,20 +249,11 @@ class AdminUserController extends Controller
 
             return response()->json($user->load(['images']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'User not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('user', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the User',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -293,28 +278,19 @@ class AdminUserController extends Controller
     public function deleteUser(string $id): JsonResponse
     {
         try {
-
             $user = User::findOrFail($id);
 
             //Check user role, so it can't create/update/delete a user with bigger role
             $this->compareUserRoleService->compareUserRole(Auth::user(), $user->role->id);
 
-
             $this->imagesManagementService->deleteSingleImage($user);
-
             $user->delete();
 
             return response()->json(['message' => 'user deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'User not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the user',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 }

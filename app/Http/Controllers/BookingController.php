@@ -9,6 +9,7 @@ use App\Models\Room;
 use App\Models\Service;
 use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
+use App\Services\ErrorsService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,10 +22,17 @@ use Illuminate\Validation\ValidationException;
 class BookingController extends Controller
 {
     protected BookingPriceCalculationService $bookingPriceCalculationService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(BookingPriceCalculationService $bookingPriceCalculationService)
+
+    public function __construct(
+        BookingPriceCalculationService $bookingPriceCalculationService,
+        ErrorsService $errorsService
+    )
     {
         $this->bookingPriceCalculationService = $bookingPriceCalculationService;
+        $this->errorsService = $errorsService;
+
     }
 
 
@@ -54,15 +62,9 @@ class BookingController extends Controller
 
             return response()->json($booking);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'booking not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the booking',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -84,10 +86,7 @@ class BookingController extends Controller
 
             return response()->json($bookings);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the bookings',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -155,15 +154,9 @@ class BookingController extends Controller
 
             return response()->json($booking->load(['services', 'rooms.category', 'user']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the booking',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -230,20 +223,11 @@ class BookingController extends Controller
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Booking not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (ValidationException $e){
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('booking', $e);
         } catch (Exception $e){
-            return response()->json([
-                'error' => 'An error occurred while updating the Booking',
-                'details'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 
@@ -276,15 +260,9 @@ class BookingController extends Controller
 
             return response()->json(['message' => 'booking deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Booking not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('booking', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the booking',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('booking', $e);
         }
     }
 }

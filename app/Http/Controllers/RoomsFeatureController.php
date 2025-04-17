@@ -3,6 +3,7 @@
     namespace App\Http\Controllers;
 
     use App\Models\RoomsFeature;
+    use App\Services\ErrorsService;
     use App\Services\ImagesManagementService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +13,15 @@
 
     class RoomsFeatureController extends Controller
     {
+
+        protected ErrorsService $errorsService;
+
+        public function __construct(
+            ErrorsService $errorsService
+        )
+        {
+            $this->errorsService = $errorsService;
+        }
 
         /**
          * @OA\Get(
@@ -36,15 +46,9 @@
                 $feature = RoomsFeature::with(['roomsCategories', 'language'])->findOrFail($id);
                 return response()->json($feature);
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Feature not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('feature', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while fetching the feature',
-                    'message' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
 
@@ -72,10 +76,7 @@
                 $features = RoomsFeature::where('language_id', $lang)->with(['roomsCategories', 'language'])->get();
                 return response()->json($features);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while fetching the features',
-                    'message' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
 
@@ -93,10 +94,7 @@
                 $features = RoomsFeature::with(['roomsCategories', 'language'])->get();
                 return response()->json($features);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while fetching the features',
-                    'message' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
 
@@ -178,15 +176,9 @@
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($feature->load(['roomsCategories', 'language']), 201);
             } catch (ValidationException $e) {
-                return response()->json([
-                    'error' => 'Validation failed',
-                    'errors' => $e->errors(),
-                ], 422);
+                return $this->errorsService->validationException('feature', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while adding the feature',
-                    'details' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
 
@@ -277,20 +269,11 @@
                 return response()->json($feature->load(['roomsCategories', 'language']));
 
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Feature not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('feature', $e);
             } catch (ValidationException $e) {
-                return response()->json([
-                    'error' => 'Validation failed',
-                    'errors' => $e->errors(),
-                ], 422);
+                return $this->errorsService->validationException('feature', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while updating the feature',
-                    'details' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
 
@@ -319,15 +302,9 @@
                 $feature->delete();
                 return response()->json(['message' => 'feature deleted successfully']);
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Feature not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('feature', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while deleting the feature',
-                    'details' => $e->getMessage(),
-                ],500);
+                return $this->errorsService->exception('feature', $e);
             }
         }
     }

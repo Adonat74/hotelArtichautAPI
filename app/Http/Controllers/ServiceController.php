@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Service;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,10 +16,15 @@ use Illuminate\Validation\ValidationException;
 class ServiceController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
     /**
      * @OA\Get(
@@ -43,15 +49,9 @@ class ServiceController extends Controller
             $service = Service::with(['images', 'language'])->findOrFail($id);
             return response()->json($service);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Service not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('service', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the service',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 
@@ -77,10 +77,7 @@ class ServiceController extends Controller
             $services = Service::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($services);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the services',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 
@@ -99,10 +96,7 @@ class ServiceController extends Controller
             $services = Service::with(['images', 'language'])->get();
             return response()->json($services);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the services',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 
@@ -223,15 +217,9 @@ class ServiceController extends Controller
 
             return response()->json($service->load(['images', 'language']), 201);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $e->errors()
-            ], 422);
+            return $this->errorsService->validationException('service', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the news article',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 
@@ -361,20 +349,11 @@ class ServiceController extends Controller
                 'updatedService' => $service->load(['images', 'language']),
             ]);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Service not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('service', $e);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $e->errors()
-            ], 422);
+            return $this->errorsService->validationException('service', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while updating the Service',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 
@@ -406,15 +385,9 @@ class ServiceController extends Controller
 
             return response()->json(['message' => 'service deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'Service not found',
-                'message' => $e->getMessage()
-            ], 404);
+            return $this->errorsService->modelNotFoundException('service', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the service',
-                'message' => $e->getMessage()
-            ], 500);
+            return $this->errorsService->exception('service', $e);
         }
     }
 }

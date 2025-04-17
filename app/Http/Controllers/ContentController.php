@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\Image;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,11 +16,17 @@ use Illuminate\Validation\ValidationException;
 class ContentController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
+
     /**
      * @OA\Get(
      *     path="/api/content/{id}",
@@ -43,15 +50,9 @@ class ContentController extends Controller
             $content = Content::with(['images', 'language'])->findOrFail($id);
             return response()->json($content);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'content not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('content', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the content',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 
@@ -77,10 +78,7 @@ class ContentController extends Controller
             $contents = Content::where('language_id', $lang)->with(['images', 'language'])->get();
             return response()->json($contents);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the contents',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 
@@ -99,10 +97,7 @@ class ContentController extends Controller
             $contents = Content::with(['images', 'language'])->get();
             return response()->json($contents);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while fetching the contents',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 
@@ -212,16 +207,10 @@ class ContentController extends Controller
             $this->imagesManagementService->addImages($request, $content, 'content_id');
 
             return response()->json($content->load(['images', 'language']), 201);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('content', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the content',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 
@@ -340,20 +329,11 @@ class ContentController extends Controller
 
             return response()->json($content->load(['images', 'language']));
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'content not found',
-                'message' => $e->getMessage(),
-            ], 404);
-        } catch (ValidationException $exception) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'message' => $exception->errors(),
-            ], 422);
+            return $this->errorsService->modelNotFoundException('content', $e);
+        } catch (ValidationException $e) {
+            return $this->errorsService->validationException('content', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while updating the content',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 
@@ -378,22 +358,13 @@ class ContentController extends Controller
     {
         try {
             $content = Content::findOrFail($id);
-
             $this->imagesManagementService->deleteImages($content);
-
             $content->delete();
-
             return response()->json(['message' => 'content deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json([
-                'error' => 'content not found',
-                'message' => $e->getMessage(),
-            ], 404);
+            return $this->errorsService->modelNotFoundException('content', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while deleting the content',
-                'message' => $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('content', $e);
         }
     }
 }

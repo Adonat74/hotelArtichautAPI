@@ -4,6 +4,7 @@
 
     use App\Models\Image;
     use App\Models\RoomsCategory;
+    use App\Services\ErrorsService;
     use App\Services\ImagesManagementService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,10 +16,15 @@
     class RoomsCategoryController extends Controller
     {
         protected ImagesManagementService $imagesManagementService;
+        protected ErrorsService $errorsService;
 
-        public function __construct(ImagesManagementService $imagesManagementService)
+        public function __construct(
+            ImagesManagementService $imagesManagementService,
+            ErrorsService $errorsService
+        )
         {
             $this->imagesManagementService = $imagesManagementService;
+            $this->errorsService = $errorsService;
         }
 
 
@@ -45,15 +51,9 @@
                 $category = RoomsCategory::with(['features', 'rooms', 'images', 'language'])->findOrFail($id);
                 return response()->json($category);
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Category not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('category', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while fetching the category',
-                    'message' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('category', $e);
             }
         }
 
@@ -82,10 +82,7 @@
                 $categories = RoomsCategory::where('language_id', $lang)->with(['features', 'rooms', 'images', 'language'])->get();
                 return response()->json($categories);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while fetching the categories',
-                    'message' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('category', $e);
             }
         }
 
@@ -224,15 +221,9 @@
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($roomCategory->load(['features', 'rooms', 'images', 'language']), 201);
             } catch (ValidationException $e) {
-                return response()->json([
-                    'error' => 'Validation failed',
-                    'errors' => $e->errors(),
-                ], 422);
+                return $this->errorsService->validationException('category', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while adding the category',
-                    'details' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('category', $e);
             }
         }
 
@@ -357,20 +348,11 @@
 
                 return response()->json($roomCategory->load(['features',  'rooms', 'images', 'language']));
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Category not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('category', $e);
             } catch (ValidationException $e) {
-                return response()->json([
-                    'error' => 'Validation failed',
-                    'errors' => $e->errors(),
-                ], 422);
+                return $this->errorsService->validationException('category', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while updating the category',
-                    'details' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('category', $e);
             }
         }
 
@@ -405,15 +387,9 @@
 
                 return response()->json(['message' => 'Catégorie deleted successfully']);
             } catch (ModelNotFoundException $e) {
-                return response()->json([
-                    'error' => 'Category not found',
-                    'message' => $e->getMessage(),
-                ], 404);
+                return $this->errorsService->modelNotFoundException('category', $e);
             } catch (Exception $e) {
-                return response()->json([
-                    'error' => 'An error occurred while deleting the category',
-                    'details' => $e->getMessage(),
-                ], 500);
+                return $this->errorsService->exception('category', $e);
             }
         }
     }
