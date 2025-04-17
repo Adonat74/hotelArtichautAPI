@@ -6,12 +6,10 @@ use App\Http\Requests\AdminBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
-use App\Services\ImagesManagementService;
 use App\Services\SyncService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class AdminBookingController extends Controller
