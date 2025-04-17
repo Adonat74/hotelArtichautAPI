@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServiceRequest;
-use App\Models\Image;
 use App\Models\Service;
 use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ServiceController extends Controller

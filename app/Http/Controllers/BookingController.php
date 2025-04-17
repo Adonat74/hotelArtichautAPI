@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingRequest;
 use App\Mail\BookingMail;
-use App\Mail\QrCodeMail;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\Service;
@@ -13,7 +12,6 @@ use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
 use App\Services\SyncService;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;

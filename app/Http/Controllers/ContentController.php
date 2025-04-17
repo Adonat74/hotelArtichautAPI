@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContentRequest;
 use App\Models\Content;
-use App\Models\Image;
 use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;

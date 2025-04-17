@@ -3,7 +3,6 @@
     namespace App\Http\Controllers;
 
     use App\Http\Requests\RoomsCategoryRequest;
-    use App\Models\Image;
     use App\Models\RoomsCategory;
     use App\Services\AttachService;
     use App\Services\ErrorsService;
@@ -12,8 +11,6 @@
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Storage;
     use Illuminate\Validation\ValidationException;
 
     class RoomsCategoryController extends Controller
