@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingRequest;
 use App\Mail\BookingMail;
 use App\Mail\QrCodeMail;
 use App\Models\Booking;
@@ -117,18 +118,10 @@ class BookingController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addBooking(Request $request): JsonResponse
+    public function addBooking(BookingRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after_or_equal:now',
-                'check_out' => 'bail|required|date|after:check_in',
-                'number_of_persons' => 'bail|required|integer',
-                'rooms' => 'bail|required|array',
-                'rooms.*' => 'bail|required|exists:rooms,id',
-                'services' => 'nullable|array',
-                'services.*' => 'nullable|exists:services,id',
-            ]);
+            $validatedData = $request->validated();
 
             $bookingService = new BookingService();
             forEach($validatedData['rooms'] as $room){
@@ -191,18 +184,10 @@ class BookingController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateBooking(Request $request, string $id): JsonResponse
+    public function updateBooking(BookingRequest $request, string $id): JsonResponse
     {
         try{
-            $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after_or_equal:now',
-                'check_out' => 'bail|required|date|after:check_in',
-                'number_of_persons' => 'bail|required|integer',
-                'rooms' => 'bail|required|array',
-                'rooms.*' => 'bail|required|exists:rooms,id',
-                'services' => 'nullable|array',
-                'services.*' => 'nullable|exists:services,id',
-            ]);
+            $validatedData = $request->validated();
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche l'update
             $this->authorize('update', $booking); // policy check
@@ -218,7 +203,7 @@ class BookingController extends Controller
 
             $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
             $this->syncService->syncRelatedModel($booking, $validatedData['services']);
-            
+
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
             return $this->errorsService->modelNotFoundException('booking', $e);

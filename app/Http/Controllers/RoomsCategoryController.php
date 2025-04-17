@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers;
 
+    use App\Http\Requests\RoomsCategoryRequest;
     use App\Models\Image;
     use App\Models\RoomsCategory;
     use App\Services\AttachService;
@@ -192,31 +193,11 @@
          * )
          */
 
-        public function addCategory(Request $request): JsonResponse
+        public function addCategory(RoomsCategoryRequest $request): JsonResponse
         {
             try {
-                $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:50',
-                    'category_name' => 'bail|required|string|max:255',
-                    'description' => 'bail|required|string|max:1000',
-                    'price_in_cent' => 'bail|required|integer',
-                    'bed_size' => 'bail|required|integer',
-                    'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric|exists:languages,id',
-                    'rooms_features' => 'nullable|array', // Accepter un tableau de features
-                    'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
-                    'images' => 'nullable|array',
-                    'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-                ]);
-                $roomCategory = new RoomsCategory([
-                    'name' => $validatedData['name'],
-                    'category_name' => $validatedData['category_name'],
-                    'description' => $validatedData['description'],
-                    'price_in_cent' => $validatedData['price_in_cent'],
-                    'bed_size' => $validatedData['bed_size'],
-                    'display_order' => $validatedData['display_order'],
-                    'language_id' => $validatedData['language_id'],
-                ]);
+                $validatedData = $request->validated();
+                $roomCategory = new RoomsCategory($request->safe()->except(['rooms_features', 'images']));
                 $roomCategory->save();
 
                 // Si des features sont fournies, les associer à la catégorie
@@ -317,32 +298,12 @@
          * )
          */
 
-        public function updateCategory(Request $request, $id): JsonResponse
+        public function updateCategory(RoomsCategoryRequest $request, $id): JsonResponse
         {
             try {
-                $validatedData = $request->validate([
-                    'name' => 'bail|required|string|max:50',
-                    'category_name' => 'bail|required|string|max:255',
-                    'description' => 'bail|required|string|max:1000',
-                    'price_in_cent' => 'bail|required|integer',
-                    'bed_size' => 'bail|required|integer',
-                    'display_order' => 'bail|required|integer',
-                    'language_id' => 'bail|required|numeric|exists:languages,id',
-                    'rooms_features' => 'nullable|array', // Accepter un tableau de features
-                    'rooms_features.*' => 'nullable|exists:rooms_features,id', // Valider que chaque feature exist
-                    'images' => 'nullable|array',
-                    'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-                ]);
+                $validatedData = $request->validated();
                 $roomCategory = RoomsCategory::findOrFail($id);
-                $roomCategory->update([
-                    'name' => $validatedData['name'],
-                    'category_name' => $validatedData['category_name'],
-                    'description' => $validatedData['description'],
-                    'price_in_cent' => $validatedData['price_in_cent'],
-                    'bed_size' => $validatedData['bed_size'],
-                    'display_order' => $validatedData['display_order'],
-                    'language_id' => $validatedData['language_id'],
-                ]);
+                $roomCategory->update($request->safe()->except(['rooms_features', 'images']));
 
                 // Si des features sont fournies, les associer à la catégorie
                 $this->syncService->syncRelatedModel($roomCategory, $validatedData['rooms_features']);

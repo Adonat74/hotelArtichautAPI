@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ServiceRequest;
 use App\Models\Image;
 use App\Models\Service;
 use App\Services\ErrorsService;
@@ -180,37 +181,11 @@ class ServiceController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addService(Request $request): JsonResponse
+    public function addService(ServiceRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'link' => 'nullable|string|max:50',
-                'price_in_cent' => 'bail|required|numeric|min:0',
-                'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|nullable|boolean',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',// vérifie que c'est un tableau
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',// vérifie que les éléments sont des images
-            ]);
-
             // n'enregistre que les fields de service
-            $service = new Service([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'link' => $validatedData['link'],
-                'price_in_cent' => $validatedData['price_in_cent'],
-                'duration_in_day' => $validatedData['duration_in_day'],
-                'is_per_person' => $validatedData['is_per_person'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $service = new Service($request->safe()->except(['images']));
             $service->save();
 
             $this->imagesManagementService->addImages($request, $service, 'service_id');
@@ -311,36 +286,11 @@ class ServiceController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateService(Request $request, String $id): JsonResponse
+    public function updateService(ServiceRequest $request, String $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:50',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'link' => 'nullable|string|max:50',
-                'price_in_cent' => 'bail|required|numeric|min:0',
-                'duration_in_day' => 'bail|required|numeric|min:1',
-                'is_per_person' => 'bail|required|boolean',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-            ]);
             $service = Service::findOrFail($id);
-            $service->update([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'link' => $validatedData['link'],
-                'price_in_cent' => $validatedData['price_in_cent'],
-                'duration_in_day' => $validatedData['duration_in_day'],
-                'is_per_person' => $validatedData['is_per_person'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $service->update($request->safe()->except(['images']));
 
             $this->imagesManagementService->updateImages($request, $service, 'service_id');
 

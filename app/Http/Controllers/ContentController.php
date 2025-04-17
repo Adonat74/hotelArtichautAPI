@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContentRequest;
 use App\Models\Content;
 use App\Models\Image;
 use App\Services\ErrorsService;
@@ -9,8 +10,6 @@ use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class ContentController extends Controller
@@ -174,34 +173,10 @@ class ContentController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addContent(Request $request): JsonResponse
+    public function addContent(ContentRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:100',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|boolean',
-                'navbar_display' => 'bail|required|boolean',
-                'link' => 'nullable|string',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-            ]);
-
-            $content = new Content([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'landing_page_display' => $validatedData['landing_page_display'],
-                'navbar_display' => $validatedData['navbar_display'],
-                'link' => $validatedData['link'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $content = new Content($request->safe()->except(['images']));
             $content->save();
 
             $this->imagesManagementService->addImages($request, $content, 'content_id');
@@ -295,35 +270,11 @@ class ContentController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateContent(Request $request, string $id): JsonResponse
+    public function updateContent(ContentRequest $request, string $id): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'name' => 'bail|required|string|max:100',
-                'title' => 'bail|required|string|max:50',
-                'short_description' => 'bail|required|string|max:200',
-                'description' => 'bail|required|string|max:1000',
-                'landing_page_display' => 'bail|required|boolean',
-                'navbar_display' => 'bail|required|boolean',
-                'link' => 'nullable|string',
-                'display_order' => 'bail|required|integer',
-                'language_id' => 'bail|required|numeric|exists:languages,id',
-                'images' => 'nullable|array',
-                'images.*' => 'nullable|file|mimetypes:video/mp4,video/avi,video/mpeg,image/jpeg,image/png,image/jpg,image/gif|max:100000',
-            ]);
-
             $content = Content::findOrFail($id);
-            $content->update([
-                'name' => $validatedData['name'],
-                'title' => $validatedData['title'],
-                'short_description' => $validatedData['short_description'],
-                'description' => $validatedData['description'],
-                'landing_page_display' => $validatedData['landing_page_display'],
-                'navbar_display' => $validatedData['navbar_display'],
-                'link' => $validatedData['link'],
-                'display_order' => $validatedData['display_order'],
-                'language_id' => $validatedData['language_id'],
-            ]);
+            $content->update(request()->safe()->except(['images', 'language_id']));
 
             $this->imagesManagementService->updateImages($request, $content, 'content_id');
 

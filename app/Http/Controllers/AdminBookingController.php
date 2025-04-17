@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
@@ -120,20 +121,10 @@ class AdminBookingController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function addBooking(Request $request): JsonResponse
+    public function addBooking(AdminBookingRequest $request): JsonResponse
     {
         try {
-            $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after:today',
-                'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cent' => 'bail|required|integer',
-                'to_be_paid_in_cent' => 'bail|required|integer',
-                'user_id' => 'bail|required|exists:users,id',
-                'rooms' => 'bail|required|array',
-                'rooms.*' => 'bail|required|exists:rooms,id',
-                'services' => 'nullable|array',
-                'services.*' => 'nullable|exists:services,id',
-            ]);
+            $validatedData = $request->validated();
 
             $bookingService = new BookingService();
             forEach($validatedData['rooms'] as $room){
@@ -188,20 +179,10 @@ class AdminBookingController extends Controller
      *     @OA\Response(response=500, description="An error occurred")
      * )
      */
-    public function updateBooking(Request $request, string $id): JsonResponse
+    public function updateBooking(AdminBookingRequest $request, string $id): JsonResponse
     {
         try{
-            $validatedData = $request->validate([
-                'check_in' => 'bail|required|date|after:today',
-                'check_out' => 'bail|required|date|after:check_in',
-                'total_price_in_cent' => 'bail|required|integer',
-                'to_be_paid_in_cent' => 'bail|required|integer',
-                'user_id' => 'bail|required|exists:users,id',
-                'rooms' => 'bail|required|array',
-                'rooms.*' => 'bail|required|exists:rooms,id',
-                'services' => 'nullable|array',
-                'services.*' => 'nullable|exists:services,id',
-            ]);
+            $validatedData = $request->validated();
             $booking = Booking::findOrFail($id);
 //          Check si le user est bien le proprio de la résa et empeche l'update
 
