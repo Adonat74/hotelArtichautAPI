@@ -3,8 +3,10 @@
     namespace App\Http\Controllers;
 
     use App\Models\RoomsFeature;
+    use App\Services\AttachService;
     use App\Services\ErrorsService;
     use App\Services\ImagesManagementService;
+    use App\Services\SyncService;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\JsonResponse;
@@ -15,12 +17,17 @@
     {
 
         protected ErrorsService $errorsService;
-
+        protected SyncService $syncService;
+        protected AttachService $attachService;
         public function __construct(
-            ErrorsService $errorsService
+            ErrorsService $errorsService,
+            SyncService $syncService,
+            AttachService $attachService,
         )
         {
             $this->errorsService = $errorsService;
+            $this->syncService = $syncService;
+            $this->attachService = $attachService;
         }
 
         /**
@@ -169,9 +176,7 @@
                 $feature->save();
 
                 // Attachez les catégories à l'équipement
-                if (isset($validatedData['rooms_categories'])) {
-                    $feature->roomsCategories()->attach($validatedData['rooms_categories']);
-                }
+                $this->attachService->attachRelatedModel($feature, $validatedData['rooms_categories']);
 
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($feature->load(['roomsCategories', 'language']), 201);
@@ -262,9 +267,7 @@
                 $feature = RoomsFeature::findOrFail($id);
                 $feature->update($validatedData);
 
-                if (isset($validatedData['rooms_categories'])) {
-                    $feature->roomsCategories()->sync($validatedData['rooms_categories']);
-                }
+                $this->syncService->syncRelatedModel($feature, $validatedData['rooms_categories']);
 
                 return response()->json($feature->load(['roomsCategories', 'language']));
 

@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
+use App\Services\SyncService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -16,11 +17,14 @@ class AdminBookingController extends Controller
 {
 
     protected ErrorsService $errorsService;
+    protected SyncService $syncService;
     public function __construct(
-        ErrorsService $errorsService
+        ErrorsService $errorsService,
+        SyncService $syncService
     )
     {
         $this->errorsService = $errorsService;
+        $this->syncService = $syncService;
     }
 
     /**
@@ -142,12 +146,8 @@ class AdminBookingController extends Controller
             $booking->save();
 
 //            Associe rooms et services si fournis dans le body de la requete
-            if (isset($validatedData['rooms'])) {
-                $booking->rooms()->attach($validatedData['rooms']);
-            }
-            if (isset($validatedData['services'])) {
-                $booking->services()->attach($validatedData['services']);
-            }
+            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
+            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
 
             return response()->json($booking->load(['services', 'rooms', 'user']), 201);
         } catch (ValidationException $e) {
@@ -214,12 +214,8 @@ class AdminBookingController extends Controller
 
             $booking->update($validatedData);
 
-            if (isset($validatedData['rooms'])) {
-                $booking->rooms()->sync($validatedData['rooms']);
-            }
-            if (isset($validatedData['services'])) {
-                $booking->services()->sync($validatedData['services']);
-            }
+            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
+            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {

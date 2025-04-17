@@ -6,6 +6,7 @@ use App\Mail\QrCodeMail;
 use App\Mail\RegisterMail;
 use App\Models\Image;
 use App\Models\User;
+use App\Services\ErrorsService;
 use App\Services\ImagesManagementService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -18,10 +19,15 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     protected ImagesManagementService $imagesManagementService;
+    protected ErrorsService $errorsService;
 
-    public function __construct(ImagesManagementService $imagesManagementService)
+    public function __construct(
+        ImagesManagementService $imagesManagementService,
+        ErrorsService $errorsService
+    )
     {
         $this->imagesManagementService = $imagesManagementService;
+        $this->errorsService = $errorsService;
     }
 
     /**
@@ -112,8 +118,8 @@ class AuthController extends Controller
                 'password' => 'bail|required|string|min:10',
                 'firstname' => 'bail|required|string|max:50',
                 'lastname' => 'bail|required|string|max:50',
-                'address' => 'bail|required|string|max:100',
-                'city' => 'bail|required|string|max:100',
+                'address' => 'bail|required|string|max:70',
+                'city' => 'bail|required|string|max:30',
                 'postal_code' => 'bail|required|string|max:15',
                 'phone' => 'bail|required|string|max:12',
                 'is_pro' => 'bail|required|boolean',
@@ -149,15 +155,9 @@ class AuthController extends Controller
                 ]
             ]);
         } catch (ValidationException $e) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+            return $this->errorsService->validationException('user', $e);
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred while adding the user',
-                'message'=>    $e->getMessage(),
-            ], 500);
+            return $this->errorsService->exception('user', $e);
         }
     }
 
@@ -180,7 +180,6 @@ class AuthController extends Controller
             'message' => 'Successfully logged out',
         ]);
     }
-
 
 
     /**
