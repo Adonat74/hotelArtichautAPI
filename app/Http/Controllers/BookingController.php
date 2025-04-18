@@ -140,8 +140,8 @@ class BookingController extends Controller
             $booking->save();
 
 //          Associe rooms et services si fournis dans le body de la requete
-            $this->attachService->attachRelatedModel($booking, $validatedData['rooms']);
-            $this->attachService->attachRelatedModel($booking, $validatedData['services']);
+            $this->attachService->attachRoomModel($booking, $validatedData['rooms']);
+            $this->attachService->attachServiceModel($booking, $validatedData['services']);
 
             Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 
@@ -206,8 +206,8 @@ class BookingController extends Controller
             $booking->to_be_paid_in_cent = $price;
             $booking->save();
 
-            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
-            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
+            $this->syncService->syncRoomModel($booking, $validatedData['rooms']);
+            $this->syncService->syncServiceModel($booking, $validatedData['services']);
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {

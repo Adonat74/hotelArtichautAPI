@@ -274,7 +274,7 @@ class ContentController extends Controller
     {
         try {
             $content = Content::findOrFail($id);
-            $content->update(request()->safe()->except(['images', 'language_id']));
+            $content->update($request->safe()->except(['images', 'language_id']));
 
             $this->imagesManagementService->updateImages($request, $content, 'content_id');
 

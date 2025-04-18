@@ -166,7 +166,7 @@
                 $feature->save();
 
                 // Attachez les catégories à l'équipement
-                $this->attachService->attachRelatedModel($feature, $validatedData['rooms_categories']);
+                $this->attachService->attachCategoryModel($feature, $validatedData['rooms_categories']);
 
                 // Retourne une réponse JSON avec les données enregistrées
                 return response()->json($feature->load(['roomsCategories', 'language']), 201);
@@ -249,7 +249,7 @@
                 $feature = RoomsFeature::findOrFail($id);
                 $feature->update($validatedData);
 
-                $this->syncService->syncRelatedModel($feature, $validatedData['rooms_categories']);
+                $this->syncService->syncCategoryModel($feature, $validatedData['rooms_categories']);
 
                 return response()->json($feature->load(['roomsCategories', 'language']));
 

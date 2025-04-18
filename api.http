@@ -16,7 +16,7 @@ Content-Type: application/json
   "city": "Paris",
   "postal_code": "75001",
   "phone": "0612345678",
-  "is_pro": false
+  "is_pro": 0
 }
 
 ###  Login after register
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
     client.global.set("TOKEN", data.authorisation.token);
 %}
@@ -39,11 +39,35 @@ Content-Type: application/json
 GET {{base_address}}/refresh
 Authorization: Bearer {{TOKEN}}
 
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("TOKEN", data.authorisation.token);
+%}
+
 ### Logout
 POST {{base_address}}/logout
 Authorization: Bearer {{TOKEN}}
 
 ############################################################ USER
+
+###  Login
+POST {{base_address}}/login
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "testpassword"
+}
+
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("TOKEN", data.authorisation.token);
+%}
+
 ### GET USER INFOS
 GET {{base_address}}/user
 Authorization: Bearer {{TOKEN}}
@@ -62,7 +86,7 @@ Content-Type: application/json
   "city": "Paris",
   "postal_code": "75001",
   "phone": "0612345678",
-  "is_pro": false
+  "is_pro": 0
 }
 
 ### Delete user infos
@@ -75,13 +99,13 @@ POST {{base_address}}/login
 Content-Type: application/json
 
 {
-    "email": "admin@admin.com",
-    "password": "adminadmin"
+    "email": "dou@dou.com",
+    "password": "doudoudoudou"
 }
 
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
     client.global.set("TOKEN", data.authorisation.token);
 %}
@@ -100,13 +124,15 @@ Content-Type: application/json
   "city": "Paris",
   "postal_code": "75001",
   "phone": "0612345678",
-  "is_pro": false
+  "role_id": 2,
+  "is_vip": 0,
+  "is_pro": 0
 }
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
-    client.global.set("ID", data.user.id);
+    client.global.set("ID", data.id);
 %}
 
 ### Login user
@@ -140,7 +166,9 @@ Content-Type: application/json
     "city": "Paris",
     "postal_code": "75001",
     "phone": "0612345678",
-    "is_pro": false
+    "role_id": 1,
+    "is_vip": 1,
+    "is_pro": 1
 }
 
 ### Delete user
@@ -164,9 +192,9 @@ Authorization: Bearer {{TOKEN}}
 }
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
-    client.global.set("ID", data.user.id);
+    client.global.set("ID", data.id);
 %}
 
 ### GET one role
@@ -189,10 +217,6 @@ Authorization: Bearer {{TOKEN}}
 
 ############################################################ BOOKING
 
-### GET all user bookings
-GET {{base_address}}/booking/user
-Authorization: Bearer {{TOKEN}}
-
 ### POST one booking
 POST {{base_address}}/booking
 Content-Type: application/json
@@ -203,14 +227,18 @@ Authorization: Bearer {{TOKEN}}
     "check_out": "2026-12-06",
     "number_of_persons": 3,
     "services": [17, 15],
-    "rooms": [101, 102]
+    "rooms": [1, 2]
 }
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
-    client.global.set("ID", data.user.id);
+    client.global.set("ID", data.id);
 %}
+
+### GET all user bookings
+GET {{base_address}}/booking/user
+Authorization: Bearer {{TOKEN}}
 
 ### GET one user booking
 GET {{base_address}}/booking/{{ID}}
@@ -226,7 +254,7 @@ Authorization: Bearer {{TOKEN}}
     "check_out": "2028-12-06",
     "number_of_persons": 4,
     "services": [17, 15],
-    "rooms": [101, 102, 103]
+    "rooms": [1, 2, 3]
 }
 
 ### DELETE one booking
@@ -240,9 +268,9 @@ GET {{base_address}}/admin/booking
 Authorization: Bearer {{TOKEN}}
 
 ### POST one booking
-POST {{base_address}}/booking
-Content-Type: application/json
+POST {{base_address}}/admin/booking
 Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
 
 {
     "check_in": "2026-11-26",
@@ -250,13 +278,13 @@ Authorization: Bearer {{TOKEN}}
     "user_id": 21,
     "number_of_persons": 3,
     "services": [17, 15],
-    "rooms": [101, 102]
+    "rooms": [1, 2]
 }
 > {%
     // parse the JSON response
-    const data = JSON.parse(response.body);
+    const data = response.body;
     // store token in a global variable
-    client.global.set("ID", data.user.id);
+    client.global.set("ID", data.id);
 %}
 
 ### GET all user bookings
@@ -268,7 +296,7 @@ GET {{base_address}}/admin/booking/{{ID}}
 Authorization: Bearer {{TOKEN}}
 
 ### PUT one booking
-POST {{base_address}}/booking/{{ID}}
+POST {{base_address}}/admin/booking/{{ID}}
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
@@ -278,11 +306,11 @@ Authorization: Bearer {{TOKEN}}
     "user_id": 22,
     "number_of_persons": 4,
     "services": [17, 15],
-    "rooms": [101, 102, 103]
+    "rooms": [1, 2, 3]
 }
 
 ### DELETE one booking
-DELETE {{base_address}}/booking/{{ID}}
+DELETE {{base_address}}/admin/booking/{{ID}}
 Authorization: Bearer {{TOKEN}}
 
 
@@ -290,253 +318,344 @@ Authorization: Bearer {{TOKEN}}
 ### GET all services by language:  1 = fr, 2 = en
 GET {{base_address}}/service/lang-1
 
-### GET one service
-GET {{base_address}}/service/1
-
 ### POST one service
 POST {{base_address}}/service
-Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
 
 {
-    "title": "Hello lucas ",
-    "price_in_cent": 1000,
-    "duration_in_day": 2,
-    "is_per_person": "true",
+    "name": "TEST",
+    "title": "TEST",
+    "short_description": "TEST",
+    "description": "TEST",
+    "link": "voiturier",
+    "price_in_cent": 10000,
+    "duration_in_day": 1,
+    "is_per_person": 1,
+    "display_order": "0",
     "language_id": 1
 }
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one service
+GET {{base_address}}/service/{{ID}}
 
 ### PUT one service
-POST {{base_address}}/service/2
+POST {{base_address}}/service/{{ID}}
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "title": "Hello et pas qu'un peu",
-    "price_in_cent": 1000,
-    "duration_in_day": 2,
-    "is_per_person": "true",
-    "language_id": 2
+    "name": "TEST1",
+    "title": "TEST1",
+    "short_description": "TEST1",
+    "description": "TEST1",
+    "link": "voiturier",
+    "price_in_cent": 10000,
+    "duration_in_day": 1,
+    "is_per_person": 1,
+    "display_order": "0",
+    "language_id": 1
 }
 
 ### DELETE one service
-DELETE {{base_address}}/service/3
-
-
+DELETE {{base_address}}/service/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################CONTENTS
 ### GET all contents by language:  1 = fr, 2 = en
-GET {{base_address}}/content/lang-2
-
-### GET one content
-GET {{base_address}}/content/1
+GET {{base_address}}/content/lang-1
 
 ### POST one content
 POST {{base_address}}/content
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "name": "luuuuuuucas",
-    "title": "lucas est pd",
-    "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool",
-    "landing_page_display": "true",
-    "navbar_display": "false",
-    "language_id": 1
-
+    "name": "content-room",
+    "title": "Our Rooms",
+    "short_description": "TEST",
+    "description": "TEST",
+    "landing_page_display": 1,
+    "navbar_display": 0,
+    "display_order": "1",
+    "language_id": 2
 }
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one content
+GET {{base_address}}/content/{{ID}}
 
 ### PUT one content
-POST {{base_address}}/content/2
+POST {{base_address}}/content/{{ID}}
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "name": "luuuuuuucas",
-    "title": "lucas est pd",
-    "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool",
-    "landing_page_display": "true",
-    "navbar_display": "false",
+    "name": "content-room",
+    "title": "Our Rooms",
+    "short_description": "TEST1",
+    "description": "TEST1",
+    "landing_page_display": 1,
+    "navbar_display": 0,
+    "display_order": "1",
     "language_id": 2
 }
 
 ### DELETE one content
-DELETE {{base_address}}/content/3
-
-
+DELETE {{base_address}}/content/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################NEWS
-### GET all news by language:  1 = fr, 2 = en
+### GET all newss by language:  1 = fr, 2 = en
 GET {{base_address}}/news/lang-1
-
-### GET one news
-GET {{base_address}}/news/1
 
 ### POST one news
 POST {{base_address}}/news
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "title": "lucas est pd",
-    "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool",
-    "language_id": 2
+    "name": "news-room",
+    "title": "Our Rooms",
+    "short_description": "TEST",
+    "description": "TEST",
+    "display_order": "1",
+    "language_id": 1
 }
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one news
+GET {{base_address}}/news/{{ID}}
 
 ### PUT one news
-POST {{base_address}}/news/2
+POST {{base_address}}/news/{{ID}}
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "title": "lucas est pd",
-    "short_description": "Petite description comme ça à la cool",
-    "description": "Grande description comme ça aussi à la cool",
-    "language_id": 1
+    "name": "news-room",
+    "title": "Our Rooms",
+    "short_description": "TEST1",
+    "description": "TEST1",
+    "display_order": "1",
+    "language_id": 2
 }
 
 ### DELETE one news
-DELETE {{base_address}}/news/3
-
-
+DELETE {{base_address}}/news/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################ROOMS
-### GET all room by language:  1 = fr, 2 = en
-GET {{base_address}}/room/lang-2
+### GET all rooms by language:  1 = fr, 2 = en
+GET {{base_address}}/room/lang-1
 
-### GET one room
-GET {{base_address}}/room/1
+### GET all rooms available by language :   1 = fr, 2 = en
+GET {{base_address}}/room/lang-1/available
+Content-Type: application/json
+
+{
+    "check_in": "2027-05-23",
+    "check_out": "2027-05-27",
+    "category": 6
+}
 
 ### POST one room
 POST {{base_address}}/room
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "number": 244,
-    "name": "Kling",
-    "description": "Nesciunt nostrum autem amet quia consequatur odio.",
-    "rooms_category_id": 2,
+    "name": "Nikolaus, Pagac and Schulist",
+    "number": 1011,
+    "room_name": "Gusikowski",
+    "description": "super chambre",
+    "rooms_category_id": 4,
+    "display_order": 9,
+    "language_id": 1
+}
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one room
+GET {{base_address}}/room/{{ID}}
+
+### PUT one room
+POST {{base_address}}/room/{{ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+    "name": "Nikolaus, Pagac and Schulist test",
+    "number": 1011,
+    "room_name": "Gusikowskitest",
+    "description": "super chambre test",
+    "rooms_category_id": 4,
+    "display_order": 9,
     "language_id": 1
 }
 
-### PUT one room
-POST {{base_address}}/room/2
-Content-Type: application/json
-
-{
-    "number": 244,
-    "name": "Kling",
-    "description": "Nesciunt nostrum autem amet quia consequatur odio.",
-    "rooms_category_id": 2,
-    "language_id": 2
-}
-
 ### DELETE one room
-DELETE {{base_address}}/room/5
-
-
+DELETE {{base_address}}/room/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 
 ############################################################REVIEWS
 ### GET all reviews
 GET {{base_address}}/review
 
-### GET one review
-GET {{base_address}}/review/1
-
 ### POST one review
 POST {{base_address}}/review
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
     "rate": 5,
     "review_content": "not bad at all",
-    "user_id": 546
+    "display_order": 546
 }
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET all users reviews
+GET {{base_address}}/review/user
+Authorization: Bearer {{TOKEN}}
+
+### GET one review
+GET {{base_address}}/review/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ### PUT one review
-POST {{base_address}}/review/2
+POST {{base_address}}/review/{{ID}}
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
     "rate": 2,
     "review_content": "suck my dick",
-    "user_id": 69
+    "display_order": 69
 }
 
 ### DELETE one review
-DELETE {{base_address}}/review/5
-
+DELETE {{base_address}}/review/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################FEATURES
-### GET all room-features by language:  1 = fr, 2 = en
+### GET all rooms-features by language:  1 = fr, 2 = en
 GET {{base_address}}/rooms-feature/lang-1
-
-### GET one rooms-feature
-GET {{base_address}}/rooms-feature/1
 
 ### POST one rooms-feature
 POST {{base_address}}/rooms-feature
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "name": "Tv",
-    "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
+    "name": "tv_enTEST",
+    "feature_name": "Tv",
+    "description": "TEST",
     "rooms_categories": [1, 2],
+    "display_order": "1",
+    "language_id": 2
+}
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one rooms-feature
+GET {{base_address}}/rooms-feature/{{ID}}
+
+### PUT one rooms-feature
+POST {{base_address}}/rooms-feature/{{ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+    "name": "tv_enTEST1",
+    "feature_name": "Tv1",
+    "description": "TEST1",
+    "rooms_categories": [2],
+    "display_order": "1",
     "language_id": 2
 }
 
-### PUT one rooms-feature
-POST {{base_address}}/rooms-feature/2
-Content-Type: application/json
-
-{
-    "name": "Tv",
-    "description": "Une télévision à écran plat avec une large sélection de chaînes locales et internationales, permettant aux clients de se détendre et de profiter de divertissements dans leur chambre.",
-    "rooms_categories": [1, 2],
-    "language_id": 1
-}
-
-### DELETE one rooms-category
-DELETE {{base_address}}/rooms-category/5
-
+### DELETE one rooms-feature
+DELETE {{base_address}}/rooms-feature/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################CATEGORIES
-### GET all rooms-categories  by language:  1 = fr, 2 = en
-GET {{base_address}}/rooms-category/lang-2
-
-### GET one rooms-category
-GET {{base_address}}/rooms-category/1
+### GET all rooms-categorys by language:  1 = fr, 2 = en
+GET {{base_address}}/rooms-category/lang-1
 
 ### POST one rooms-category
 POST {{base_address}}/rooms-category
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "name": "StandardRooms2",
-    "description": "Spacious room with a great vi,nhg,g,,hg,ew.",
-    "price_in_cent": 1000000,
-    "bed_size": 701,
-    "rooms_features": [1,2],
-    "language_id": 1,
-    "images": []
+    "name": "standard_cat_enTEST",
+    "category_name": "Standard RoomsTEST",
+    "description": "The artichoke quality at a reasonable price.TEST",
+    "price_in_cent": 25000,
+    "bed_size": 3,
+    "rooms_features": [1, 2],
+    "display_order": "1",
+    "language_id": 2
 }
+> {%
+    // parse the JSON response
+    const data = response.body;
+    // store token in a global variable
+    client.global.set("ID", data.id);
+%}
+
+### GET one rooms-category
+GET {{base_address}}/rooms-category/{{ID}}
 
 ### PUT one rooms-category
-POST {{base_address}}/rooms-category/2
+POST {{base_address}}/rooms-category/{{ID}}
+Authorization: Bearer {{TOKEN}}
 Content-Type: application/json
 
 {
-    "name": "StandardRooms2",
-    "description": "Spacious room with a great vi,nhg,g,,hg,ew.",
-    "price_in_cent": 1000000,
-    "bed_size": 701,
-    "rooms_features": [1,2],
-    "language_id": 2,
-    "images": []
+    "name": "standard_cat_enTEST1",
+    "category_name": "Standard RoomsTEST1",
+    "description": "The artichoke quality at a reasonable price.TEST1",
+    "price_in_cent": 25000,
+    "bed_size": 3,
+    "rooms_features": [1, 2, 3],
+    "display_order": "1",
+    "language_id": 2
 }
 
 ### DELETE one rooms-category
-DELETE {{base_address}}/rooms-category/5
-
+DELETE {{base_address}}/rooms-category/{{ID}}
+Authorization: Bearer {{TOKEN}}
 
 ############################################################LANGUAGE
 ### GET all language
@@ -544,22 +663,3 @@ GET {{base_address}}/language
 
 ### GET one language
 GET {{base_address}}/language/1
-
-### POST one language
-POST {{base_address}}/language
-Content-Type: application/json
-
-{
-    "lang": "sp"
-}
-
-### PUT one language
-POST {{base_address}}/language/2
-Content-Type: application/json
-
-{
-    "lang": "it"
-}
-
-### DELETE one language
-DELETE {{base_address}}/language/3

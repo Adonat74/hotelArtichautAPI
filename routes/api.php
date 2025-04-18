@@ -141,8 +141,8 @@ Route::group(['middleware'=>[
     Route::prefix('rooms-category')->controller(RoomsCategoryController::class)->group(function () {
         Route::get('/lang-{lang}', 'getAllCategoriesByLang'); // Liste toutes les catégories by language
         Route::get('/', 'getAllCategories'); // Liste toutes les catégories
-        Route::post('/', 'addCategory'); // Crée une nouvelle catégorie
-        Route::get('/{id}', 'getSingleCategory')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // Affiche une catégorie spécifique
+        Route::post('/', 'addCategory')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // Crée une nouvelle catégorie
+        Route::get('/{id}', 'getSingleCategory'); // Affiche une catégorie spécifique
         Route::post('/{id}', 'updateCategory')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // Met à jour une catégorie
         Route::delete('/{id}', 'deleteCategory')->middleware(['auth:api', CheckTokenVersion::class, CheckRole::class . ':manager']); // Supprime une catégorie
     });

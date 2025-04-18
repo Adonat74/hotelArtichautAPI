@@ -137,11 +137,18 @@ class RoomController extends Controller
     public function getAllRoomsAvailableByLang(int $lang, Request $request): JsonResponse
     {
         try {
-            if($request->has('category')) {
+            $validatedData = $request->validate([
+                'check_in'  => 'required|date',
+                'check_out' => 'required|date|after:check_in',
+                'category'  => 'nullable|integer|exists:rooms_categories,id',
+            ]);
+
+            if($request->filled('category')) {
                 $rooms = Room::where('language_id', $lang)
-                    ->where('rooms_category_id', $request->query('category'))
+                    ->where('rooms_category_id', $validatedData['category'])
                     ->with(['images', 'category', 'language'])
                     ->get();
+
             } else {
                 $rooms = Room::where('language_id', $lang)
                     ->orderBy('rooms_category_id')
@@ -149,9 +156,10 @@ class RoomController extends Controller
                     ->get();
             }
 
+
             $bookingService = new BookingService();
             forEach($rooms as $key => $room){
-                if (!$bookingService->checkRoomAvailability($room->id, $request->query('check_in'), $request->query('check_out'))) {
+                if (!$bookingService->checkRoomAvailability($room->id,  $validatedData['check_in'],  $validatedData['check_out'])) {
                     unset($rooms[$key]);
                 }
             }

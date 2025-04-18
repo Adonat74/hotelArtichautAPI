@@ -151,8 +151,8 @@ class AdminBookingController extends Controller
             Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 
 //            Associe rooms et services si fournis dans le body de la requete
-            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
-            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
+            $this->syncService->syncRoomModel($booking, $validatedData['rooms']);
+            $this->syncService->syncServiceModel($booking, $validatedData['services']);
 
             return response()->json($booking->load(['services', 'rooms', 'user']), 201);
         } catch (ValidationException $e) {
@@ -214,8 +214,8 @@ class AdminBookingController extends Controller
             $booking->to_be_paid_in_cent = $price;
             $booking->save();
 
-            $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
-            $this->syncService->syncRelatedModel($booking, $validatedData['services']);
+            $this->syncService->syncRoomModel($booking, $validatedData['rooms']);
+            $this->syncService->syncServiceModel($booking, $validatedData['services']);
 
             return response()->json($booking->load(['services', 'rooms', 'user']));
         } catch (ModelNotFoundException $e) {
