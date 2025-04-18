@@ -18,6 +18,7 @@ class AdminBookingRequest extends FormRequest
             'check_in' => 'bail|required|date|after:today',
             'check_out' => 'bail|required|date|after:check_in',
             'user_id' => 'bail|required|exists:users,id',
+            'number_of_persons' => 'bail|required|integer|min:1',
             'rooms' => 'bail|required|array',
             'rooms.*' => 'bail|required|exists:rooms,id',
             'services' => 'nullable|array',

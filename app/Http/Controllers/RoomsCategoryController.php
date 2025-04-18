@@ -198,7 +198,7 @@
                 $roomCategory->save();
 
                 // Si des features sont fournies, les associer à la catégorie
-                $this->attachService->attachRelatedModel($roomCategory, $validatedData['rooms_features']);
+                $this->attachService->attachFeatureModel($roomCategory, $validatedData['rooms_features']);
 
                 $this->imagesManagementService->addImages($request, $roomCategory, 'rooms_category_id');
 
@@ -303,7 +303,7 @@
                 $roomCategory->update($request->safe()->except(['rooms_features', 'images']));
 
                 // Si des features sont fournies, les associer à la catégorie
-                $this->syncService->syncRelatedModel($roomCategory, $validatedData['rooms_features']);
+                $this->syncService->syncFeatureModel($roomCategory, $validatedData['rooms_features']);
 
 
                 $this->imagesManagementService->updateImages($request, $roomCategory, 'rooms_category_id');

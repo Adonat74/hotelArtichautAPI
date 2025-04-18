@@ -210,7 +210,7 @@ class BookingManagementController extends Controller
             $booking = Booking::findOrFail($id);
             $this->authorize('update', $booking); // policy check
 
-            $this->attachService->attachRelatedModel($booking, $validatedData['services']);
+            $this->attachService->attachServiceModel($booking, $validatedData['services']);
 
             foreach ($booking->services as $service) {
                 $booking->total_price_in_cent += $service->price_in_cent;
