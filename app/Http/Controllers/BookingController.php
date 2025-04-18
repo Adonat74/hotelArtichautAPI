@@ -197,7 +197,14 @@ class BookingController extends Controller
                 }
             }
 
-            $booking->update($validatedData);
+            $booking->fill($validatedData);
+
+            $rooms = Room::whereIn('id', $validatedData['rooms'])->get();
+            $services = Service::whereIn('id', $validatedData['services'])->get();
+            $price = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
+            $booking->total_price_in_cent = $price;
+            $booking->to_be_paid_in_cent = $price;
+            $booking->save();
 
             $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
             $this->syncService->syncRelatedModel($booking, $validatedData['services']);

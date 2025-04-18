@@ -3,25 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminBookingRequest;
+use App\Mail\BookingMail;
 use App\Models\Booking;
+use App\Models\Room;
+use App\Models\Service;
+use App\Models\User;
+use App\Services\BookingPriceCalculationService;
 use App\Services\BookingService;
 use App\Services\ErrorsService;
 use App\Services\SyncService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 
 class AdminBookingController extends Controller
 {
-
+    protected BookingPriceCalculationService $bookingPriceCalculationService;
     protected ErrorsService $errorsService;
     protected SyncService $syncService;
     public function __construct(
+        BookingPriceCalculationService $bookingPriceCalculationService,
         ErrorsService $errorsService,
         SyncService $syncService
     )
     {
+        $this->bookingPriceCalculationService = $bookingPriceCalculationService;
         $this->errorsService = $errorsService;
         $this->syncService = $syncService;
     }
@@ -104,11 +112,9 @@ class AdminBookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "user_id", "rooms"},
+     *             required={"check_in", "check_out", "user_id", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-04-10"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-04-15"),
-     *             @OA\Property(property="total_price_in_cent", type="integer", example=15000),
-     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=5000),
      *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={1,2,3}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={5,6})
@@ -132,7 +138,17 @@ class AdminBookingController extends Controller
             }
 
             $booking = new Booking($validatedData);
+
+            $rooms = Room::whereIn('id', $validatedData['rooms'])->get();
+            $services = Service::whereIn('id', $validatedData['services'])->get();
+            $price = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
+            $booking->total_price_in_cent = $price;
+            $booking->to_be_paid_in_cent = $price;
+
             $booking->save();
+
+            $user = User::findOrFail($validatedData['user_id']);
+            Mail::to($user->email)->send(new BookingMail($booking->load(['services', 'rooms.category', 'user'])));
 
 //            Associe rooms et services si fournis dans le body de la requete
             $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
@@ -161,11 +177,9 @@ class AdminBookingController extends Controller
      *     @OA\RequestBody(
      *          required=true,
      *          @OA\JsonContent(
-     *             required={"check_in", "check_out", "total_price_in_cent", "to_be_paid_in_cent", "rooms"},
+     *             required={"check_in", "check_out", "rooms"},
      *             @OA\Property(property="check_in", type="string", format="date", example="2025-06-01"),
      *             @OA\Property(property="check_out", type="string", format="date", example="2025-06-10"),
-     *             @OA\Property(property="total_price_in_cent", type="integer", example=20000),
-     *             @OA\Property(property="to_be_paid_in_cent", type="integer", example=7000),
      *             @OA\Property(property="user_id", type="integer", example=1),
      *             @OA\Property(property="rooms", type="array", @OA\Items(type="integer"), example={4,5}),
      *             @OA\Property(property="services", type="array", @OA\Items(type="integer"), example={7,8})
@@ -191,7 +205,14 @@ class AdminBookingController extends Controller
                 }
             }
 
-            $booking->update($validatedData);
+            $booking->fill($validatedData);
+
+            $rooms = Room::whereIn('id', $validatedData['rooms'])->get();
+            $services = Service::whereIn('id', $validatedData['services'])->get();
+            $price = $this->bookingPriceCalculationService->calculatePrice($validatedData['check_in'], $validatedData['check_out'], $rooms, $services);
+            $booking->total_price_in_cent = $price;
+            $booking->to_be_paid_in_cent = $price;
+            $booking->save();
 
             $this->syncService->syncRelatedModel($booking, $validatedData['rooms']);
             $this->syncService->syncRelatedModel($booking, $validatedData['services']);
