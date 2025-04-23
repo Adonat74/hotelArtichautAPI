@@ -37,8 +37,11 @@ build:
   stage: build
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    - docker-compose -f docker-compose.yml build
+    # optionally tag & push, or `docker-compose push`
+    - docker-compose -f docker-compose.yml push
+#    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH .
+#    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
 
 
 deploy:
