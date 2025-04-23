@@ -62,3 +62,4 @@ deploy:
     - main
   when: manual
   allow_failure: false
+
