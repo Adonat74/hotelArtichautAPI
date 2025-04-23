@@ -73,6 +73,6 @@ deploy:
       "
   only:
     - main
-  when: manual
+#  when: manual
   allow_failure: false
 
