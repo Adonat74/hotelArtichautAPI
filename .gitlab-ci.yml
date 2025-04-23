@@ -1,27 +1,64 @@
+# You'll need to add this on top of your file
+# This is a requireded configuration for the Gitlab-Runner (see in 'build' job for more information)
+variables:
+  DOCKER_HOST: tcp://docker:2376
+  DOCKER_TLS_VERIFY: "true"
+  DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  DOCKER_DRIVER: overlay2
+  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+
+
+
 # We use a pipeline with 2 stage
 stages:
-  # the first stage>
   - test
-  # the second stage>
   - build
+  - deploy
 
-# We declare a job named "build-job"
-build-job:
-  # The docker image to use when running that job
-  # We use minideb (A minimalist Debian-based image built specifically to be used as a base image for containers.)
-  # see https://hub.docker.com/r/bitnami/minideb
-  image: bitnami/minideb
-  # this job is run inside the "build" stage
-  stage: build
-  # List of bash command to run
-  script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
-
-test-job1:
-  # The docker image to use when running that job
-  image: bitnami/minideb
-  # this job is run inside the "test" stage
+test:
   stage: test
-  # List of bash command to run
+  image: node:18
   script:
-    - echo "This job tests something"
+    - echo "🚧 No tests yet — placeholder job"
+  # allow this to fail so it doesn’t block build until you add real tests
+  allow_failure: true
+
+
+# The build job
+build:
+  # We use the image named "docker" this image is usefull to run docker inside docker (aka DinD)
+  # This is required because docker use docker image internally to build other docker image
+  image: docker:28.1.1
+  # We'll use the DinD service ,so we need to declare it
+  # This service is installed on the Gitlab-Runner (The machine where your Jobs are executed)
+  services:
+    - docker:28.1.1-dind-rootless
+  stage: build
+  script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - docker build -t registry.gitlab.com/gratienLucas/hotel_artichaut_api:$CI_COMMIT_BRANCH .
+    - docker push registry.gitlab.com/gratienLucas/hotel_artichaut_api:$CI_COMMIT_BRANCH
+
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    # write the SSH key to disk & set perms
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+  script:
+    - ssh "$DEPLOY_USER@$DEPLOY_HOST" "
+      cd /srv/hotelArtichautAPI &&
+      docker login -u \"$CI_REGISTRY_USER\" -p \"$CI_REGISTRY_PASSWORD\" \"$CI_REGISTRY\" &&
+      docker-compose pull &&
+      docker-compose up -d
+      "
+  only:
+    - main
+  when: manual
+  allow_failure: false
