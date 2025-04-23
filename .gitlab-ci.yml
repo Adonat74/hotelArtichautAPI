@@ -1,0 +1,27 @@
+# We use a pipeline with 2 stage
+stages:
+  # the first stage>
+  - test
+  # the second stage>
+  - build
+
+# We declare a job named "build-job"
+build-job:
+  # The docker image to use when running that job
+  # We use minideb (A minimalist Debian-based image built specifically to be used as a base image for containers.)
+  # see https://hub.docker.com/r/bitnami/minideb
+  image: bitnami/minideb
+  # this job is run inside the "build" stage
+  stage: build
+  # List of bash command to run
+  script:
+    - echo "Hello, $GITLAB_USER_LOGIN!"
+
+test-job1:
+  # The docker image to use when running that job
+  image: bitnami/minideb
+  # this job is run inside the "test" stage
+  stage: test
+  # List of bash command to run
+  script:
+    - echo "This job tests something"
