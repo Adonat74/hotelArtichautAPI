@@ -60,22 +60,17 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
   script:
-    - ssh "$DEPLOY_USER@$DEPLOY_HOST" << 'EOF'
-      # clone on first deploy, otherwise pull
-      if [ ! -d /srv/hotelArtichautAPI ]; then
-      git clone "$CI_REPOSITORY_URL" /srv/hotelArtichautAPI
-      else
-      cd /srv/hotelArtichautAPI && git pull
-      fi
-
-      # go into the project dir
-      cd /srv/hotelArtichautAPI
-
-      # login and update containers
-      docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-      docker-compose pull
-      docker-compose up -d
-      EOF
+    - ssh "$DEPLOY_USER@$DEPLOY_HOST" "
+        if [ ! -d /srv/hotelArtichautAPI ]; then
+          git clone $CI_REPOSITORY_URL /srv/hotelArtichautAPI;
+        else
+          cd /srv/hotelArtichautAPI && git pull;
+        fi;
+        cd /srv/hotelArtichautAPI
+        docker login -u \"$CI_REGISTRY_USER\" -p \"$CI_REGISTRY_PASSWORD\" \"$CI_REGISTRY\"
+        docker-compose pull
+        docker-compose up -d
+      "
   only:
     - main
   when: manual
