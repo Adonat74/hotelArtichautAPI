@@ -61,10 +61,15 @@ deploy:
     - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
   script:
     - ssh "$DEPLOY_USER@$DEPLOY_HOST" "
-      cd /srv/hotelArtichautAPI &&
-      docker login -u \"$CI_REGISTRY_USER\" -p \"$CI_REGISTRY_PASSWORD\" \"$CI_REGISTRY\" &&
-      docker-compose pull &&
-      docker-compose up -d
+        if [ ! -d /srv/hotelArtichautAPI ]; then
+          git clone $CI_REPOSITORY_URL /srv/hotelArtichautAPI;
+        else
+          cd /srv/hotelArtichautAPI && git pull;
+        fi
+        cd /srv/hotelArtichautAPI
+        docker login -u \"$CI_REGISTRY_USER\" -p \"$CI_REGISTRY_PASSWORD\" \"$CI_REGISTRY\"
+        docker-compose pull
+        docker-compose up -d
       "
   only:
     - main
