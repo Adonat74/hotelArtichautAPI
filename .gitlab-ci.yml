@@ -78,5 +78,6 @@ deploy:
       EOF
   only:
     - main
+  when: manual
   allow_failure: false
 
