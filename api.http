@@ -1,4 +1,4 @@
-@base_address = http://localhost:8000/api
+@base_address = http://0.0.0.0:8080/api
 @TOKEN =
 @ID =
 

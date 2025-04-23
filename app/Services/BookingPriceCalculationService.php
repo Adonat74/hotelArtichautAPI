@@ -19,7 +19,7 @@ class BookingPriceCalculationService
 
 //      Calcul du prix des servicespar la durée du séjour
         foreach ($services as $service) {
-            $bookingPrice += $service->price_in_cent;
+            $bookingPrice += $service->price_in_cent * $bookingDuration;
         }
 
         return $bookingPrice;
