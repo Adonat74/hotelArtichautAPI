@@ -2,8 +2,8 @@
 # This is a requireded configuration for the Gitlab-Runner (see in 'build' job for more information)
 variables:
   DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_VERIFY: "true"
-  DOCKER_TLS_CERTDIR: "/certs"
+#  DOCKER_TLS_VERIFY: "true"
+#  DOCKER_TLS_CERTDIR: "/certs"
   DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   DOCKER_DRIVER: overlay2
   IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
@@ -33,7 +33,7 @@ build:
   # We'll use the DinD service ,so we need to declare it
   # This service is installed on the Gitlab-Runner (The machine where your Jobs are executed)
   services:
-    - docker:28.1.1-dind-rootless
+    - docker:28.1.1-dind
   stage: build
   variables:
     DB_DATABASE: "$DB_DATABASE"
