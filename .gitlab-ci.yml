@@ -23,7 +23,6 @@ test:
   # allow this to fail so it doesn’t block build until you add real tests
   allow_failure: true
 
-
 # The build job
 build:
   # We use the image named "docker" this image is usefull to run docker inside docker (aka DinD)
