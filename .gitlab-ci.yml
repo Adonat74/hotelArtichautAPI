@@ -31,10 +31,10 @@ build:
   image: docker:28.1.1
   # We'll use the DinD service ,so we need to declare it
   # This service is installed on the Gitlab-Runner (The machine where your Jobs are executed)
+  stage: build
   services:
     - name: docker:28.1.1-dind
       alias: docker
-  stage: build
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
