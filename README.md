@@ -73,7 +73,7 @@ Structure Laravel classique qui ne ré-invente pas la roue.
 
 ## :construction: Sécurité
 
-### Authentification JWT et Gestion des Rôles
+- ### Authentification JWT et Gestion des Rôles
 
 L’authentification repose sur des JSON Web Tokens (JWT) qui, une fois générés après une connexion réussie, contiennent des informations essentielles (comme l’ID utilisateur et des métadonnées d’expiration). Le client doit inclure ce token dans l’en-tête `Authorization` pour accéder aux routes protégées.
 
@@ -84,6 +84,23 @@ Les rôles sont hiérarchisés de façon incrémentale :
 - **master** : tous les droits cumulés.
 
 La vérification se fait via des policies ou middlewares, qui autorisent l’accès si l’utilisateur connecté a un rôle égal ou supérieur à celui requis.
+
+- ### Limitation de requêtes (Throttle)
+
+  Pour éviter les abus (DOS, brute-force…) :
+    - **Middleware** `throttle:60,1`  
+  → 60 requêtes max toutes les 1 minute par client (IP ou token).
+    - En cas de dépassement, l’API renvoie un **429 Too Many Requests**.
+
+- ### Assainissement des données
+
+    - Éliminer ou neutraliser toute partie potentiellement dangereuse ou indésirable d’une donnée brute.
+  - Les données sont assainies grâce à un middleware appliqué globalement aux routes.
+
+- ### Validation des données 
+
+  - Vérifier que les données sont conformes aux attentes de l’application : type, format, plage de valeurs, contraintes d’unicité, longueur, etc.
+  - La validation des données se fait par le biais de "Form Requests Laravel" 
 
 ---
 ## :warning: Récap éléments du projet
@@ -96,8 +113,21 @@ Reviews et Users, servent à vérifier si l'utilisateur qui cherche à modifier 
   - CheckRole : Sert à vérifier si l'utilisateur à le bon role pour accéder à une route.
 
 - ### Console/Commands + routes/console.php
-  - les commandes permettent d'écrire et d'éxécuter des tâches via les lignes de commandes. 
+  - Les commandes permettent d'écrire et d'éxécuter des tâches via les lignes de commandes. 
   - Le fichier console.php permet dans notre cas de planifier l'éxécution de commandes artisan avec Schedule.
+
+- ### Services
+    - Les services sont de simples classes PHP qui encapsulent une logique métier ou un ensemble d’opérations réutilisables, en dehors des contrôleurs ou des modèles.
+
+- ### Form Requests
+    - En Laravel, une Form Request est une classe dédiée qui centralise la validation et l’autorisation des requêtes HTTP entrantes.
+
+- ### Mails
+    Laravel fournit un système complet et modulaire pour envoyer des emails via des Mailables, avec :
+    - **Configuration** centralisée du driver (SMTP, Mailgun, Postmark, etc.)
+    - **Classes Mailable** pour structurer et réutiliser vos envois
+    - **Templates Markdown** pour générer des vues d’email responsives
+    - **Queues** pour libérer la requête HTTP et envoyer les messages en arrière-plan
 
 ---
 
