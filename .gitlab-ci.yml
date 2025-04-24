@@ -33,7 +33,8 @@ build:
   # We'll use the DinD service ,so we need to declare it
   # This service is installed on the Gitlab-Runner (The machine where your Jobs are executed)
   services:
-    - docker:28.1.1-dind
+    - name: docker:28.1.1-dind
+      alias: docker
   stage: build
   variables:
     DB_DATABASE: "$DB_DATABASE"
