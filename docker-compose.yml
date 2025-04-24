@@ -34,8 +34,7 @@ services:
       timeout: 5s
       retries: 3
     depends_on:
-        mysql:
-         condition: service_healthy
+      - mysql
 
   mysql:
     container_name: mysql
@@ -54,12 +53,12 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - laravel
-    healthcheck:
-#      test: [ "CMD", "mysqladmin", "ping", "-h", "mysql" ]
-      test: [ "CMD-SHELL", "mysqladmin ping -uroot -p\"${MYSQL_ROOT_PASSWORD}\" -h 127.0.0.1 || exit 1" ]
-      interval: 10s
-      timeout: 20s
-      retries: 5
+#    healthcheck:
+##      test: [ "CMD", "mysqladmin", "ping", "-h", "mysql" ]
+#      test: [ "CMD-SHELL", "mysqladmin ping -uroot -p\"${MYSQL_ROOT_PASSWORD}\" -h 127.0.0.1 || exit 1" ]
+#      interval: 10s
+#      timeout: 20s
+#      retries: 5
 
 networks:
   laravel:
