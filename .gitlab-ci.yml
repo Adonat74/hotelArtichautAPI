@@ -36,7 +36,7 @@ build:
       alias: docker
   stage: build
   variables:
-    DOCKER_HOST: tcp://docker:2376
+    DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
     DB_DATABASE: "$DB_DATABASE"
     DB_USERNAME: "$DB_USERNAME"
