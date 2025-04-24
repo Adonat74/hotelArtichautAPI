@@ -1,11 +1,10 @@
 # You'll need to add this on top of your file
 # This is a requireded configuration for the Gitlab-Runner (see in 'build' job for more information)
 variables:
-  DOCKER_HOST: tcp://docker:2376
-  DOCKER_TLS_VERIFY: "false"
-  DOCKER_TLS_CERTDIR: ""
+#  DOCKER_HOST: tcp://docker:2376
+#  DOCKER_TLS_CERTDIR: ""
 #  DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
-  DOCKER_DRIVER: overlay2
+#  DOCKER_DRIVER: overlay2
   IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
 
@@ -37,6 +36,8 @@ build:
       alias: docker
   stage: build
   variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: ""
     DB_DATABASE: "$DB_DATABASE"
     DB_USERNAME: "$DB_USERNAME"
     DB_PASSWORD: "$DB_PASSWORD"
