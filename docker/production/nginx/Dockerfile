@@ -2,11 +2,11 @@
 FROM node:18-alpine AS builder
 
 # Install Node.js and build tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-#    nodejs \
-#    npm \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN #apt-get update && apt-get install -y --no-install-recommends \
+#    curl \
+##    nodejs \
+##    npm \
+#    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set working directory
 WORKDIR /var/www
