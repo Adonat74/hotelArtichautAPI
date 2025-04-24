@@ -1,8 +1,8 @@
 #FROM debian AS builder
-FROM node:18-alpine AS builder
+FROM node:18-bullseye-slim AS builder
 
 # Install Node.js and build tools
-RUN #apt-get update && apt-get install -y --no-install-recommends \
+#RUN apt-get update && apt-get install -y --no-install-recommends \
 #    curl \
 ##    nodejs \
 ##    npm \
