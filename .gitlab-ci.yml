@@ -50,7 +50,6 @@ build:
 #    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
 
 
-
 deploy:
   stage: deploy
   image: alpine:latest
