@@ -53,6 +53,7 @@ deploy:
   stage: deploy
   image: alpine:latest
   before_script:
+    - docker system prune --all --volumes --force || true
     - apk add --no-cache openssh-client
     # write the SSH key to disk & set perms
     - mkdir -p ~/.ssh
