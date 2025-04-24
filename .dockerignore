@@ -1,8 +1,37 @@
-
-
-
+# ─── Version control ────────────────────────────
 .git
 .gitignore
 
+# ─── Environment & local config ────────────────
+.env
+.env.*
+.env.*.local
+
+# ─── Dependencies (will be re-installed in container) ────
 node_modules/
 vendor/
+
+# ─── Log files & caches ────────────────────────
+npm-debug.log*
+yarn-error.log*
+*.log
+.cache/
+build/
+storage/debugbar/
+
+# ─── IDE and editor files ──────────────────────
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+
+# ─── OS cruft ───────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── Testing artifacts ─────────────────────────
+phpunit.xml
+phpunit.xml.dist
+coverage/
